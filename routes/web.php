@@ -15,11 +15,18 @@ use Illuminate\Support\Facades\Route;
 //Auth::routes();
 
 Route::get('/', function () {
-    /*if(stristr($_SERVER['HTTP_HOST'],'www.vifense.com')){
+   if(Str::startsWith($_SERVER['HTTP_HOST'],'www.vifense.com')){
+		//echo '<br>  strstr >>>  '.$_SERVER['HTTP_HOST'];
         return view('user.apkdown');
     }
-    else*/
+	else if(Str::startsWith($_SERVER['HTTP_HOST'],'vifense.com')){
+		//echo '<br>  stristr >>>  '.$_SERVER['HTTP_HOST'];
+        return view('user.apkdown');
+    }
+    else{
+		//echo '<br> else strstr >>>  '.$_SERVER['HTTP_HOST'];
         return view('admin.login');
+	}
 });
 
 //-----------------------------------------------------
