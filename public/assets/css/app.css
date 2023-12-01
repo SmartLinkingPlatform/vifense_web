@@ -1,0 +1,49 @@
+
+.btn.changehover a{
+    color: #212529;
+}
+
+.btn.changehover:hover a, .btn.changehover a:focus{
+    color: #5e2dd8;
+}
+
+.row-cards-dash > .col, .row-cards-dash > [class*="col-"] {
+    display: flex;
+    flex-direction: row;
+}
+
+.row-cards-dash .card {
+    margin-right: 1.5rem;
+    width: 18rem;
+}
+
+.symbol-right-input100{
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    border-radius: 5px;
+    bottom: 0;
+    right: 0;
+    width: 37%;
+    height: 100%;
+    padding-left: 22px;
+    pointer-events: none;
+    transition: all 0.4s;
+    color: #424344;
+}
+@media (min-width: 762px) {
+    .login100-form.signup-corporate {
+        width: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    .row-cards-dash > .col, .row-cards-dash > [class*="col-"] {
+        flex-direction: column;
+    }
+    .row-cards-dash .card {
+         margin-right: 0;
+         width: 100%;
+    }
+}
