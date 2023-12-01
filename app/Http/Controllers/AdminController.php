@@ -110,7 +110,6 @@ class AdminController extends BaseController
 
 
         $user = DB::table($tb_user_info)->where('user_id', $userid)->first();
-        //$dec_password = $this->encrypt_decrypt('decrypt', "MVdWZVNKdkgrVzZRYk1MZ045V3NRdz09");
 
         if($user == null){
             return \Response::json([
