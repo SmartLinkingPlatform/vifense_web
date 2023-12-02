@@ -154,7 +154,8 @@ Route::post('user.goOutcomeModPage', 'UserController@goOutcomeModPage');
 Route::post('user.getOrderDetailInformation', 'UserController@getOrderDetailInformation');
 Route::post('user.modOutcomeOrderInfo', 'UserController@modOutcomeOrderInfo');
 */
-//Route::get('/{page}', 'AdminController@index'); // don't call this part for mobile.php route
+include ('mobile.php');
+Route::get('/{page}', 'AdminController@index'); // don't call this part for mobile.php route
 
 
 
