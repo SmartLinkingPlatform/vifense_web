@@ -138,12 +138,6 @@ class CallAPIController extends BaseController
     }
 
     //회사 정보 요청
-    public function testCompanyInfo(){
-        echo 'testCompanyInfo >>>';
-        exit();
-    }
-
-    //회사 정보 요청
     public function requestCompanyInfo(){
         $table_info = 'tb_user_info';
         //$rows = DB::table('tb_company')->get();
