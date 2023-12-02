@@ -99,21 +99,15 @@ class CallAPIController extends BaseController
         //
     }
 
-    public function postTest(Request $request){
-        return \Response::json([
-            'msg' => 'welcome mobile.postTest sucess!'
-        ]);
-    }
-
     //모바일 유저 로그인
     public function userLogin(Request $request){
-        $userid = $request->post('userid');
-        $password = $request->post('password');
+        $userid = $request->post('user_id');
+        $password = $request->post('user_pwd');
 
         $tb_user_info = 'tb_user_info';
         $updated_at = @date("Y-m-d h:i:s", time());
 
-        $user = DB::table($tb_user_info)->where('user_id', $userid)->first();
+        $user = DB::table($tb_user_info)->where('user_id', $userid)->where('user_pwd', $password)->first();
 
         if($user == null){
             return \Response::json([
@@ -121,27 +115,23 @@ class CallAPIController extends BaseController
             ]);
         }
         else{
-            $md5pwd = $this->encrypt_decrypt('encrypt', $password);
-            $pwd = DB::table($tb_user_info)->where('user_id', $userid)->where('user_pwd', $md5pwd)->first();
-            if($pwd == null){
-                return \Response::json([
-                    'msg' => 'nonpwd'
-                ]);
-            }
-            else{
-                DB::table($tb_user_info)->where('user_id', $userid)->update(['active' => 1]);
-                return \Response::json([
-                    'msg' => 'ok'
-                ]);
-            }
+            DB::table($tb_user_info)->where('user_id', $userid)
+                ->update(
+                    [
+                        'visit_date' => $updated_at,
+                        'active' => 1
+                    ]
+                );
+            return \Response::json([
+                'msg' => 'ok'
+            ]);
         }
+        exit();
     }
 
     //회사 정보 요청
     public function requestCompanyInfo(){
         $table_info = 'tb_user_info';
-        //$rows = DB::table('tb_company')->get();
-        $sql = 'SELECT * from '. $table_info. ' ';
         $rows =DB::table($table_info)->where('user_class', '0')->get();
 
         if($rows == null){
@@ -160,7 +150,31 @@ class CallAPIController extends BaseController
 
     //모바일 회원 정보 수정
     public function userInfoModify(Request $request){
+        $userid = $request->post('user_id');
+        $password = $request->post('user_pwd');
+        $company_name = $request->post('company_name');
 
+        $tb_user_info = 'tb_user_info';
+        $user = DB::table($tb_user_info)->where('user_id', $userid)->first();
+
+        if($user == null){
+            return \Response::json([
+                'msg' => 'nonuser'
+            ]);
+        }
+        else{
+            DB::table($tb_user_info)->where('user_id', $userid)
+                ->update(
+                    [
+                        'user_pwd' => $password,
+                        'company_name' => $company_name
+                    ]
+                );
+            return \Response::json([
+                'msg' => 'ok'
+            ]);
+        }
+        exit();
     }
 
     //모바일 회원 가입
@@ -171,6 +185,7 @@ class CallAPIController extends BaseController
         $user_type = $request->post('user_type');
         $user_class = $request->post('user_class');
         $company_name = $request->post('company_name');
+        $updated_at = @date("Y-m-d h:i:s", time());
 
         $table_user_info = 'tb_user_info';
         try {
@@ -192,7 +207,7 @@ class CallAPIController extends BaseController
                         'user_class' => $user_class, // 0 회사 | 1 개인
                         'user_name' => $user_name, // 대표자 성명
                         'company_name' => $company_name, // 상호(회사이름)
-                        'registe_date' => '', // 가입일시
+                        'registe_date' => $updated_at, // 가입일시
                         'visit_date' => '', // 방문시간
                     ]
                 );
