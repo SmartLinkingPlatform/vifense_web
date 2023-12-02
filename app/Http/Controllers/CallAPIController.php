@@ -99,6 +99,12 @@ class CallAPIController extends BaseController
         //
     }
 
+    public function postTest(Request $request){
+        return \Response::json([
+            'msg' => 'welcome mobile.postTest route!'
+        ]);
+    }
+
     //모바일 유저 로그인
     public function userLogin(Request $request){
         $userid = $request->post('userid');
@@ -129,6 +135,12 @@ class CallAPIController extends BaseController
                 ]);
             }
         }
+    }
+
+    //회사 정보 요청
+    public function testCompanyInfo(){
+        echo 'testCompanyInfo >>>';
+        exit();
     }
 
     //회사 정보 요청

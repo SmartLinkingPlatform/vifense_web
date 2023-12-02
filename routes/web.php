@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Str;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -154,7 +154,7 @@ Route::post('user.goOutcomeModPage', 'UserController@goOutcomeModPage');
 Route::post('user.getOrderDetailInformation', 'UserController@getOrderDetailInformation');
 Route::post('user.modOutcomeOrderInfo', 'UserController@modOutcomeOrderInfo');
 */
-Route::get('/{page}', 'AdminController@index');
+//Route::get('/{page}', 'AdminController@index'); // don't call this part for mobile.php route
 
 
 

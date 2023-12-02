@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,9 +12,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 //Auth::routes();
+Route::get('mobile.test', function () {
+    echo 'welcome mobile.test route!!';
+    exit();
+});
 
+Route::post('mobile.postTest', 'CallAPIController@postTest');
 Route::post('mobile.companyInfo', 'CallAPIController@requestCompanyInfo');
-
 Route::post('mobile.userLogin', 'CallAPIController@userLogin');
 Route::post('mobile.userSignup', 'CallAPIController@userSignup');
 Route::post('mobile.userInfoModify', 'CallAPIController@userInfoModify');

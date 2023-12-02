@@ -1,4 +1,4 @@
-        <!-- FAVICON -->
+        <!-- VIFENSE -->
         <link rel="shortcut icon" type="image/x-icon" href="{{ URL::asset('assets/images/brand/favicon.ico')}}" />
 
         <!-- CSRF Token -->

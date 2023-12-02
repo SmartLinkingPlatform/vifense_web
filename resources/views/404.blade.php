@@ -14,12 +14,12 @@
 			<div class="page-content error-page">
 				<div class="container text-center">
 					<div class="error-template">
-						<h1 class="display-1 text-white mb-2">404<span class="text-transparent fs-20">错误</span></h1>
+						<h1 class="display-1 text-white mb-2">404<span class="text-transparent fs-20">Error</span></h1>
 						<h5 class="error-details text-white">
-                            抱歉，发生错误，找不到请求的页面！
+                           Sorry. The page can't find here!
 						</h5>
 						<div class="text-center">
-							<a class="btn btn-secondary mt-5 mb-5" href="{{ url('/' . $page='admin') }}"> <i class="fa fa-long-arrow-left"></i> 登录页面 </a>
+							<a class="btn btn-secondary mt-5 mb-5" href="{{ url('/' . $page='admin') }}"> <i class="fa fa-long-arrow-left"></i> Login page </a>
 						</div>
                     </div>
 				</div>
