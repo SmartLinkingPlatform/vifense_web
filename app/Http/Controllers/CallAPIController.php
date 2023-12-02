@@ -101,7 +101,7 @@ class CallAPIController extends BaseController
 
     public function postTest(Request $request){
         return \Response::json([
-            'msg' => 'mobile post 성공!'
+            'msg' => 'welcome mobile.postTest sucess!'
         ]);
     }
 

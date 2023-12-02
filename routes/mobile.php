@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 */
 //Auth::routes();
 Route::get('mobile.test', function () {
-    echo 'welcome mobile.test route!!';
+    echo 'welcome mobile.test sucess!';
     exit();
 });
 
