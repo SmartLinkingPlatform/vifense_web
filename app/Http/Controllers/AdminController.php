@@ -1312,7 +1312,7 @@ class AdminController extends BaseController
                         'user_id' => $smart_phone, // 아이디
                         'user_pwd' => $enc_password, // 암호
                         'user_type' => 0, // 1 어드민 | 0 사업자
-                        'user_class' => 1, // 0 회사 | 1 개인
+                        'user_class' => 0, // 0 회사 | 1 개인
                         'user_regnum' => $corporate_phone, // 사업자 등록번호
                         'user_address' => $corporate_address, // 주소
                         'user_name' => $corporate_name, // 대표자 성명

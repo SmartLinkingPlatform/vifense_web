@@ -26,7 +26,7 @@
 								</div>
 								<div class="card mt-2">
 									<div class="card-header border-bottom-0 p-4">
-										<h2 class="card-title" style="margin-left: 7px;">사용자 리스트</h2>
+										<h2 class="card-title" style="margin-left: 7px;">회사정보 리스트</h2>
 										<div class="page-options d-flex float-right">
                                             <div class="btn btn-success" id="button_add" style="width: 80px; margin-right: 10px;">
                                                 <i class="icon icon-plus"></i>
@@ -47,7 +47,7 @@
                                                         <th >가입일시</th>
 														<th >마지막 방문</th>
                                                         <th >로그</th>
-														<th class="text-center" style="width: 200px;" >액션</th>
+														<th class="text-center" style="width: 200px;" >수정삭제</th>
 													</tr>
 												</thead>
 												<tbody id="tbody_admin_list">
@@ -71,7 +71,7 @@
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header">
-                                <div id="modal_title" style="color: #5c6bc0; font-size: 20px; font-weight: 600;">새 관리자 추가</div>
+                                <div id="modal_title" style="color: #5c6bc0; font-size: 20px; font-weight: 600;">회사 추가</div>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -82,35 +82,100 @@
                                 </div>
                                 <div >
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-2 pl-3">
-                                            <label class="form-label">계정</label>
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">아이디</label>
                                         </div>
-                                        <div class="col-md-10">
-                                            <input type="text" id="input_account" class="form-control" name="example-text-input" placeholder="계정">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row d-flex">
-                                        <div class="col-md-2 pl-3">
-                                            <label class="form-label">이름</label>
-                                        </div>
-                                        <div class="col-md-10">
-                                            <input type="text" id="input_name" class="form-control" name="example-text-input" placeholder="이름">
+                                        <div class="col-md-9">
+                                            <input type="number" id="input_id" class="form-control" name="example-text-input" placeholder="아이디">
                                         </div>
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-2 pl-3">
+                                        <div class="col-md-3 pl-3">
                                             <label class="form-label">비밀번호</label>
                                         </div>
-                                        <div class="col-md-10">
-                                            <input type="password" id="input_password" class="form-control" name="example-text-input" placeholder="암호">
+                                        <div class="col-md-9">
+                                            <input type="password" id="input_password" class="form-control" name="example-text-input" placeholder="비밀번호">
                                         </div>
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-2 pl-3">
+                                        <div class="col-md-3 pl-3">
                                             <label class="form-label">비밀번호 확인</label>
                                         </div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-9">
                                             <input type="password" id="input_password_confirm" class="form-control" name="example-text-input" placeholder="비밀번호 확인">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">상호</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text" id="input_company" class="form-control" name="example-text-input" placeholder="상호">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">사업자등록번호</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text" id="input_business_number" class="form-control" name="example-text-input" placeholder="사업자등록번호">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">주소</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text" id="input_company_address" class="form-control" name="example-text-input" placeholder="주소">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">대리인</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text" id="input_agent" class="form-control" name="example-text-input" placeholder="대리인">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">전화번호</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text" id="input_company_phone" class="form-control" name="example-text-input" placeholder="전화번호">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">설립일자</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text" id="input_create_date" class="form-control" name="example-text-input" placeholder="설립일자">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">담당자</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text" id="input_person" class="form-control" name="example-text-input" placeholder="담당자">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">차량수량</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text" id="input_car_count" class="form-control" name="example-text-input" placeholder="차량수량">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-3 pl-3">
+                                            <label class="form-label">사업자등록사진</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="file" name="upload_user_img" id="upload_user_img" value="" style="display: none">
+                                            <div id="uploaduserimg_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
                                         </div>
                                     </div>
                                 </div>
@@ -149,25 +214,50 @@
                     editAdmin();
                 }
             });
+
+            $('div[id="uploaduserimg_btn"]').on('mouseup', function () {
+                $('#uploadcorporate_doc').trigger('click');
+            });
+            $('input[id="upload_user_img"]').change(function(){
+                if (this.files && this.files[0])
+                {
+                    //console.log(this.files[0].name);
+                    let img_file_name = this.files[0].name;
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#uploaduserimg_btn').text(img_file_name);
+                    }
+                    reader.readAsDataURL(this.files[0]); // convert to base64 string
+                }
+            });
         });
         function showAddDialog() {
             current_id = 0;
             $('#addAdminModal').modal('show');
             $('#dlgErr').text('').css({'display':'none'});
-            $('#modal_title').text('새 관리자 추가');
+            $('#modal_title').text('회사 추가');
             $('#modal_button_add').text('추가');
-            $('#input_name').val('');
-            $('#input_account').val('').prop('readonly', false);
+            $('#input_id').val('');
+            $('#input_company').val('').prop('readonly', false);
             $('#input_password').val('');
             $('#input_password_confirm').val('');
+            $('#input_company').val('');
+            $('#input_business_number').val('');
+            $('#input_company_address').val('');
+            $('#input_agent').val('');
+            $('#input_company_phone').val('');
+            $('#input_create_date').val('');
+            $('#input_person').val('');
+            $('#input_car_count').val('');
+            $('#input_create_date').val('');
         }
         function showEditDialog(id) {
             current_id = id;
             $('#addAdminModal').modal('show');
             $('#dlgErr').text('').css({'display':'none'});
-            $('#modal_title').text('관리자 수정');
+            $('#modal_title').text('회사 정보 수정');
             $('#modal_button_add').text('수정');
-            $('#input_account').prop('readonly', true);
+            $('#input_company').prop('readonly', true);
 
             $.ajax({
                 url: 'admin.getAdminInformation',
@@ -183,8 +273,8 @@
                         let password = data.pwd;
                         let name = list.name;
 
-                        $('#input_name').val(name);
-                        $('#input_account').val(account);
+                        $('#input_id').val(name);
+                        $('#input_company').val(account);
                         $('#input_password').val(password);
                         $('#input_password_confirm').val(password);
                     }
@@ -338,8 +428,8 @@
         }
 
         function addAdmin() {
-            let name = $('#input_name').val();
-            let account = $('#input_account').val();
+            let name = $('#input_id').val();
+            let account = $('#input_company').val();
             let password = $('#input_password').val();
             let password_confirm = $('#input_password_confirm').val();
             if (account === '' || account == null) {
@@ -393,8 +483,8 @@
         }
 
         function editAdmin() {
-            let name = $('#input_name').val();
-            let account = $('#input_account').val();
+            let name = $('#input_id').val();
+            let account = $('#input_company').val();
             let password = $('#input_password').val();
             let password_confirm = $('#input_password_confirm').val();
             if (account === '' || account == null) {

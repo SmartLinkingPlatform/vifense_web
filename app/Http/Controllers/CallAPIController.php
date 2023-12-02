@@ -101,7 +101,7 @@ class CallAPIController extends BaseController
 
     public function postTest(Request $request){
         return \Response::json([
-            'msg' => 'welcome mobile.postTest route!'
+            'msg' => 'mobile post 성공!'
         ]);
     }
 
@@ -144,11 +144,13 @@ class CallAPIController extends BaseController
     }
 
     //회사 정보 요청
-    public function requestCompanyInfo(Request $request){
-        $tb_user_info = 'tb_company';
-        $company = DB::table($tb_user_info);
+    public function requestCompanyInfo(){
+        $table_info = 'tb_user_info';
+        //$rows = DB::table('tb_company')->get();
+        $sql = 'SELECT * from '. $table_info. ' ';
+        $rows =DB::table($table_info)->where('user_class', '0')->get();
 
-        if($company == null){
+        if($rows == null){
             return \Response::json([
                 'msg' => 'err'
             ]);
@@ -156,9 +158,10 @@ class CallAPIController extends BaseController
         else{
             return \Response::json([
                 'msg' => 'ok',
-                'lists' => $company,
+                'lists' => $rows,
             ]);
         }
+        exit();
     }
 
     //모바일 회원 정보 수정
@@ -168,7 +171,52 @@ class CallAPIController extends BaseController
 
     //모바일 회원 가입
     public function userSignup(Request $request){
+        $user_name = $request->post('user_name');
+        $user_id = $request->post('user_id');
+        $user_pwd = $request->post('user_pwd');
+        $user_type = $request->post('user_type');
+        $user_class = $request->post('user_class');
+        $company_name = $request->post('company_name');
 
+        $table_user_info = 'tb_user_info';
+        try {
+            $cnt = DB::table($table_user_info)->where('user_id', $user_id)->doesntExist();
+            if (!$cnt){ // exist
+                return \Response::json([
+                    'msg' => 'du'
+                ]);
+
+                exit();
+            }
+
+            $success = DB::table($table_user_info)
+                ->insert(
+                    [
+                        'user_id' => $user_id, // 아이디
+                        'user_pwd' => $user_pwd, // 암호
+                        'user_type' => $user_type, // 1 어드민 | 0 사업자
+                        'user_class' => $user_class, // 0 회사 | 1 개인
+                        'user_name' => $user_name, // 대표자 성명
+                        'company_name' => $company_name, // 상호(회사이름)
+                        'registe_date' => '', // 가입일시
+                        'visit_date' => '', // 방문시간
+                    ]
+                );
+            if ($success) {
+                return \Response::json([
+                    'msg' => 'ok'
+                ]);
+            } else {
+                return \Response::json([
+                    'msg' => 'err'
+                ]);
+            }
+        }catch(Exception $e) {
+            return \Response::json([
+                'msg' => $e->getMessage()
+            ]);
+        }
+        exit();
     }
 
     //차량 등록 정보
