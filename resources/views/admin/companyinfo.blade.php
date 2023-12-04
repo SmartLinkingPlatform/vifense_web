@@ -66,7 +66,7 @@
 				<!-- CONTAINER CLOSED -->
 
                 <!-- modal part -->
-                <div class="modal fade" id="addAdminModal" role="dialog">
+                <div class="modal fade" id="addCompanyModal" role="dialog">
                     <div class="modal-dialog modal-dialog-centered">
                         <!-- Modal content-->
                         <div class="modal-content">
@@ -75,109 +75,175 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <div class="row"  id="dlgErr" style="display: none; padding-left: 15px;">
-                                    <div class="col">
-                                        error;
-                                    </div>
+                                <div class="col"  id="dlgErr" style="display: none;">
                                 </div>
                                 <div >
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_smart_phone">
+                                        Error id!
+                                    </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">아이디</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="number" id="input_id" class="form-control" name="example-text-input" placeholder="아이디">
+                                            <input type="text" id="input_smart_phone" class="form-control" name="input_smart_phone" placeholder="폰 번호">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_password">
+                                        Error password!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">비밀번호</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="password" id="input_password" class="form-control" name="example-text-input" placeholder="비밀번호">
+                                            <input type="password" id="input_password" class="form-control" name="input_password" placeholder="비밀번호">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_check_password">
+                                        Error check password!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">비밀번호 확인</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="password" id="input_password_confirm" class="form-control" name="example-text-input" placeholder="비밀번호 확인">
+                                            <input type="password" id="input_check_password" class="form-control" name="input_check_password" placeholder="비밀번호 확인">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_corporate_company_name">
+                                        Error corporate company!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">상호</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" id="input_company" class="form-control" name="example-text-input" placeholder="상호">
+                                            <input type="text" id="input_corporate_company_name" class="form-control" name="input_corporate_company_name" placeholder="상호">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_corporate_phone">
+                                        Error corporate phone!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">사업자등록번호</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" id="input_business_number" class="form-control" name="example-text-input" placeholder="사업자등록번호">
+                                            <input type="text" id="input_corporate_phone" class="form-control" name="input_corporate_phone" placeholder="사업자등록번호">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_corporate_address">
+                                        Error corporate address!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">주소</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" id="input_company_address" class="form-control" name="example-text-input" placeholder="주소">
+                                            <input type="text" id="input_corporate_address" class="form-control" name="input_corporate_address" placeholder="주소">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_corporate_name">
+                                        Error corporate name!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">대리인</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" id="input_agent" class="form-control" name="example-text-input" placeholder="대리인">
+                                            <input type="text" id="input_corporate_name" class="form-control" name="input_corporate_name" placeholder="대리인">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_company_phone">
+                                        Error company phone!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
-                                            <label class="form-label">전화번호</label>
+                                            <label class="form-label">회사 전화번호</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" id="input_company_phone" class="form-control" name="example-text-input" placeholder="전화번호">
+                                            <input type="text" id="input_company_phone" class="form-control" name="input_company_phone" placeholder="전화번호">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_create_date">
+                                        Error create date!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">설립일자</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" id="input_create_date" class="form-control" name="example-text-input" placeholder="설립일자">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">
+                                                        <i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+                                                    </div>
+                                                </div><input id="input_create_date" name="input_create_date" class="form-control fc-datepicker" placeholder="YYYY/MM/DD" type="text">
+                                            </div>
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_company_manager">
+                                        Error company manager!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">담당자</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" id="input_person" class="form-control" name="example-text-input" placeholder="담당자">
+                                            <input type="text" id="input_company_manager" class="form-control" name="input_company_manager" placeholder="담당자">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_car_count">
+                                        Error car count!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">차량수량</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" id="input_car_count" class="form-control" name="example-text-input" placeholder="차량수량">
+                                            <input type="number" id="input_car_count" class="form-control" name="input_car_count" placeholder="차량수량">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_corporate_photo">
+                                        Error corporate photo!
                                     </div>
                                     <div class="form-group row d-flex">
                                         <div class="col-md-3 pl-3">
                                             <label class="form-label">사업자등록사진</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="file" name="upload_user_img" id="upload_user_img" value="" style="display: none">
-                                            <div id="uploaduserimg_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
+                                            <input type="file" name="corporate_photo" id="corporate_photo" value="" style="display: none">
+                                            <div id="corporate_photo_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
                                         </div>
                                     </div>
+
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_uploadcorporate_doc">
+                                        Error corporate doc!
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">사업자등록증사본</label>
+                                        </div>
+                                        <div class="col-md-8 d-flex flex-row">
+                                            <input type="file" name="uploadcorporate_doc" id="uploadcorporate_doc" value="" style="display: none">
+                                            <div id="uploadcorporate_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
+                                            {{-- <div id="upload_corporate_doc" class="d-flex btn btn-primary align-items-center" style="width: 100px; margin-left: 10px; ">업로드</div>--}}
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                             <div class="modal-footer text-center" style="height: auto; justify-content: center;">
@@ -193,6 +259,21 @@
 			</div>
 @endsection
 @section('js')
+    <script src="{{ URL::asset('assets/plugins/sweet-alert/sweetalert.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/popover.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/date-picker/spectrum.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/date-picker/jquery-ui.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/fileuploads/js/fileupload.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/fileuploads/js/file-upload.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/time-picker/jquery.timepicker.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/time-picker/toggles.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/my-common.js') }}"></script>
+
     <script>
         let current_id = 0;
         let pstart=1;
@@ -200,22 +281,24 @@
         let pcount=5;
         let numg = 5;
         $(document).ready(function () {
-            getAdminList();
+            $( "#input_create_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
 
+            getCompanyList();
             $('#button_add').click(function(){
                 showAddDialog();
             });
 
             $('#modal_button_add').click(function(){
                 if (current_id === 0) {
-                    addAdmin();
+                    addCompany();
                 }
                 else {
-                    editAdmin();
+                    editCompany();
                 }
             });
 
             $('div[id="uploaduserimg_btn"]').on('mouseup', function () {
+                alert("ok");
                 $('#uploadcorporate_doc').trigger('click');
             });
             $('input[id="upload_user_img"]').change(function(){
@@ -233,27 +316,31 @@
         });
         function showAddDialog() {
             current_id = 0;
-            $('#addAdminModal').modal('show');
+            $('#addCompanyModal').modal('show');
             $('#dlgErr').text('').css({'display':'none'});
             $('#modal_title').text('회사 추가');
             $('#modal_button_add').text('추가');
-            $('#input_id').val('');
-            $('#input_company').val('').prop('readonly', false);
+            $('#input_smart_phone').val('');
+            //$('#input_password').val('').prop('readonly', false);
             $('#input_password').val('');
-            $('#input_password_confirm').val('');
-            $('#input_company').val('');
-            $('#input_business_number').val('');
+            $('#input_check_password').val('');
+            $('#input_corporate_company_name').val('');
+            $('#input_corporate_phone').val('');
+            $('#input_corporate_address').val('');
             $('#input_company_address').val('');
-            $('#input_agent').val('');
+            $('#input_corporate_name').val('');
             $('#input_company_phone').val('');
             $('#input_create_date').val('');
-            $('#input_person').val('');
+            $('#input_company_manager').val('');
             $('#input_car_count').val('');
-            $('#input_create_date').val('');
+            $('#corporate_photo').val('');
+            $('#corporate_photo_btn').text('파일 찾기');
+            $('#uploadcorporate_doc').val('');
+            $('#uploadcorporate_btn').text('파일 찾기');
         }
         function showEditDialog(id) {
             current_id = id;
-            $('#addAdminModal').modal('show');
+            $('#addCompanyModal').modal('show');
             $('#dlgErr').text('').css({'display':'none'});
             $('#modal_title').text('회사 정보 수정');
             $('#modal_button_add').text('수정');
@@ -287,12 +374,14 @@
             });
         }
 
-        function getAdminList() {
+        function getCompanyList() {
             $.ajax({
-                url: 'admin.getAdminList',
+                url: 'admin.getCompanyList',
                 data: {
                     start: pstart,
                     count:pcount,
+                    user_phone:'',
+                    company_name:'',
                 },
                 type: 'POST',
                 success: function (data) {
@@ -305,22 +394,22 @@
                         let tags = '';
                         for (let i = 0; i < lists.length; i++) {
                             let list = lists[i];
-                            let user_num = list.user_num;
+                            let admin_id = list.admin_id;
                             let order = i + 1;
-                            let user_id = list.user_id;
+                            let user_phone = list.user_phone;
                             let company_name = list.company_name || '';
                             let certifice_status = list.certifice_status || '';
                             let active = list.active || '';
                             let registe_date = list.registe_date || '';
                             let visit_date = list.visit_date || '';
-                            //let create_date = list.created_at;
+                            //let create_date = list.create_date;
                             //let dateString = create_date.split(' ')[0];
                             //let temp = dateString.split('-');
                             //let create_string = temp[1] + '/' + temp[2] + '/' + temp[0];
 
                             tags += '<tr>';
                             tags += '<td class="text-nowrap align-middle">' + order + '</td>';
-                            tags += '<td class="text-nowrap align-middle">' + user_id + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + user_phone + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + company_name + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + certifice_status + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + active + '</td>';
@@ -329,10 +418,10 @@
                             tags += '<td class="text-nowrap align-middle"> 로그 </td>';
                             tags += '<td class="text-center align-middle">';
                                 tags += '<div class="btn-group align-top pr-3 col-md-6 pb-1 justify-content-center">';
-                                tags += '<button class="btn btn-sm btn-primary badge p-3 " data-target="#user-form-modal" data-toggle="modal" type="button" id = "button_edit_'+user_num + '">수정<i class="fa fa-edit"></i></button>';
+                                tags += '<button class="btn btn-sm btn-primary badge p-3 " data-target="#user-form-modal" data-toggle="modal" type="button" id = "button_edit_'+admin_id + '">수정<i class="fa fa-edit"></i></button>';
                                 tags += '</div>';
                                 tags += '<div class="btn-group align-top col-md-6 pb-1 justify-content-center">';
-                                tags += '<button class="btn btn-sm btn-red badge p-3" data-target="#user-form-modal" data-toggle="modal" type="button" id="button_delete_' + user_num + '">삭제<i class="fa fa-trash"></i></button>';
+                                tags += '<button class="btn btn-sm btn-red badge p-3" data-target="#user-form-modal" data-toggle="modal" type="button" id="button_delete_' + admin_id + '">삭제<i class="fa fa-trash"></i></button>';
                                 tags += '</div>';
                             tags += '</td>';
                             tags += '</tr>';
@@ -401,7 +490,7 @@
                         $('a[id^="page_nav_number_"]').click(function(){
                             let oid=$(this).attr("id");
                             pstart=oid.split('_')[3];
-                            getAdminList();
+                            getCompanyList();
                         });
 
                         $('button[id^="button_edit_"]').click(function(){
@@ -427,54 +516,191 @@
             });
         }
 
-        function addAdmin() {
-            let name = $('#input_id').val();
-            let account = $('#input_company').val();
-            let password = $('#input_password').val();
-            let password_confirm = $('#input_password_confirm').val();
-            if (account === '' || account == null) {
-                $('#dlgErr').text('사용자 이름을 입력해주세요').css({'display':'block','color':'#d41b11'});
-                return;
-            }
-            if (name === '' || name == null) {
-                $('#dlgErr').text('이름을 입력하세요').css({'display':'block','color':'#d41b11'});
-                return;
-            }
-            if (password === '' || password == null) {
-                $('#dlgErr').text('비밀번호를 입력 해주세요').css({'display':'block','color':'#d41b11'});
-                return;
-            }
-            if (password_confirm === '' || password_confirm == null) {
-                $('#dlgErr').text('확인 비밀번호를 입력해주세요').css({'display':'block','color':'#d41b11'});
-                return;
-            }
-            if (password !== password_confirm) {
-                $('#dlgErr').text('비밀번호 오류').css({'display':'block','color':'#d41b11'});
+        function addCompany() {
+            let smart_phone = $('#input_smart_phone').val().replace(/ /g, '');
+            smart_phone = smart_phone.replace(/-/g, '');
+            smart_phone = smart_phone.replace(/_/g, '');
+            let password = $('#input_password').val().replace(/ /g, '');
+            let check_password = $('#input_check_password').val().replace(/ /g, '');
+            let corporate_company_name = $('#input_corporate_company_name').val().replace(/ /g, '');
+            let corporate_phone = $('#input_corporate_phone').val().replace(/ /g, '');
+            let corporate_address = $('#input_corporate_address').val().replace(/ /g, '');
+            let corporate_name = $('#input_corporate_name').val().replace(/ /g, '');
+            let company_phone = $('#input_company_phone').val().replace(/ /g, '');
+            let create_date = $('#input_create_date').val().replace(/ /g, '');
+            let company_manager = $('#input_company_manager').val().replace(/ /g, '');
+            let car_count = $('#input_car_count').val().replace(/ /g, '');
+
+            if(smart_phone === ""){
+                $('#valid_smart_phone').text("사용자 아이디를 입력해주세요").css('display','block');
+                setTimeout(function () {
+                    $('#valid_smart_phone').text("사용자 아이디를 입력해주세요").css('display','none');
+                    $('#text_smart_phone').css('margin-bottom','1.5rem');
+                },1000);
                 return;
             }
 
+            if(!isNumeric(smart_phone))
+            {
+                $('#valid_smart_phone').text("휴대폰 번호를 입력해주세요").css('display','block');
+                setTimeout(function () {
+                    $('#valid_smart_phone').text("휴대폰 번호를 입력해주세요").css('display','none');
+                    $('#text_smart_phone').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(password === "") {
+                $('#valid_password').text("비밀번호를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_password').text("비밀번호를 입력 해주세요").css('display','none');
+                    $('#text_password').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(check_password === "") {
+                $('#valid_check_password').text("확인 비밀번호를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_check_password').text("확인 비밀번호를 입력 해주세요").css('display','none');
+                    $('#text_check_password').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(password !== check_password){
+                $('#valid_check_password').text("비밀번호가 서로 다릅니다.").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_check_password').text("비밀번호가 서로 다릅니다.").css('display','none');
+                    $('#text_check_password').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(corporate_company_name === "") {
+                $('#valid_corporate_company_name').text("상호를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_corporate_company_name').text("상호를 입력 해주세요").css('display','none');
+                    $('#text_corporate_company_name').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(corporate_phone === "") {
+                $('#valid_corporate_phone').text("사업자 등록번호 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_corporate_phone').text("사업자 등록번호 입력 해주세요").css('display','none');
+                    $('#text_corporate_phone').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(corporate_address === "") {
+                $('#valid_corporate_address').text("주소를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_corporate_address').text("주소를 입력 해주세요").css('display','none');
+                    $('#text_corporate_address').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(corporate_name === "") {
+                $('#valid_corporate_name').text("대표자 성명을 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_corporate_name').text("대표자 성명을 입력 해주세요").css('display','none');
+                    $('#text_corporate_name').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(company_phone === "") {
+                $('#valid_company_phone').text("회사 전화번호를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_company_phone').text("회사 전화번호를 입력 해주세요").css('display','none');
+                    $('#text_company_phone').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(create_date === "") {
+                $('#valid_create_date').text("설립일자를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_create_date').text("설립일자를 입력 해주세요").css('display','none');
+                    $('#text_create_date').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(company_manager === "") {
+                $('#valid_company_manager').text("담당자를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_company_manager').text("담당자를 입력 해주세요").css('display','none');
+                    $('#text_company_manager').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(!isNumeric(car_count)){
+                $('#valid_car_count').text("차량 수량을 정확히 숫자로 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_car_count').text("차량 수량을 정확히 숫자로 입력 해주세요").css('display','none');
+                    $('#text_car_count').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(parseInt(car_count) <= 0){
+                $('#valid_car_count').text("차량 수량을 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_car_count').text("차량 수량을 입력 해주세요").css('display','none');
+                    $('#text_car_count').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            let corporate_photo_file =  $('#corporate_photo').prop('files')[0];
+            let corporate_doc_file =  $('#uploadcorporate_doc').prop('files')[0];
+
+            let form_data = new FormData();
+            form_data.append('smart_phone', smart_phone);
+            form_data.append('password', password);
+            form_data.append('corporate_company_name', corporate_company_name);
+            form_data.append('corporate_phone', corporate_phone);
+            form_data.append('corporate_address', corporate_address);
+            form_data.append('corporate_name', corporate_name);
+            form_data.append('company_phone', company_phone);
+            form_data.append('create_date', create_date);
+            form_data.append('company_manager', company_manager);
+            form_data.append('car_count', car_count);
+            form_data.append('corporate_photo_file', corporate_photo_file);
+            form_data.append('corporate_doc_file', corporate_doc_file);
+
             $.ajax({
-                url: 'admin.adminRegister',
-                data: {
-                    account:account,
-                    name: name,
-                    password: password,
-                },
+                url: 'admin.addNewCompany',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,
                 type: 'POST',
                 success: function (data) {
                     if (data.msg === 'ok') {
                         $('#dlgErr').text('성공적으로 추가되었습니다').css({'display':'block','color':'#0BC334'});
                         setTimeout(function () {
-                            $("#addAdminModal").modal('hide');
-                            getAdminList();
+                            $("#addCompanyModal").modal('hide');
+                            getCompanyList();
                         },1000);
                     }
                     else if (data.msg ==='du'){
                         $('#dlgErr').text('계정이 이미 존재합니다.').css({'display':'block','color':'#d41b11'});
+
                     }
                     else {
                         $('#dlgErr').text('오류 발생').css({'display':'block','color':'#d41b11'});
                     }
+
+                    setTimeout(function () {
+                        $('#dlgErr').text('').css({'display':'none','color':'#1a1a1a'});
+                    },900);
                 },
                 error: function (jqXHR, errdata, errorThrown) {
                     console.log(errdata);
@@ -482,7 +708,7 @@
             });
         }
 
-        function editAdmin() {
+        function editCompany() {
             let name = $('#input_id').val();
             let account = $('#input_company').val();
             let password = $('#input_password').val();
@@ -509,7 +735,7 @@
             }
 
             $.ajax({
-                url: 'admin.editAdminInformation',
+                url: 'admin.editCompanyInformation',
                 data: {
                     id: current_id,
                     account: account,
@@ -521,8 +747,8 @@
                     if (data.msg === 'ok') {
                         $('#dlgErr').text('수정되었습니다.').css({'display':'block','color':'#0BC334'});
                         setTimeout(function () {
-                            $("#addAdminModal").modal('hide');
-                            getAdminList();
+                            $("#addCompanyModal").modal('hide');
+                            getCompanyList();
                         },1000);
                     }
                     else {
@@ -555,4 +781,9 @@
             });
         }
     </script>
+    <style>
+        #ui-datepicker-div {
+            z-index: 1600 !important; /* has to be larger than 1050 */
+        }
+    </style>
 @endsection

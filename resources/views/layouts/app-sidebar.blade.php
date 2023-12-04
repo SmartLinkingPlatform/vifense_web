@@ -29,7 +29,7 @@
 
                         @if (Session::get('user') == 'admin')
                             <li>
-                                <a class="side-menu__item" href="{{ url('/' . $page='admin.admin') }}">
+                                <a class="side-menu__item" href="{{ url('/' . $page='admin.companyinfo') }}">
                                     <i class="side-menu__icon mdi mdi-account-key"></i><span class="side-menu__label">회사 정보</span>
                                 </a>
                             </li>

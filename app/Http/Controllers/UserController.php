@@ -11,6 +11,7 @@ use mysql_xdevapi\Exception;
 
 class UserController extends BaseController
 {
+    protected $tb_user_info ='tb_user_info';
 
     public function __construct(Request $request)
     {
@@ -234,6 +235,37 @@ order by o.order_type ';
         else {
             return \Response::json([
                 'msg' => 'err'
+            ]);
+        }
+    }
+
+    //-----------------------------------------------------
+    // User management part
+    //-----------------------------------------------------
+    public function getUserList(Request $request){
+        $start  = $request->post('start');
+        $count    = $request->post('count');
+        $start_from = ($start-1) * $count;
+        $table_user = 'user';
+        $sql = 'SELECT * from '. $table_user. ' ';
+        $lim_sql = $sql.'LIMIT '.$start_from.', '.$count.'';
+        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
+        $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+
+        $total = count($total_rows);
+        $total_page = ceil($total / $count);
+        if($rows == null){
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        }
+        else{
+            return \Response::json([
+                'msg' => 'ok',
+                'total'    =>  $total,
+                'start'    =>  $start,
+                'totalpage'    =>  $total_page,
+                'lists' => $rows,
             ]);
         }
     }

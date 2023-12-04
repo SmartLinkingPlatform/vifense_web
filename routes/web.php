@@ -36,8 +36,8 @@ Route::middleware('adminsession')->group(function(){
     Route::get('admin.dashboard', function () {
         return view('admin.dashborad-view');
     });
-    Route::get('admin.admin', function () {
-        return view('admin.admin');
+    Route::get('admin.companyinfo', function () {
+        return view('admin.companyinfo');
     });
     Route::get('admin.user', function () {
         return view('admin.user');
@@ -74,6 +74,7 @@ Route::post('admin.adminDelete', 'AdminController@adminDelete');
 Route::post('admin.getAdminInformation', 'AdminController@getAdminInformation');
 Route::post('admin.editAdminInformation', 'AdminController@editAdminInformation');
 
+/*
 Route::post('admin.getUserList', 'AdminController@getUserList');
 Route::post('admin.userRegister', 'AdminController@userRegister');
 Route::post('admin.userDelete', 'AdminController@userDelete');
@@ -109,7 +110,7 @@ Route::post('admin.rejectOutcomeRequest', 'AdminController@rejectOutcomeRequest'
 
 Route::post('admin.csvOrderHistoryList', 'AdminController@csvOrderHistoryList');
 Route::post('admin.getOrderHistoryList', 'AdminController@getOrderHistoryList');
-
+*/
 
 
 //---------------------------------------------------
@@ -118,6 +119,9 @@ Route::post('admin.getOrderHistoryList', 'AdminController@getOrderHistoryList');
 Route::view('admin.findPasswordView', 'admin.find-password-view');
 Route::view('admin.signupCorporateView', 'admin.signup-corporate-view');
 Route::post('admin.corporateSignup', 'AdminController@corporateSignup');
+
+Route::post('admin.getCompanyList', 'CompanyController@getCompanyList');
+Route::post('admin.addNewCompany', 'CompanyController@addNewCompany');
 
 //-----------------------------------------------------
 // User part

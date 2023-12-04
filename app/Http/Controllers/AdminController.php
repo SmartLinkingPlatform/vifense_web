@@ -11,7 +11,7 @@ use mysql_xdevapi\Exception;
 
 class AdminController extends BaseController
 {
-
+    protected $tb_admin_info='tb_admin_info';
     public function __construct(Request $request)
     {
 //        $this->middleware("auth");
@@ -105,11 +105,10 @@ class AdminController extends BaseController
     public function adminLogin(Request $request){
         $userid = $request->post('userid');
         $password = $request->post('password');
-        $tb_user_info = 'tb_user_info';
         $updated_at = @date("Y-m-d h:i:s", time());
 
 
-        $user = DB::table($tb_user_info)->where('user_id', $userid)->first();
+        $user = DB::table($this->tb_admin_info)->where('user_phone', $userid)->first();
 
         if($user == null){
             return \Response::json([
@@ -118,17 +117,17 @@ class AdminController extends BaseController
         }
         else{
             $md5pwd = $this->encrypt_decrypt('encrypt', $password);
-            $pwd = DB::table($tb_user_info)->where('user_id', $userid)->where('user_pwd', $md5pwd)->first();
+            $pwd = DB::table($this->tb_admin_info)->where('user_phone', $userid)->where('user_pwd', $md5pwd)->first();
             if($pwd == null){
                 return \Response::json([
                     'msg' => 'nonpwd'
                 ]);
             }
             else{
-                DB::table($tb_user_info)->where('user_id', $userid)->update(['active' => 1]);
+                DB::table($this->tb_admin_info)->where('admin_id', $userid)->update(['active' => 1]);
                 $request->session()->put('user', 'admin');
-                $request->session()->put('user_num', $user->user_num);
-                $request->session()->put('user_id', $user->user_id);
+                $request->session()->put('admin_id', $user->admin_id);
+                $request->session()->put('user_phone', $user->user_phone);
                 $request->session()->put('user_type', $user->user_type);
                 $request->session()->put('user_name', $user->user_name);
                 $request->session()->put('logintime', $updated_at);
@@ -151,13 +150,13 @@ class AdminController extends BaseController
 
     public function logout()
     {
-        $userid = session('user_id',null);
-        if(!is_null($userid))
-            DB::table('tb_user_info')->where('user_id', $userid)->update(['active' => 0]);
+        $user_phone = session('user_phone',null);
+        if(!is_null($user_phone))
+            DB::table($this->tb_admin_info)->where('user_phone', $user_phone)->update(['active' => 0]);
 
         session()->forget('user');
-        session()->forget('user_num');
-        session()->forget('user_id');
+        session()->forget('admin_id');
+        session()->forget('user_phone');
         session()->forget('user_type');
         session()->forget('user_name');
         session()->forget('logintime');
@@ -171,11 +170,10 @@ class AdminController extends BaseController
         $start  = $request->post('start');
         $count    = $request->post('count');
         $start_from = ($start-1) * $count;
-        $table_user_info = 'tb_user_info';
 
         $user_type = $request->session()->get('user_type', 0);
 
-        $sql = 'SELECT * from '. $table_user_info. ' ';
+        $sql = 'SELECT * from '. $this->tb_admin_info. ' ';
         if((int)$user_type <= 0) // be geted user_type < 1 if not admin
             $sql .= ' WHERE user_type < 1 ';
         $lim_sql = $sql.'LIMIT '.$start_from.', '.$count.'';
@@ -201,9 +199,8 @@ class AdminController extends BaseController
     }
 
     public function getAdminInformation(Request $request){
-        $id = $request->post('id');
-        $table_admin = 'admin';
-        $rows =DB::table($table_admin)->where('id', $id)->first();
+        $admin_id = $request->post('admin_id');
+        $rows =DB::table($this->tb_admin_info)->where('admin_id', $admin_id)->first();
         $password = $rows->password;
         $dec_password = $this->encrypt_decrypt('decrypt', $password);
 
@@ -222,23 +219,22 @@ class AdminController extends BaseController
     }
 
     public function editAdminInformation(Request $request){
-        $id = $request->post('id');
-        $account = $request->post('account');
+        $admin_id = $request->post('admin_id');
+        $user_phone = $request->post('user_phone');
         $password = $request->post('password');
         $name = $request->post('name');
-        $table_admin = 'admin';
         $current_time = date("Y-m-d h:i:s", time());
 
-        $cnt = DB::table($table_admin)->where('id', $id)->doesntExist();
+        $cnt = DB::table($this->tb_admin_info)->where('admin_id', $admin_id)->doesntExist();
         if (!$cnt){
             $enc_password = $this->encrypt_decrypt('encrypt', $password);
-            $success =  DB::table($table_admin)->where('id', $id)
+            $success =  DB::table($this->tb_admin_info)->where('admin_id', $admin_id)
                 ->update(
                     [
-                        'account' => $account,
-                        'name' => $name,
-                        'password' => $enc_password,
-                        'updated_at' => $current_time,
+                        'user_phone' => $user_phone,
+                        'user_name' => $name,
+                        'user_pwd' => $enc_password,
+                        'update_date' => $current_time,
                     ]
                 );
             if ($success) {
@@ -260,23 +256,22 @@ class AdminController extends BaseController
     }
 
     public function adminRegister(Request $request){
-        $account = $request->post('account');
+        $user_phone = $request->post('user_phone');
         $password = $request->post('password');
         $name = $request->post('name');
-        $table_admin = 'admin';
         $current_time = date("Y-m-d h:i:s", time());
 
-        $cnt = DB::table($table_admin)->where('account', $account)->doesntExist();
+        $cnt = DB::table($this->tb_admin_info)->where('user_phone', $user_phone)->doesntExist();
         if ($cnt){
             $enc_password = $this->encrypt_decrypt('encrypt', $password);
-            $success =  DB::table($table_admin)
+            $success =  DB::table($this->tb_admin_info)
                 ->insert(
                     [
-                        'account' => $account,
-                        'name' => $name,
-                        'password' => $enc_password,
-                        'created_at' => $current_time,
-                        'updated_at' => $current_time,
+                        'user_phone' => $user_phone,
+                        'user_name' => $name,
+                        'user_pwd' => $enc_password,
+                        'registe_date' => $current_time,
+                        'update_date' => $current_time,
                     ]
                 );
             if ($success) {
@@ -298,169 +293,17 @@ class AdminController extends BaseController
     }
 
     public function adminDelete(Request $request){
-        $id = $request->post('id');
-        $table_admin = 'admin';
+        $id = $request->post('admin_id');
         $success = false;
 
-        $cnt = DB::table($table_admin)->where('id', $id)->doesntExist();
+        $cnt = DB::table($this->tb_admin_info)->where('admin_id', $id)->doesntExist();
         if (!$cnt){
-            $success = DB::table($table_admin)->delete($id);
+            $success = DB::table($this->tb_admin_info)->delete($id);
         }
         if ($success) {
             return \Response::json([
                 'msg' => 'ok'
             ]);
-        }
-        else {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-    }
-
-    //-----------------------------------------------------
-    // User management part
-    //-----------------------------------------------------
-    public function getUserList(Request $request){
-        $start  = $request->post('start');
-        $count    = $request->post('count');
-        $start_from = ($start-1) * $count;
-        $table_user = 'user';
-        $sql = 'SELECT * from '. $table_user. ' ';
-        $lim_sql = $sql.'LIMIT '.$start_from.', '.$count.'';
-        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
-        $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
-
-        $total = count($total_rows);
-        $total_page = ceil($total / $count);
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'total'    =>  $total,
-                'start'    =>  $start,
-                'totalpage'    =>  $total_page,
-                'lists' => $rows,
-            ]);
-        }
-    }
-
-    public function userRegister(Request $request){
-        $account = $request->post('account');
-        $password = $request->post('password');
-        $name = $request->post('name');
-        $table_user = 'user';
-        $current_time = date("Y-m-d h:i:s", time());
-
-        $cnt = DB::table($table_user)->where('account', $account)->doesntExist();
-        if ($cnt){
-            $enc_password = $this->encrypt_decrypt('encrypt', $password);
-            $success =  DB::table($table_user)
-                ->insert(
-                    [
-                        'account' => $account,
-                        'name' => $name,
-                        'password' => $enc_password,
-                        'created_at' => $current_time,
-                        'updated_at' => $current_time,
-                    ]
-                );
-            if ($success) {
-                return \Response::json([
-                    'msg' => 'ok'
-                ]);
-            }
-            else {
-                return \Response::json([
-                    'msg' => 'err'
-                ]);
-            }
-        }
-        else {
-            return \Response::json([
-                'msg' => 'du'
-            ]);
-        }
-    }
-
-    public function userDelete(Request $request){
-        $id = $request->post('id');
-        $table_user = 'user';
-        $table_order = 'order_history';
-        $success = false;
-
-        $cnt = DB::table($table_user)->where('id', $id)->doesntExist();
-        if (!$cnt){
-            $success = DB::table($table_order)->where('user_id', $id)->delete();
-            $success = DB::table($table_user)->delete($id);
-        }
-        if ($success) {
-            return \Response::json([
-                'msg' => 'ok'
-            ]);
-        }
-        else {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-    }
-
-    public function getUserInformation(Request $request){
-        $id = $request->post('id');
-        $table_user = 'user';
-        $rows =DB::table($table_user)->where('id', $id)->first();
-        $password = $rows->password;
-        $dec_password = $this->encrypt_decrypt('decrypt', $password);
-
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-                'pwd' => $dec_password,
-            ]);
-        }
-    }
-
-    public function editUserInformation(Request $request){
-        $id = $request->post('id');
-        $account = $request->post('account');
-        $password = $request->post('password');
-        $name = $request->post('name');
-        $table_user = 'user';
-        $current_time = date("Y-m-d h:i:s", time());
-
-        $cnt = DB::table($table_user)->where('id', $id)->doesntExist();
-        if (!$cnt){
-            $enc_password = $this->encrypt_decrypt('encrypt', $password);
-            $success =  DB::table($table_user)->where('id', $id)
-                ->update(
-                    [
-                        'account' => $account,
-                        'name' => $name,
-                        'password' => $enc_password,
-                        'updated_at' => $current_time,
-                    ]
-                );
-            if ($success) {
-                return \Response::json([
-                    'msg' => 'ok'
-                ]);
-            }
-            else {
-                return \Response::json([
-                    'msg' => 'err'
-                ]);
-            }
         }
         else {
             return \Response::json([
@@ -1271,7 +1114,9 @@ class AdminController extends BaseController
         $current_time = date("Y-m-d h:i:s", time());
         $company_manager = $request->post('company_manager');
         $car_count = $request->post('car_count');
+        $corporate_photo_file = $request->file('corporate_photo_file');
         $corporate_doc_file = $request->file('corporate_doc_file');
+        $corporate_photo_name = '';
         $corporate_doc_name = '';
 
         if ($date_string === null || $date_string ==='') {
@@ -1282,10 +1127,20 @@ class AdminController extends BaseController
             $create_date = date('Y-m-d h:i:s',$date_string);
         }
 
+        $corporate_photo_url='';
+        $file_currentTime = date("YmdHis");
+        $randNump= rand(1, 9);
+        $order_numberp = $file_currentTime.$randNump;
+        if($corporate_photo_file != null && $corporate_photo_file != ''){
+            $new_namep = $order_numberp.'.'.$corporate_photo_file->getClientOriginalExtension();
+            $corporate_photo_file->move(public_path('images/uploads'), $new_namep);
+            $corporate_photo_url = 'images/uploads/'.$new_namep;
+            $corporate_photo_name = $corporate_photo_file->getClientOriginalName();
+        }
+
         $corporate_doc_url='';
-        $doc_currentTime = date("YmdHis");
         $randNum = rand(1, 9);
-        $order_number = $doc_currentTime.$randNum;
+        $order_number = $file_currentTime.$randNum;
         if($corporate_doc_file != null && $corporate_doc_file != ''){
             $new_name = $order_number.'.'.$corporate_doc_file->getClientOriginalExtension();
             $corporate_doc_file->move(public_path('docs/uploads'), $new_name);
@@ -1295,9 +1150,9 @@ class AdminController extends BaseController
 
         $enc_password = $this->encrypt_decrypt('encrypt', $password);
 
-        $table_user_info = 'tb_user_info';
+        $tb_admin_info = 'tb_admin_info';
         try {
-            $cnt = DB::table($table_user_info)->where('user_id', $smart_phone)->doesntExist();
+            $cnt = DB::table($tb_admin_info)->where('user_phone', $smart_phone)->doesntExist();
             if (!$cnt){ // exist
                 return \Response::json([
                     'msg' => 'du'
@@ -1306,28 +1161,29 @@ class AdminController extends BaseController
                 exit();
             }
 
-            $success = DB::table($table_user_info)
+            $success = DB::table($tb_admin_info)
                 ->insert(
                     [
-                        'user_id' => $smart_phone, // 아이디
+                        'user_phone' => $smart_phone, // 아이디
                         'user_pwd' => $enc_password, // 암호
-                        'user_type' => 0, // 1 어드민 | 0 사업자
-                        'user_class' => 0, // 0 회사 | 1 개인
-                        'user_regnum' => $corporate_phone, // 사업자 등록번호
-                        'user_address' => $corporate_address, // 주소
                         'user_name' => $corporate_name, // 대표자 성명
+                        'user_email' => '', // 이메일
                         'user_birthday' => '',
-                        'user_email' => '',
+                        'user_address' => $corporate_address, // 주소
+                        'user_photo' => $corporate_photo_name, // 사용자사진 이름
+                        'user_photo_url' => $corporate_photo_url, // 사용자사진 경로
+                        'user_type' => 0, // 1 어드민 | 0 사업자
+                        'user_regnum' => $corporate_phone, // 사업자 등록번호
                         'company_name' => $corporate_company_name, // 상호(회사이름)
                         'company_phone' => $company_phone, // 회사 전화번호
-                        'person_name' => $company_manager, // 담당자 이름
-                        'person_phone' => '', // 담당자 전화번호
+                        'manager_name' => $company_manager, // 담당자 이름
+                        'manager_phone' => '', // 담당자 전화번호
                         'certified_copy' => $corporate_doc_url, // 등록증 사본
-                        'certified_name' => $corporate_doc_name, // 등록증 사본 실지 이름
                         'certifice_status' => 0, // 인증여부 1: 인증됨, 0: 안됨
+                        'certified_name' => $corporate_doc_name, // 등록증 사본 실지 이름
                         'car_count' => (int)$car_count, // 차량수량
                         'create_date' => $create_date, // 설립일자
-                        'registe_date' => '', // 가입일시
+                        'registe_date' => $current_time, // 가입일시
                         'visit_date' => '', // 방문시간
                         'website' => '',
                         'active' => 0, // 1 이면 액티브 , 0 이면 디액티브

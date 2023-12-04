@@ -25,6 +25,7 @@
 					<div class="container-login100">
 						<div class="wrap-login100 p-6">
 							<form class="login100-form signup-corporate validate-form">
+
 								<span class="login100-form-title">
                                     법인회원 가입
 								</span>
@@ -167,12 +168,25 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_corporate_doc">
+                                <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_corporate_photo">
+                                    Error corporate photo!
+                                </div>
+                                <div class="form-group row d-flex">
+                                    <div class="col-md-4 pl-3">
+                                        <label class="form-label">사업자 등록사진</label>
+                                    </div>
+                                    <div class="col-md-8  d-flex flex-row">
+                                        <input type="file" name="corporate_photo" id="corporate_photo" value="" style="display: none">
+                                        <div id="corporate_photo_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_uploadcorporate_doc">
                                     Error corporate doc!
                                 </div>
                                 <div class="form-group row d-flex">
                                     <div class="col-md-4 pl-3">
-                                        <label class="form-label">사업자 등록증 사본</label>
+                                        <label class="form-label">사업자 등록증사본</label>
                                     </div>
                                     <div class="col-md-8 d-flex flex-row">
                                         <input type="file" name="uploadcorporate_doc" id="uploadcorporate_doc" value="" style="display: none">
@@ -180,8 +194,6 @@
                                        {{-- <div id="upload_corporate_doc" class="d-flex btn btn-primary align-items-center" style="width: 100px; margin-left: 10px; ">업로드</div>--}}
                                     </div>
                                 </div>
-
-
 
 								<div class="container-login100-form-btn mb-4" style="cursor: pointer;">
 									<div id="button_corporate_signup" class="login100-form-btn btn-primary">
@@ -202,27 +214,40 @@
 @endsection
 @section('js')
     <script src="{{ URL::asset('assets/plugins/sweet-alert/sweetalert.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
+    {{-- <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script> --}}
     <script src="{{ URL::asset('assets/js/popover.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/date-picker/spectrum.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/date-picker/jquery-ui.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/fileuploads/js/fileupload.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/fileuploads/js/file-upload.js') }}"></script>
+    {{-- <script src="{{ URL::asset('assets/plugins/fileuploads/js/file-upload.js') }}"></script> --}}
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/time-picker/jquery.timepicker.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/time-picker/toggles.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/my-common.js') }}"></script>
 
     <script>
-        function isNumeric(value) {
-            return /^\d+$/.test(value);
-        }
 
         $(document).ready(function () {
 
-            $( "#input_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+            $( "#input_create_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+
+            $('div[id="corporate_photo_btn"]').on('mouseup', function () {
+                $('#corporate_photo').trigger('click');
+            });
+            $('input[id="corporate_photo"]').change(function(){
+                if (this.files && this.files[0])
+                {
+                    //console.log(this.files[0].name);
+                    let corporate_photo_name = this.files[0].name;
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#corporate_photo_btn').text(corporate_photo_name);
+                    }
+                    reader.readAsDataURL(this.files[0]); // convert to base64 string
+                }
+            });
 
             $('div[id="uploadcorporate_btn"]').on('mouseup', function () {
                 $('#uploadcorporate_doc').trigger('click');
@@ -381,7 +406,7 @@
                     },1000);
                     return;
                 }
-
+                let corporate_photo_file =  $('#corporate_photo').prop('files')[0];
                 let corporate_doc_file =  $('#uploadcorporate_doc').prop('files')[0];
 
                 let form_data = new FormData();
@@ -395,6 +420,7 @@
                 form_data.append('create_date', create_date);
                 form_data.append('company_manager', company_manager);
                 form_data.append('car_count', car_count);
+                form_data.append('corporate_photo_file', corporate_photo_file);
                 form_data.append('corporate_doc_file', corporate_doc_file);
 
                 $.ajax({
