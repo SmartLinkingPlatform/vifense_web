@@ -16,7 +16,7 @@ class CheckAdminSession
      */
     public function handle($request, Closure $next)
     {
-        if($request->session()->has('user_id')){
+        if($request->session()->has('admin_id')){
             return $next($request);
         } else {
             return redirect('/admin');

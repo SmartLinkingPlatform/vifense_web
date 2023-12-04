@@ -82,10 +82,10 @@
                                         Error id!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">아이디</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="text" id="input_smart_phone" class="form-control" name="input_smart_phone" placeholder="폰 번호">
                                         </div>
                                     </div>
@@ -94,10 +94,10 @@
                                         Error password!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">비밀번호</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="password" id="input_password" class="form-control" name="input_password" placeholder="비밀번호">
                                         </div>
                                     </div>
@@ -106,10 +106,10 @@
                                         Error check password!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">비밀번호 확인</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="password" id="input_check_password" class="form-control" name="input_check_password" placeholder="비밀번호 확인">
                                         </div>
                                     </div>
@@ -118,10 +118,10 @@
                                         Error corporate company!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">상호</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="text" id="input_corporate_company_name" class="form-control" name="input_corporate_company_name" placeholder="상호">
                                         </div>
                                     </div>
@@ -130,10 +130,10 @@
                                         Error corporate phone!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">사업자등록번호</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="text" id="input_corporate_phone" class="form-control" name="input_corporate_phone" placeholder="사업자등록번호">
                                         </div>
                                     </div>
@@ -142,10 +142,10 @@
                                         Error corporate address!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">주소</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="text" id="input_corporate_address" class="form-control" name="input_corporate_address" placeholder="주소">
                                         </div>
                                     </div>
@@ -154,10 +154,10 @@
                                         Error corporate name!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">대리인</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="text" id="input_corporate_name" class="form-control" name="input_corporate_name" placeholder="대리인">
                                         </div>
                                     </div>
@@ -166,10 +166,10 @@
                                         Error company phone!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">회사 전화번호</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="text" id="input_company_phone" class="form-control" name="input_company_phone" placeholder="전화번호">
                                         </div>
                                     </div>
@@ -178,10 +178,10 @@
                                         Error create date!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">설립일자</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">
@@ -196,10 +196,10 @@
                                         Error company manager!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">담당자</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="text" id="input_company_manager" class="form-control" name="input_company_manager" placeholder="담당자">
                                         </div>
                                     </div>
@@ -208,10 +208,10 @@
                                         Error car count!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">차량수량</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="number" id="input_car_count" class="form-control" name="input_car_count" placeholder="차량수량">
                                         </div>
                                     </div>
@@ -220,10 +220,10 @@
                                         Error corporate photo!
                                     </div>
                                     <div class="form-group row d-flex">
-                                        <div class="col-md-3 pl-3">
+                                        <div class="col-md-4 pl-3">
                                             <label class="form-label">사업자등록사진</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <input type="file" name="corporate_photo" id="corporate_photo" value="" style="display: none">
                                             <div id="corporate_photo_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
                                         </div>
@@ -282,8 +282,8 @@
         let numg = 5;
         $(document).ready(function () {
             $( "#input_create_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
-
             getCompanyList();
+
             $('#button_add').click(function(){
                 showAddDialog();
             });
@@ -297,22 +297,38 @@
                 }
             });
 
-            $('div[id="uploaduserimg_btn"]').on('mouseup', function () {
-                alert("ok");
-                $('#uploadcorporate_doc').trigger('click');
+            $('div[id="corporate_photo_btn"]').on('mouseup', function () {
+                $('#corporate_photo').trigger('click');
             });
-            $('input[id="upload_user_img"]').change(function(){
+            $('input[id="corporate_photo"]').change(function(){
                 if (this.files && this.files[0])
                 {
                     //console.log(this.files[0].name);
-                    let img_file_name = this.files[0].name;
+                    let corporate_photo_name = this.files[0].name;
                     let reader = new FileReader();
                     reader.onload = function(e) {
-                        $('#uploaduserimg_btn').text(img_file_name);
+                        $('#corporate_photo_btn').text(corporate_photo_name);
                     }
                     reader.readAsDataURL(this.files[0]); // convert to base64 string
                 }
             });
+
+            $('div[id="uploadcorporate_btn"]').on('mouseup', function () {
+                $('#uploadcorporate_doc').trigger('click');
+            });
+            $('input[id="uploadcorporate_doc"]').change(function(){
+                if (this.files && this.files[0])
+                {
+                    //console.log(this.files[0].name);
+                    let corporate_doc_name = this.files[0].name;
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#uploadcorporate_btn').text(corporate_doc_name);
+                    }
+                    reader.readAsDataURL(this.files[0]); // convert to base64 string
+                }
+            });
+
         });
         function showAddDialog() {
             current_id = 0;
