@@ -155,9 +155,7 @@ Route::post('user.getOrderDetailInformation', 'UserController@getOrderDetailInfo
 Route::post('user.modOutcomeOrderInfo', 'UserController@modOutcomeOrderInfo');
 */
 
-/*include ('mobile.php');
-//Route::get('/{page}', 'AdminController@index'); // don't call this part for mobile.php route
-*/
-
-Route::get('/{page}', 'AdminController@index')->where('page', '!(^[mobile.]?)');
+include ('mobile.php');
+Route::get('/{page}', 'AdminController@index'); // don't call this part for mobile.php route
+// Route::get('/{page}', 'AdminController@index')->where('page', '!(^[mobile.]?)');
 
