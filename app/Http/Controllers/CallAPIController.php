@@ -228,19 +228,102 @@ class CallAPIController extends BaseController
         exit();
     }
 
+    //비밀번호 찾기 및 변화
+    public function userFindPassword(Request $request){
+
+        exit();
+    }
+
     //차량 등록 정보
     public function regCarInfo(Request $request){
+        $number = $request->post('number');
+        $manufacturer = $request->post('manufacturer');
+        $car_model = $request->post('car_model');
+        $car_date = $request->post('car_date');
+        $car_fuel = $request->post('car_fuel');
+        $car_gas = $request->post('car_gas');
+        $user_id = $request->post('user_id');
+        $company = $request->post('company');
 
+        $current_time = date("Y-m-d h:i:s", time());
+
+        $tb_car_info = 'tb_car_info';
+        $table_user_info = 'tb_user_info';
+        $tb_user_car = 'tb_user_car';
+        try {
+            $cnt = DB::table($tb_car_info)->where('number', $number)->doesntExist();
+            if (!$cnt){ // exist
+                return \Response::json([
+                    'msg' => 'du'
+                ]);
+
+                exit();
+            }
+
+            $success = DB::table($tb_car_info)
+                ->insert(
+                    [
+                        'in_date' => $current_time,
+                        'number' => $number,
+                        'manufacturer' => $manufacturer,
+                        'car_model' => $car_model,
+                        'car_date' => $car_date,
+                        'car_fuel' => $car_fuel,
+                        'car_gas' => $car_gas
+                    ]
+                );
+            if ($success) {
+                $user_rows =DB::table($table_user_info)->where('user_id', $user_id)->first();
+                if($user_rows == null){
+                    return \Response::json([
+                        'msg' => 'err'
+                    ]);
+                    exit();
+                }
+                $car_rows =DB::table($tb_car_info)->where('number', $number)->first();
+                $success = DB::table($tb_user_car)
+                    ->insert(
+                        [
+                            'time' => $current_time,
+                            'company' => $company,
+                            'user_num' => $user_rows->user_num,
+                            'car_num' => $car_rows->car_num,
+                            'job' => ''
+                        ]
+                    );
+                if ($success) {
+                    return \Response::json([
+                        'msg' => 'ok'
+                    ]);
+                } else {
+                    return \Response::json([
+                        'msg' => 'err'
+                    ]);
+                }
+            } else {
+                return \Response::json([
+                    'msg' => 'err'
+                ]);
+            }
+        }catch(Exception $e) {
+            return \Response::json([
+                'msg' => $e->getMessage()
+            ]);
+        }
+
+        exit();
     }
 
     //모바일에서 서버로 오는 차량 주행 정보
     public function mtsDrivingInfo(Request $request){
 
+        exit();
     }
 
     //서버에서 모바일로 보내는 주행 기록 정보
     public function stmDrivingRecord(Request $request){
 
+        exit();
     }
 
 } // area of class
