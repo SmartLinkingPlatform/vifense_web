@@ -18,6 +18,8 @@ Route::post('mobile.userSignup', 'CallAPIController@userSignup');
 Route::post('mobile.userInfoModify', 'CallAPIController@userInfoModify');
 Route::post('mobile.userFindPassword', 'CallAPIController@userFindPassword');
 Route::post('mobile.regCarInfo', 'CallAPIController@regCarInfo');
+Route::post('mobile.modCarInfo', 'CallAPIController@modCarInfo');
+Route::post('mobile.delCarInfo', 'CallAPIController@delCarInfo');
 Route::post('mobile.mtsDrivingInfo', 'CallAPIController@mtsDrivingInfo');
 Route::post('mobile.stmDrivingRecord', 'CallAPIController@stmDrivingRecord');
 
