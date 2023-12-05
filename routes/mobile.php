@@ -13,15 +13,15 @@ use Illuminate\Support\Facades\Route;
 */
 //Auth::routes();
 Route::post('mobile.companyInfo', 'CallAPIController@requestCompanyInfo');
-Route::post('mobile.userLogin', 'CallAPIController@userLogin');
-Route::post('mobile.userSignup', 'CallAPIController@userSignup');
-Route::post('mobile.userInfoModify', 'CallAPIController@userInfoModify');
-Route::post('mobile.userFindPassword', 'CallAPIController@userFindPassword');
-Route::post('mobile.regCarInfo', 'CallAPIController@regCarInfo');
-Route::post('mobile.modCarInfo', 'CallAPIController@modCarInfo');
-Route::post('mobile.delCarInfo', 'CallAPIController@delCarInfo');
-Route::post('mobile.mtsDrivingInfo', 'CallAPIController@mtsDrivingInfo');
-Route::post('mobile.stmDrivingRecord', 'CallAPIController@stmDrivingRecord');
+Route::post('mobile.userLogin', 'CallAPIController@requestUserLogin');
+Route::post('mobile.userSignup', 'CallAPIController@requestUserSignup');
+Route::post('mobile.userInfoModify', 'CallAPIController@requestUserInfoModify');
+Route::post('mobile.userFindPassword', 'CallAPIController@requestUserFindPassword');
+Route::post('mobile.regCarInfo', 'CallAPIController@requestRegCarInfo');
+Route::post('mobile.modCarInfo', 'CallAPIController@requestModCarInfo');
+Route::post('mobile.delCarInfo', 'CallAPIController@requestDelCarInfo');
+Route::post('mobile.readDriving', 'CallAPIController@requestReadDrivingInfo');
+Route::post('mobile.saveDriving', 'CallAPIController@requestSaveDrivingInfo');
 
 
 

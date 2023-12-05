@@ -97,46 +97,11 @@ class CallAPIController extends BaseController
         //
     }
 
-    //모바일 유저 로그인
-    public function userLogin(Request $request)
-    {
-        $userid = $request->post('user_id');
-        $password = $request->post('user_pwd');
-
-        $tb_user_info = 'tb_user_info';
-        $updated_at = @date("Y-m-d h:i:s", time());
-
-        $row = DB::table($tb_user_info)->where('user_id', $userid)->where('user_pwd', $password)->first();
-
-        if ($row == null) {
-            return \Response::json([
-                'msg' => 'nonuser'
-            ]);
-        } else {
-            DB::table($tb_user_info)->where('user_id', $userid)
-                ->update(
-                    [
-                        'visit_date' => $updated_at,
-                        'active' => 1
-                    ]
-                );
-            return \Response::json([
-                'msg' => 'ok',
-                'user_num' => $row->user_num,
-                'user_id' => $row->user_id,
-                'user_pwd' => $row->user_pwd,
-                'user_name' => $row->user_name,
-                'company_name' => $row->company_name
-            ]);
-        }
-        exit();
-    }
-
     //회사 정보 요청
     public function requestCompanyInfo()
     {
-        $table_info = 'tb_user_info';
-        $rows = DB::table($table_info)->where('user_class', '0')->get();
+        $table_info = 'tb_admin_info';
+        $rows = DB::table($table_info)->where('user_type', '0')->get();
 
         if ($rows == null) {
             return \Response::json([
@@ -151,49 +116,20 @@ class CallAPIController extends BaseController
         exit();
     }
 
-    //모바일 회원 정보 수정
-    public function userInfoModify(Request $request)
-    {
-        $userid = $request->post('user_id');
-        $password = $request->post('user_pwd');
-        $company_name = $request->post('company_name');
-
-        $tb_user_info = 'tb_user_info';
-        $user = DB::table($tb_user_info)->where('user_id', $userid)->first();
-
-        if ($user == null) {
-            return \Response::json([
-                'msg' => 'nonuser'
-            ]);
-        } else {
-            DB::table($tb_user_info)->where('user_id', $userid)
-                ->update(
-                    [
-                        'user_pwd' => $password,
-                        'company_name' => $company_name
-                    ]
-                );
-            return \Response::json([
-                'msg' => 'ok'
-            ]);
-        }
-        exit();
-    }
-
     //모바일 회원 가입
-    public function userSignup(Request $request)
+    public function requestUserSignup(Request $request)
     {
         $user_name = $request->post('user_name');
-        $user_id = $request->post('user_id');
+        $user_phone = $request->post('user_phone');
         $user_pwd = $request->post('user_pwd');
-        $user_type = $request->post('user_type');
-        $user_class = $request->post('user_class');
-        $company_name = $request->post('company_name');
-        $updated_at = @date("Y-m-d h:i:s", time());
+        $admin_id = $request->post('admin_id');
+        $certifice_status = $request->post('certifice_status');
+        $active = $request->post('active');
+        $create_date = $request->post('create_date');
 
-        $table_user_info = 'tb_user_info';
+        $table_info = 'tb_user_info';
         try {
-            $cnt = DB::table($table_user_info)->where('user_id', $user_id)->doesntExist();
+            $cnt = DB::table($table_info)->where('user_phone', $user_phone)->doesntExist();
             if (!$cnt) { // exist
                 return \Response::json([
                     'msg' => 'du'
@@ -202,16 +138,16 @@ class CallAPIController extends BaseController
                 exit();
             }
 
-            $success = DB::table($table_user_info)
+            $success = DB::table($table_info)
                 ->insert(
                     [
-                        'user_id' => $user_id, // 아이디
+                        'user_phone' => $user_phone, // 아이디
+                        'user_name' => $user_name, // 성명
                         'user_pwd' => $user_pwd, // 암호
-                        'user_type' => $user_type, // 1 어드민 | 0 사업자
-                        'user_class' => $user_class, // 0 회사 | 1 개인
-                        'user_name' => $user_name, // 대표자 성명
-                        'company_name' => $company_name, // 상호(회사이름)
-                        'registe_date' => $updated_at, // 가입일시
+                        'admin_id' => $admin_id, // 회사 아이디
+                        'certifice_status' => $certifice_status,
+                        'active' => $active,
+                        'create_date' => $create_date, // 가입일시
                         'visit_date' => '', // 방문시간
                     ]
                 );
@@ -232,8 +168,75 @@ class CallAPIController extends BaseController
         exit();
     }
 
+    //모바일 유저 로그인
+    public function requestUserLogin(Request $request)
+    {
+        $user_phone = $request->post('user_phone');
+        $user_pwd = $request->post('user_pwd');
+        $visit_date = $request->post('visit_date');
+
+        $tb_info = 'tb_user_info';
+
+
+        $row = DB::table($tb_info)->where('user_phone', $user_phone)->where('user_pwd', $user_pwd)->first();
+
+        if ($row == null) {
+            return \Response::json([
+                'msg' => 'nonuser'
+            ]);
+        } else {
+            DB::table($tb_info)->where('user_phone', $user_phone)
+                ->update(
+                    [
+                        'visit_date' => $visit_date,
+                        'active' => 1
+                    ]
+                );
+            return \Response::json([
+                'msg' => 'ok',
+                'user_id' => $row->user_id,
+                'user_phone' => $row->user_phone,
+                'user_name' => $row->user_name,
+                'user_pwd' => $row->user_pwd,
+                'admin_id' => $row->admin_id
+            ]);
+        }
+        exit();
+    }
+
+    //모바일 회원 정보 수정
+    public function requestUserInfoModify(Request $request)
+    {
+        $userid = $request->post('user_id');
+        $password = $request->post('user_pwd');
+        $admin_id = $request->post('admin_id');
+        $update_date = $request->post('update_date');
+
+        $tb_info = 'tb_user_info';
+        $user = DB::table($tb_info)->where('user_id', $userid)->first();
+
+        if ($user == null) {
+            return \Response::json([
+                'msg' => 'nonuser'
+            ]);
+        } else {
+            DB::table($tb_info)->where('user_id', $userid)
+                ->update(
+                    [
+                        'user_pwd' => $password,
+                        'admin_id' => $admin_id,
+                        'update_date' => $update_date
+                    ]
+                );
+            return \Response::json([
+                'msg' => 'ok'
+            ]);
+        }
+        exit();
+    }
+
     //비밀번호 찾기 및 변화
-    public function userFindPassword(Request $request)
+    public function requestUserFindPassword(Request $request)
     {
 
         exit();
@@ -249,12 +252,9 @@ class CallAPIController extends BaseController
         $car_fuel = $request->post('car_fuel');
         $car_gas = $request->post('car_gas');
         $user_id = $request->post('user_id');
-        $company = $request->post('company');
-
-        $current_time = date("Y-m-d h:i:s", time());
+        $admin_id = $request->post('admin_id');
 
         $tb_car_info = 'tb_car_info';
-        $table_user_info = 'tb_user_info';
         $tb_user_car = 'tb_user_car';
         try {
             $cnt = DB::table($tb_car_info)->where('number', $number)->doesntExist();
@@ -269,7 +269,6 @@ class CallAPIController extends BaseController
             $success = DB::table($tb_car_info)
                 ->insert(
                     [
-                        'in_date' => $current_time,
                         'number' => $number,
                         'manufacturer' => $manufacturer,
                         'car_model' => $car_model,
@@ -279,28 +278,20 @@ class CallAPIController extends BaseController
                     ]
                 );
             if ($success) {
-                $user_rows = DB::table($table_user_info)->where('user_id', $user_id)->first();
-                if ($user_rows == null) {
-                    return \Response::json([
-                        'msg' => 'err'
-                    ]);
-                    exit();
-                }
                 $car_rows = DB::table($tb_car_info)->where('number', $number)->first();
                 $success = DB::table($tb_user_car)
                     ->insert(
                         [
-                            'time' => $current_time,
-                            'company' => $company,
-                            'user_num' => $user_rows->user_num,
-                            'car_num' => $car_rows->car_num,
+                            'admin_id' => $admin_id,
+                            'user_id' => $user_id,
+                            'car_id' => $car_rows->car_id,
                             'job' => ''
                         ]
                     );
                 if ($success) {
                     return \Response::json([
                         'msg' => 'ok',
-                        'car_num' => $car_rows->car_num
+                        'car_id' => $car_rows->car_id
                     ]);
                 } else {
                     return \Response::json([
@@ -322,9 +313,9 @@ class CallAPIController extends BaseController
     }
 
     //차량 수정 정보
-    public function modCarInfo(Request $request)
+    public function requestModCarInfo(Request $request)
     {
-        $c_num = $request->post('c_num');
+        $car_id = $request->post('car_id');
         $number = $request->post('number');
         $manufacturer = $request->post('manufacturer');
         $car_model = $request->post('car_model');
@@ -332,10 +323,10 @@ class CallAPIController extends BaseController
         $car_fuel = $request->post('car_fuel');
         $car_gas = $request->post('car_gas');
 
-        $tb_car_info = 'tb_car_info';
-        $cnt = DB::table($tb_car_info)->where('car_num', $c_num)->doesntExist();
+        $tb_info = 'tb_car_info';
+        $cnt = DB::table($tb_info)->where('car_id', $car_id)->doesntExist();
         if (!$cnt) { // exist
-            $success =  DB::table($tb_car_info)->where('car_num', $c_num)
+            $success =  DB::table($tb_info)->where('car_id', $car_id)
                 ->update(
                     [
                         'number' => $number,
@@ -364,18 +355,18 @@ class CallAPIController extends BaseController
         exit();
     }
     //차량 삭제 정보
-    public function delCarInfo(Request $request)
+    public function requestDelCarInfo(Request $request)
     {
-        $c_num = $request->post('c_num');
+        $car_id = $request->post('car_id');
         $number = $request->post('number');
-        $user_num = $request->post('user_num');
+        $user_id = $request->post('user_id');
 
         $tb_car_info = 'tb_car_info';
         $tb_user_car = 'tb_user_car';
 
-        $success = DB::table($tb_car_info)->where('car_num', $c_num)->where('number', $number)->delete();
+        $success = DB::table($tb_car_info)->where('car_id', $car_id)->where('number', $number)->delete();
         if ($success) {
-            DB::table($tb_user_car)->where('car_num', $c_num)->where('user_num', $user_num)->delete();
+            DB::table($tb_user_car)->where('car_id', $car_id)->where('user_id', $user_id)->delete();
             return \Response::json([
                 'msg' => 'ok'
             ]);
@@ -388,16 +379,80 @@ class CallAPIController extends BaseController
     }
 
     //모바일에서 서버로 오는 차량 주행 정보
-    public function mtsDrivingInfo(Request $request)
+    public function requestSaveDrivingInfo(Request $request)
     {
+        $driving_date = $request->post('driving_date');
+        $start_time = $request->post('start_time');
+        $end_time = $request->post('end_time');
+        $car_id = $request->post('car_id');
+        $user_id = $request->post('user_id');
+        $max_speed = $request->post('max_speed');
+        $average_speed = $request->post('average_speed');
+        $mileage = $request->post('mileage');
+        $driving_time = $request->post('driving_time');
+        $idling_time = $request->post('idling_time');
+        $driving_score = $request->post('driving_score');
+        $fast_speed_time = $request->post('fast_time');
+        $fast_speed_cnt = $request->post('fast_cnt');
+        $quick_speed_cnt = $request->post('quick_cnt');
+        $brake_speed_cnt = $request->post('brake_cnt');
 
+        $tb_info = 'tb_driving_info';
+        $success = DB::table($tb_info)
+            ->insert(
+                [
+                    'driving_date' => $driving_date,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'car_id' => $car_id,
+                    'user_id' => $user_id,
+                    'max_speed' => $max_speed,
+                    'average_speed' => $average_speed,
+                    'mileage' => $mileage,
+                    'driving_time' => $driving_time,
+                    'idling_time' => $idling_time,
+                    'driving_score' => $driving_score,
+                    'fast_speed_time' => $fast_speed_time,
+                    'fast_speed_cnt' => $fast_speed_cnt,
+                    'quick_speed_cnt' => $quick_speed_cnt,
+                    'brake_speed_cnt' => $brake_speed_cnt
+                ]
+            );
+        if ($success) {
+            return \Response::json([
+                'msg' => 'ok'
+            ]);
+        } else {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        }
         exit();
     }
 
     //서버에서 모바일로 보내는 주행 기록 정보
-    public function stmDrivingRecord(Request $request)
+    public function requestReadDrivingInfo(Request $request)
     {
+        $car_id = $request->post('car_id');
+        $user_id = $request->post('user_id');
+        $driving_date = $request->post('driving_date');
 
+        $tb_driving_info = "tb_driving_info";
+        $sql = "SELECT * FROM ".$tb_driving_info;
+        $sql .= " WHERE car_id = ".$car_id." AND user_id = ".$user_id." AND SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."'";
+        $sql .= " ORDER BY driv_id DESC";
+
+        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        if ($rows == null) {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        } else {
+            return \Response::json([
+                'msg' => 'ok',
+                'lists' => $rows
+            ]);
+        }
         exit();
     }
 
