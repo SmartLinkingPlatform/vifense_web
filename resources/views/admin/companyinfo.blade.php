@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('css')
+  <link href="{{ URL::asset('assets/css/app.css')}}" rel="stylesheet">
 @endsection
 @section('page-header')
 						<!-- PAGE-HEADER -->
@@ -10,6 +11,19 @@
 									<li class="breadcrumb-item active" aria-current="page">회사 정보</li>
 								</ol>
 							</div>
+
+                            <div class="row header-search-block">
+                                <div class="col-sm-8">
+                                    <input type="text" id="input_search" class="form-control" name="input_search" placeholder="아이디/상호">
+                                </div>
+                                <div class="col-sm-4 pl-3 header-search-block-btn">
+                                    <div class="btn btn-custom" id="button_search" style="width: 80px; border: 1px solid #e3e3e3">
+                                        <i class="icon fa fa-search"></i>
+                                        검색
+                                    </div>
+                                </div>
+                            </div>
+
 						<!-- PAGE-HEADER END -->
 @endsection
 @section('content')
@@ -56,8 +70,8 @@
 										</div>
 									</div>
 								</div>
-								<div class="mb-5" id="page_nav_container">
-								</div>
+                                <div class="mb-5" id="page_nav_container">
+                                </div>
 							</div><!-- COL-END -->
 						</div>
 						<!-- ROW CLOSED -->
@@ -75,8 +89,7 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <div class="col"  id="dlgErr" style="display: none;">
-                                </div>
+                                <div class="col"  id="dlgErr" style="display: none;"></div>
                                 <div >
                                     <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_smart_phone">
                                         Error id!
@@ -225,6 +238,7 @@
                                         </div>
                                         <div class="col-md-8">
                                             <input type="file" name="corporate_photo" id="corporate_photo" value="" style="display: none">
+                                            <input type="hidden" name="old_corporate_photo_url" id="old_corporate_photo_url" value="">
                                             <div id="corporate_photo_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
                                         </div>
                                     </div>
@@ -238,6 +252,7 @@
                                         </div>
                                         <div class="col-md-8 d-flex flex-row">
                                             <input type="file" name="uploadcorporate_doc" id="uploadcorporate_doc" value="" style="display: none">
+                                            <input type="hidden" name="old_uploadcorporate_doc_url" id="old_uploadcorporate_doc_url" value="">
                                             <div id="uploadcorporate_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
                                             {{-- <div id="upload_corporate_doc" class="d-flex btn btn-primary align-items-center" style="width: 100px; margin-left: 10px; ">업로드</div>--}}
                                         </div>
@@ -280,9 +295,16 @@
         let pnum = pstart;
         let pcount=5;
         let numg = 5;
+        let search_val = '';
         $(document).ready(function () {
             $( "#input_create_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
             getCompanyList();
+
+            $('#button_search').click(function(){
+               let sval = $('#input_search').val();
+                search_val = sval.replace(/\s/g, '');
+                getCompanyList();
+            });
 
             $('#button_add').click(function(){
                 showAddDialog();
@@ -343,16 +365,19 @@
             $('#input_corporate_company_name').val('');
             $('#input_corporate_phone').val('');
             $('#input_corporate_address').val('');
-            $('#input_company_address').val('');
             $('#input_corporate_name').val('');
             $('#input_company_phone').val('');
             $('#input_create_date').val('');
             $('#input_company_manager').val('');
             $('#input_car_count').val('');
+
             $('#corporate_photo').val('');
             $('#corporate_photo_btn').text('파일 찾기');
+            $('#old_corporate_photo_url').val('');
+
             $('#uploadcorporate_doc').val('');
             $('#uploadcorporate_btn').text('파일 찾기');
+            $('#old_uploadcorporate_doc_url').val('');
         }
         function showEditDialog(id) {
             current_id = id;
@@ -360,26 +385,39 @@
             $('#dlgErr').text('').css({'display':'none'});
             $('#modal_title').text('회사 정보 수정');
             $('#modal_button_add').text('수정');
-            $('#input_company').prop('readonly', true);
+            //$('#input_company').prop('readonly', true);
 
             $.ajax({
-                url: 'admin.getAdminInformation',
+                url: 'admin.getCompanyinInfo',
                 data: {
-                    id:id,
+                    admin_id:id,
                 },
                 type: 'POST',
                 success: function (data) {
                     if (data.msg === "ok") {
                         let list = data.lists;
-                        let id = list.id;
-                        let account = list.account;
+                        let id = list.admin_id;
                         let password = data.pwd;
-                        let name = list.name;
 
-                        $('#input_id').val(name);
-                        $('#input_company').val(account);
+                        $('#input_smart_phone').val(list.user_phone);
                         $('#input_password').val(password);
-                        $('#input_password_confirm').val(password);
+                        $('#input_check_password').val(password);
+                        $('#input_corporate_company_name').val(list.company_name);
+                        $('#input_corporate_phone').val(list.user_regnum);
+                        $('#input_corporate_address').val(list.user_address);
+                        $('#input_corporate_name').val(list.user_name);
+                        $('#input_company_phone').val(list.company_phone);
+                        $('#input_create_date').val(list.create_date);
+                        $('#input_company_manager').val(list.manager_name);
+                        $('#input_car_count').val(list.car_count);
+
+                        $('#corporate_photo').val('');
+                        $('#corporate_photo_btn').text(list.user_photo);
+                        $('#old_corporate_photo_url').val(list.user_photo_url);
+
+                        $('#uploadcorporate_doc').val('');
+                        $('#uploadcorporate_btn').text(list.certified_name);
+                        $('#old_uploadcorporate_doc_url').val(list.certified_copy);
                     }
                     else {
                     }
@@ -396,8 +434,7 @@
                 data: {
                     start: pstart,
                     count:pcount,
-                    user_phone:'',
-                    company_name:'',
+                    search_val:search_val,
                 },
                 type: 'POST',
                 success: function (data) {
@@ -414,21 +451,33 @@
                             let order = i + 1;
                             let user_phone = list.user_phone;
                             let company_name = list.company_name || '';
-                            let certifice_status = list.certifice_status || '';
-                            let active = list.active || '';
+                            let certifice_status = list.certifice_status || '0';
+                            let active = list.active || '0';
                             let registe_date = list.registe_date || '';
                             let visit_date = list.visit_date || '';
+                            let cert_check = parseInt(certifice_status) > 0 ? 'checked' : '';
+                            let act_check = parseInt(active) > 0 ? 'checked' : '';
                             //let create_date = list.create_date;
                             //let dateString = create_date.split(' ')[0];
                             //let temp = dateString.split('-');
                             //let create_string = temp[1] + '/' + temp[2] + '/' + temp[0];
-
                             tags += '<tr>';
                             tags += '<td class="text-nowrap align-middle">' + order + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + user_phone + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + company_name + '</td>';
-                            tags += '<td class="text-nowrap align-middle">' + certifice_status + '</td>';
-                            tags += '<td class="text-nowrap align-middle">' + active + '</td>';
+
+                            tags += '<td class="text-nowrap align-middle">';
+                            tags += '<div class="d-flex justify-content-center">';
+                            tags += '<input aria-disabled="true" type="checkbox" value="'+certifice_status+'" id="certiChecked_'+admin_id+'" '+cert_check+' >';
+                            tags += '</div>';
+                            tags += '</td>';
+
+                            tags += '<td class="text-nowrap align-middle">';
+                            tags += '<div class="d-flex justify-content-center">';
+                            tags += '<input  type="checkbox" value="'+active+'" id="actiChecked_'+admin_id+'" '+act_check+' >';
+                            tags += '</div>';
+                            tags += '</td>';
+
                             tags += '<td class="text-nowrap align-middle">' + registe_date + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + visit_date + '</td>';
                             tags += '<td class="text-nowrap align-middle"> 로그 </td>';
@@ -518,7 +567,16 @@
                         $('button[id^="button_delete_"]').click(function(){
                             let oid = $(this).attr("id");
                             let id = oid.split('_')[2];
-                            deleteAdmin(id);
+                            deleteCompany(id);
+                        });
+
+                        $('input[id^="actiChecked_"]').click(function(){
+                            let oid = $(this).attr("id");
+                            let id = oid.split('_')[1];
+                            let cks = $('#actiChecked_' + id).prop('checked');
+                            let act = cks ? 1 : 0;
+                            //console.log(act);
+                            activeCompany(id, act);
                         });
 
                     }
@@ -725,39 +783,177 @@
         }
 
         function editCompany() {
-            let name = $('#input_id').val();
-            let account = $('#input_company').val();
-            let password = $('#input_password').val();
-            let password_confirm = $('#input_password_confirm').val();
-            if (account === '' || account == null) {
-                $('#dlgErr').text('사용자 이름을 입력해주세요').css({'display':'block','color':'#d41b11'});
-                return;
-            }
-            if (name === '' || name == null) {
-                $('#dlgErr').text('이름을 입력하세요').css({'display':'block','color':'#d41b11'});
-                return;
-            }
-            if (password === '' || password == null) {
-                $('#dlgErr').text('비밀번호를 입력 해주세요').css({'display':'block','color':'#d41b11'});
-                return;
-            }
-            if (password_confirm === '' || password_confirm == null) {
-                $('#dlgErr').text('확인 비밀번호를 입력해주세요').css({'display':'block','color':'#d41b11'});
-                return;
-            }
-            if (password !== password_confirm) {
-                $('#dlgErr').text('비밀번호 오류').css({'display':'block','color':'#d41b11'});
+            let smart_phone = $('#input_smart_phone').val().replace(/ /g, '');
+            smart_phone = smart_phone.replace(/-/g, '');
+            smart_phone = smart_phone.replace(/_/g, '');
+            let password = $('#input_password').val().replace(/ /g, '');
+            let check_password = $('#input_check_password').val().replace(/ /g, '');
+            let corporate_company_name = $('#input_corporate_company_name').val().replace(/ /g, '');
+            let corporate_phone = $('#input_corporate_phone').val().replace(/ /g, '');
+            let corporate_address = $('#input_corporate_address').val().replace(/ /g, '');
+            let corporate_name = $('#input_corporate_name').val().replace(/ /g, '');
+            let company_phone = $('#input_company_phone').val().replace(/ /g, '');
+            let create_date = $('#input_create_date').val().replace(/ /g, '');
+            let company_manager = $('#input_company_manager').val().replace(/ /g, '');
+            let car_count = $('#input_car_count').val().replace(/ /g, '');
+
+            if(smart_phone === ""){
+                $('#valid_smart_phone').text("사용자 아이디를 입력해주세요").css('display','block');
+                setTimeout(function () {
+                    $('#valid_smart_phone').text("사용자 아이디를 입력해주세요").css('display','none');
+                    $('#text_smart_phone').css('margin-bottom','1.5rem');
+                },1000);
                 return;
             }
 
+            if(!isNumeric(smart_phone))
+            {
+                $('#valid_smart_phone').text("휴대폰 번호를 입력해주세요").css('display','block');
+                setTimeout(function () {
+                    $('#valid_smart_phone').text("휴대폰 번호를 입력해주세요").css('display','none');
+                    $('#text_smart_phone').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(password === "") {
+                $('#valid_password').text("비밀번호를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_password').text("비밀번호를 입력 해주세요").css('display','none');
+                    $('#text_password').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(check_password === "") {
+                $('#valid_check_password').text("확인 비밀번호를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_check_password').text("확인 비밀번호를 입력 해주세요").css('display','none');
+                    $('#text_check_password').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(password !== check_password){
+                $('#valid_check_password').text("비밀번호가 서로 다릅니다.").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_check_password').text("비밀번호가 서로 다릅니다.").css('display','none');
+                    $('#text_check_password').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(corporate_company_name === "") {
+                $('#valid_corporate_company_name').text("상호를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_corporate_company_name').text("상호를 입력 해주세요").css('display','none');
+                    $('#text_corporate_company_name').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(corporate_phone === "") {
+                $('#valid_corporate_phone').text("사업자 등록번호 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_corporate_phone').text("사업자 등록번호 입력 해주세요").css('display','none');
+                    $('#text_corporate_phone').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(corporate_address === "") {
+                $('#valid_corporate_address').text("주소를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_corporate_address').text("주소를 입력 해주세요").css('display','none');
+                    $('#text_corporate_address').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(corporate_name === "") {
+                $('#valid_corporate_name').text("대표자 성명을 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_corporate_name').text("대표자 성명을 입력 해주세요").css('display','none');
+                    $('#text_corporate_name').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(company_phone === "") {
+                $('#valid_company_phone').text("회사 전화번호를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_company_phone').text("회사 전화번호를 입력 해주세요").css('display','none');
+                    $('#text_company_phone').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(create_date === "") {
+                $('#valid_create_date').text("설립일자를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_create_date').text("설립일자를 입력 해주세요").css('display','none');
+                    $('#text_create_date').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(company_manager === "") {
+                $('#valid_company_manager').text("담당자를 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_company_manager').text("담당자를 입력 해주세요").css('display','none');
+                    $('#text_company_manager').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(!isNumeric(car_count)){
+                $('#valid_car_count').text("차량 수량을 정확히 숫자로 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_car_count').text("차량 수량을 정확히 숫자로 입력 해주세요").css('display','none');
+                    $('#text_car_count').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            if(parseInt(car_count) <= 0){
+                $('#valid_car_count').text("차량 수량을 입력 해주세요").css('display', 'block');
+                setTimeout(function () {
+                    $('#valid_car_count').text("차량 수량을 입력 해주세요").css('display','none');
+                    $('#text_car_count').css('margin-bottom','1.5rem');
+                },1000);
+                return;
+            }
+
+            let corporate_photo_file =  $('#corporate_photo').prop('files')[0];
+            let corporate_doc_file =  $('#uploadcorporate_doc').prop('files')[0];
+
+            let form_data = new FormData();
+            form_data.append('admin_id', current_id);
+            form_data.append('smart_phone', smart_phone);
+            form_data.append('password', password);
+            form_data.append('corporate_company_name', corporate_company_name);
+            form_data.append('corporate_phone', corporate_phone);
+            form_data.append('corporate_address', corporate_address);
+            form_data.append('corporate_name', corporate_name);
+            form_data.append('company_phone', company_phone);
+            form_data.append('create_date', create_date);
+            form_data.append('company_manager', company_manager);
+            form_data.append('car_count', car_count);
+
+            form_data.append('corporate_photo_file', corporate_photo_file);
+            let old_corporate_photo_url = $('#old_corporate_photo_url').val();
+            form_data.append('old_corporate_photo_url', old_corporate_photo_url);
+
+            form_data.append('corporate_doc_file', corporate_doc_file);
+            let old_uploadcorporate_doc_url = $('#old_uploadcorporate_doc_url').val();
+            form_data.append('old_uploadcorporate_doc_url', old_uploadcorporate_doc_url);
+
             $.ajax({
-                url: 'admin.editCompanyInformation',
-                data: {
-                    id: current_id,
-                    account: account,
-                    name: name,
-                    password: password,
-                },
+                url: 'admin.editCompanyInfo',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,
                 type: 'POST',
                 success: function (data) {
                     if (data.msg === 'ok') {
@@ -777,18 +973,39 @@
             });
         }
 
-        function deleteAdmin(id) {
+        function deleteCompany(id) {
             if(confirm('삭제하시겠습니까？')===false)
                 return;
             $.ajax({
-                url: 'admin.adminDelete',
+                url: 'admin.companyDelete',
                 data: {
-                    id:id,
+                    admin_id:id,
                 },
                 type: 'POST',
                 success: function (data) {
                     if (data.msg === 'ok') {
-                        getAdminList();
+                        getCompanyList();
+                    }
+                },
+                error: function (jqXHR, errdata, errorThrown) {
+                    console.log(errdata);
+                }
+            });
+        }
+
+        function activeCompany(id, status) {
+            $.ajax({
+                url: 'admin.companyActive',
+                data: {
+                    admin_id:id,
+                    active : status
+                },
+                type: 'POST',
+                success: function (data) {
+                    if (data.msg === 'ok') {
+                    }
+                    else{
+                        console.log("error active");
                     }
                 },
                 error: function (jqXHR, errdata, errorThrown) {
@@ -800,6 +1017,10 @@
     <style>
         #ui-datepicker-div {
             z-index: 1600 !important; /* has to be larger than 1050 */
+        }
+        input[type="checkbox"][aria-disabled="true"] {
+            background-color: blue !important;
+            pointer-events: none;
         }
     </style>
 @endsection

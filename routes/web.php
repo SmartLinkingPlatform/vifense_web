@@ -39,6 +39,7 @@ Route::middleware('adminsession')->group(function(){
     Route::get('admin.companyinfo', function () {
         return view('admin.companyinfo');
     });
+    /*
     Route::get('admin.user', function () {
         return view('admin.user');
     });
@@ -63,82 +64,46 @@ Route::middleware('adminsession')->group(function(){
     Route::get('admin.item', function () {
         return view('admin.item');
     });
+    */
 });
 Route::get('admin', function () { return redirect('admin.login');});
 Route::post('admin.adminLogin', 'AdminController@adminLogin');
 Route::post('admin.adminLogout', 'AdminController@adminLogout');
-Route::post('admin.getAdminList', 'AdminController@getAdminList');
+//Route::post('admin.getAdminList', 'AdminController@getAdminList');
 
-Route::post('admin.adminRegister', 'AdminController@adminRegister');
-Route::post('admin.adminDelete', 'AdminController@adminDelete');
-Route::post('admin.getAdminInformation', 'AdminController@getAdminInformation');
-Route::post('admin.editAdminInformation', 'AdminController@editAdminInformation');
-
-/*
-Route::post('admin.getUserList', 'AdminController@getUserList');
-Route::post('admin.userRegister', 'AdminController@userRegister');
-Route::post('admin.userDelete', 'AdminController@userDelete');
-Route::post('admin.getUserInformation', 'AdminController@getUserInformation');
-Route::post('admin.editUserInformation', 'AdminController@editUserInformation');
-
-
-Route::post('admin.csvOrderList', 'AdminController@csvOrderList');
-Route::post('admin.getOrderList', 'AdminController@getOrderList');
-Route::post('admin.orderDelete', 'AdminController@orderDelete');
-Route::post('admin.getOrderInformation', 'AdminController@getOrderInformation');
-Route::post('admin.getOrderDetailInformation', 'AdminController@getOrderDetailInformation');
-Route::post('admin.getAllUserList', 'AdminController@getAllUserList');
-Route::post('admin.getAllCurrencyList', 'AdminController@getAllCurrencyList');
-Route::post('admin.getAllItemList', 'AdminController@getAllItemList');
-Route::post('admin.goOrderModPage', 'AdminController@goOrderModPage');
-Route::post('admin.addNewOrder', 'AdminController@addNewOrder');
-Route::post('admin.modOrderInfo', 'AdminController@modOrderInfo');
-
-Route::post('admin.currencyDelete', 'AdminController@currencyDelete');
-Route::post('admin.currencyAdd', 'AdminController@currencyAdd');
-Route::post('admin.getCurrencyInformation', 'AdminController@getCurrencyInformation');
-Route::post('admin.editCurrencyInformation', 'AdminController@editCurrencyInformation');
-
-Route::post('admin.itemDelete', 'AdminController@itemDelete');
-Route::post('admin.itemAdd', 'AdminController@itemAdd');
-Route::post('admin.getItemInformation', 'AdminController@getItemInformation');
-Route::post('admin.editItemInformation', 'AdminController@editItemInformation');
-
-Route::post('admin.getOutcomeRequestList', 'AdminController@getOutcomeRequestList');
-Route::post('admin.agreeOutcomeRequest', 'AdminController@agreeOutcomeRequest');
-Route::post('admin.rejectOutcomeRequest', 'AdminController@rejectOutcomeRequest');
-
-Route::post('admin.csvOrderHistoryList', 'AdminController@csvOrderHistoryList');
-Route::post('admin.getOrderHistoryList', 'AdminController@getOrderHistoryList');
-*/
+//Route::post('admin.adminRegister', 'AdminController@adminRegister');
+//Route::post('admin.adminDelete', 'AdminController@adminDelete');
+//Route::post('admin.getAdminInformation', 'AdminController@getAdminInformation');
+//Route::post('admin.editAdminInformation', 'AdminController@editAdminInformation');
 
 
 //---------------------------------------------------
-// add part
+// admin part
 //---------------------------------------------------
 Route::view('admin.findPasswordView', 'admin.find-password-view');
 Route::view('admin.signupCorporateView', 'admin.signup-corporate-view');
 Route::post('admin.corporateSignup', 'AdminController@corporateSignup');
 
+//---------------------------------------------------
+// company part
+//---------------------------------------------------
 Route::post('admin.getCompanyList', 'CompanyController@getCompanyList');
 Route::post('admin.addNewCompany', 'CompanyController@addNewCompany');
+Route::post('admin.getCompanyinInfo', 'CompanyController@getCompanyinInfo');
+Route::post('admin.editCompanyInfo', 'CompanyController@editCompanyInfo');
+Route::post('admin.companyDelete', 'CompanyController@companyDelete');
+Route::post('admin.companyActive', 'CompanyController@companyActive');
 
 //-----------------------------------------------------
-// User part
+// Notice part
 //-----------------------------------------------------
+Route::view('user.notice', 'user.notice-view');
+Route::post('user.noticeAdd', 'NoticeController@noticeAdd');
+
 /*
 Route::middleware('usersession')->group(function(){
     Route::get('user.user', function () {
         return view('user.user');
-    });
-    Route::get('user.order-history', function () {
-        return view('user.order-history');
-    });
-    Route::get('user.new-outcome', function () {
-        return view('user.new-outcome');
-    });
-    Route::get('user.mod-outcome', function () {
-        return view('user.mod-outcome');
     });
 });
 Route::get('user', function () { return redirect('user.login');});
@@ -147,16 +112,6 @@ Route::post('user.userLogout', 'UserController@userLogout');
 Route::post('user.getUserInformation', 'UserController@getUserInformation');
 Route::post('user.changeUserPassword', 'UserController@changeUserPassword');
 Route::post('user.getUserTotalAmount', 'UserController@getUserTotalAmount');
-
-Route::post('user.csvOrderHistoryList', 'UserController@csvOrderHistoryList');
-Route::post('user.getOrderHistoryList', 'UserController@getOrderHistoryList');
-Route::post('user.getOrderInformation', 'UserController@getOrderInformation');
-Route::post('user.getAllCurrencyList', 'UserController@getAllCurrencyList');
-Route::post('user.getAllItemList', 'UserController@getAllItemList');
-Route::post('user.addNewOutcomeOrder', 'UserController@addNewOutcomeOrder');
-Route::post('user.goOutcomeModPage', 'UserController@goOutcomeModPage');
-Route::post('user.getOrderDetailInformation', 'UserController@getOrderDetailInformation');
-Route::post('user.modOutcomeOrderInfo', 'UserController@modOutcomeOrderInfo');
 */
 
 include ('mobile.php');

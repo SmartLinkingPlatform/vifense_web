@@ -49,7 +49,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="side-menu__item" href="{{ url('/' . $page='admin.outcome') }}">
+                                <a class="side-menu__item" href="{{ url('/' . $page='user.notice') }}">
                                     <i class="side-menu__icon mdi mdi-basket-unfill"></i><span class="side-menu__label">공지 사항</span>
                                 </a>
                             </li>

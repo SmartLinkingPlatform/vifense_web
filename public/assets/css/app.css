@@ -32,6 +32,21 @@
     transition: all 0.4s;
     color: #424344;
 }
+.notice-card .notice-card-header{
+    border-radius:0px !important;
+}
+
+.nav-underline .nav-link {
+    border-bottom: 0.125rem solid transparent;
+    padding: 0.2rem 2rem !important;
+}
+
+.nav-underline .nav-link.active, .nav-underline .show>.nav-link {
+    font-weight: 700 !important;
+    color: #000 !important;
+    border-bottom-color: currentcolor;
+}
+
 @media (min-width: 762px) {
     .login100-form.signup-corporate {
         width: 450px;
@@ -45,5 +60,11 @@
     .row-cards-dash .card {
          margin-right: 0;
          width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-search-block-btn {
+        margin-top: 8px;
     }
 }

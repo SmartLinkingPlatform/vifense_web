@@ -198,26 +198,6 @@ class AdminController extends BaseController
         }
     }
 
-    public function getAdminInformation(Request $request){
-        $admin_id = $request->post('admin_id');
-        $rows =DB::table($this->tb_admin_info)->where('admin_id', $admin_id)->first();
-        $password = $rows->password;
-        $dec_password = $this->encrypt_decrypt('decrypt', $password);
-
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-                'pwd' => $dec_password,
-            ]);
-        }
-    }
-
     public function editAdminInformation(Request $request){
         $admin_id = $request->post('admin_id');
         $user_phone = $request->post('user_phone');
@@ -312,90 +292,21 @@ class AdminController extends BaseController
         }
     }
 
-    //-----------------------------------------------------
-    // Order management part
-    //-----------------------------------------------------
-
-    public function csvOrderList(Request $request){
-        $search_name    = $request->post('sname');
-        $search_item   = $request->post('sitem');
-        $start_date    = $request->post('start_date');
-        $end_date    = $request->post('end_date');
-        $sql = 'select o.*, u.name, u.account, c.name as cname, i.name as iname ';
-        $sql .= 'from order_history as o ';
-        $sql .= 'Left join user as u ';
-        $sql .= 'on o.user_id = u.id ';
-        $sql .= 'left join currency as c ';
-        $sql .= 'on o.currency_id = c.id ';
-        $sql .= 'left join item as i ';
-        $sql .= 'on o.item_id = i.id ';
-        $sql.= "where o.status = 1 ";
-        if ($search_name != null && $search_name != '') {
-            $sql.="and u.name like '%" .$search_name."%' ";
-        }
-        if ($search_item != null && $search_item != 0) {
-            $sql.="and o.item_id = ".$search_item." ";
-        }
-        if ($start_date != null && $start_date != '') {
-            $start_date = strtotime($start_date);
-            $start_date = date('Y-m-d h:i:s',$start_date);
-            $sql.="and o.created_at >= '".$start_date."' ";
-        }
-        if ($end_date != null && $end_date != '') {
-            $end_date = strtotime($end_date);
-            $end_date = date('Y-m-d h:i:s',$end_date);
-            $sql.="and o.created_at <= '".$end_date."' ";
-        }
-        $lim_sql = $sql.' ORDER BY id desc ';
-        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
-
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-            ]);
-        }
-    }
-
-    public function getOrderList(Request $request){
+    public function getCompanyList(Request $request){
+        $search_val = $request->post('search_val');
         $start  = $request->post('start');
         $count    = $request->post('count');
-        $search_name    = $request->post('sname');
-        $search_item   = $request->post('sitem');
-        $start_date    = $request->post('start_date');
-        $end_date    = $request->post('end_date');
         $start_from = ($start-1) * $count;
-        $sql = 'select o.*, u.name, u.account, c.name as cname, i.name as iname ';
-        $sql .= 'from order_history as o ';
-        $sql .= 'Left join user as u ';
-        $sql .= 'on o.user_id = u.id ';
-        $sql .= 'left join currency as c ';
-        $sql .= 'on o.currency_id = c.id ';
-        $sql .= 'left join item as i ';
-        $sql .= 'on o.item_id = i.id ';
-        $sql.= "where o.status = 1 ";
-        if ($search_name != null && $search_name != '') {
-            $sql.="and u.name like '%" .$search_name."%' ";
-        }
-        if ($search_item != null && $search_item != 0) {
-            $sql.="and o.item_id = ".$search_item." ";
-        }
-        if ($start_date != null && $start_date != '') {
-            $start_date = strtotime($start_date);
-            $start_date = date('Y-m-d h:i:s',$start_date);
-            $sql.="and o.created_at >= '".$start_date."' ";
-        }
-        if ($end_date != null && $end_date != '') {
-            $end_date = strtotime($end_date);
-            $end_date = date('Y-m-d h:i:s',$end_date);
-            $sql.="and o.created_at <= '".$end_date."' ";
-        }
-        $lim_sql = $sql.' ORDER BY id desc LIMIT '.$start_from.', '.$count.'';
+
+        $company = 'tb_admin_info';
+
+        $sql = 'SELECT * from '.$company. ' ';
+        $sql .= ' WHERE user_type < 1 '; // to not admin
+
+        if(!is_null($search_val))
+            $sql .= ' AND (user_phone like "%'.$search_val.'%" OR company_name like "%'.$search_val.'%") ';
+
+        $lim_sql = $sql.'LIMIT '.$start_from.', '.$count;
         $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
         $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
 
@@ -415,121 +326,28 @@ class AdminController extends BaseController
                 'lists' => $rows,
             ]);
         }
+
     }
 
-    public function goOrderModPage(Request $request){
-        $id = $request->post('id');
-
-        $request->session()->put('order_id', $id);
-        return \Response::json([
-            'msg' => 'ok'
-        ]);
-    }
-
-    public function orderDelete(Request $request){
-        $id = $request->post('id');
-        $table_order = 'order_history';
-        $success = false;
-
-        $cnt = DB::table($table_order)->where('id', $id)->doesntExist();
-        if (!$cnt){
-            $success = DB::table($table_order)->delete($id);
-        }
-        if ($success) {
-            return \Response::json([
-                'msg' => 'ok'
-            ]);
-        }
-        else {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-    }
-
-    public function getOrderInformation(Request $request){
-        $id = $request->post('id');
-        $table_order = 'order_history';
-        $rows =DB::table($table_order)->where('id', $id)->first();
-
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-            ]);
-        }
-    }
-
-    public function getOrderDetailInformation(Request $request){
-        $id = $request->post('id');
-
-        $sql = 'select o.*, u.name, u.account, c.name as cname, i.name as iname ';
-        $sql .= 'from order_history as o ';
-        $sql .= 'Left join user as u ';
-        $sql .= 'on o.user_id = u.id  ';
-        $sql .= 'Left join currency as c ';
-        $sql .= 'on o.currency_id = c.id ';
-        $sql .= 'Left join item as i ';
-        $sql .= 'on o.item_id = i.id ';
-        $sql .= 'where o.id = '.$id.' ';
-
-        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
-
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-            ]);
-        }
-    }
-
-    public function getAllUserList(Request $request){
-        $table_user = 'user';
-        $rows = DB::table($table_user)->get();
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-            ]);
-        }
-    }
-    public function getAllCurrencyList(Request $request){
-        $currencys = DB::table('currency')->get();
-        $items = DB::table('item')->get();
-
-        return \Response::json([
-            'msg' => 'ok',
-            'c_lists' => $currencys,
-            'i_lists' => $items
-        ]);
-    }
-
-    public function addNewOrder(Request $request){
-        $user_id = $request->post('user_id');
-        $type = $request->post('type');
-        $currency_id = $request->post('currency_id');
-        $item_id = $request->post('item_id');
-        $amount = $request->post('amount');
-        $description = $request->post('description');
+    /* This function equal corporateSignup of AdminController */
+    public function addNewCompany(Request $request){
+        $smart_phone = $request->post('smart_phone');
+        $password = $request->post('password');
+        $corporate_company_name = $request->post('corporate_company_name');
+        $corporate_phone = $request->post('corporate_phone');
+        $corporate_address = $request->post('corporate_address');
+        $corporate_name = $request->post('corporate_name');
+        $company_phone = $request->post('company_phone');
         $date_string = $request->post('create_date');
         $current_time = date("Y-m-d h:i:s", time());
-        $table_order = 'order_history';
-        if ($date_string == null || $date_string =='') {
+        $company_manager = $request->post('company_manager');
+        $car_count = $request->post('car_count');
+        $corporate_photo_file = $request->file('corporate_photo_file');
+        $corporate_doc_file = $request->file('corporate_doc_file');
+        $corporate_photo_name = '';
+        $corporate_doc_name = '';
+
+        if ($date_string === null || $date_string ==='') {
             $create_date = $current_time;
         }
         else {
@@ -537,563 +355,84 @@ class AdminController extends BaseController
             $create_date = date('Y-m-d h:i:s',$date_string);
         }
 
-        $image_urls = array();
-        for ($i = 0; $i < 8; $i++) {
-            $image = $request->file('image_'.$i);
-            $image_url = "";
-            $currentTime = date("YmdHis");
-            $randNum = rand(1, 9);
-            $order_number = $currentTime.$randNum.$i;
-            if($image != null && $image != ''){
-                $new_name = $order_number.'.'.$image->getClientOriginalExtension();
-                $image->move(public_path('images/uploads'), $new_name);
-                $image_url = 'images/uploads/'.$new_name;
+        $corporate_photo_url='';
+        $file_currentTime = date("YmdHis");
+        $randNump= rand(1, 9);
+        $order_numberp = $file_currentTime.$randNump;
+        if($corporate_photo_file != null && $corporate_photo_file != ''){
+            $new_namep = $order_numberp.'.'.$corporate_photo_file->getClientOriginalExtension();
+            $corporate_photo_file->move(public_path('images/uploads'), $new_namep);
+            $corporate_photo_url = 'images/uploads/'.$new_namep;
+            $corporate_photo_name = $corporate_photo_file->getClientOriginalName();
+        }
+
+        $corporate_doc_url='';
+        $randNum = rand(1, 9);
+        $order_number = $file_currentTime.$randNum;
+        if($corporate_doc_file != null && $corporate_doc_file != ''){
+            $new_name = $order_number.'.'.$corporate_doc_file->getClientOriginalExtension();
+            $corporate_doc_file->move(public_path('docs/uploads'), $new_name);
+            $corporate_doc_url = 'docs/uploads/'.$new_name;
+            $corporate_doc_name = $corporate_doc_file->getClientOriginalName();
+        }
+
+        $enc_password = $this->encrypt_decrypt('encrypt', $password);
+
+        $tb_admin_info = 'tb_admin_info';
+        try {
+            $cnt = DB::table($tb_admin_info)->where('user_phone', $smart_phone)->doesntExist();
+            if (!$cnt){ // exist
+                return \Response::json([
+                    'msg' => 'du'
+                ]);
+
+                exit();
             }
-            //array_push($image_urls, $image_url);
-            $image_urls[] = $image_url;
-        }
-        $success =  DB::table($table_order)
-            ->insert(
-                [
-                    'order_no' => $order_number,
-                    'order_type' => $type,
-                    'user_id' => $user_id,
-                    'currency_id' => $currency_id,
-                    'item_id' => $item_id,
-                    'status' => 1,
-                    'amount' => $amount,
-                    'description' => $description,
-                    'img_0' => $image_urls[0],
-                    'img_1' => $image_urls[1],
-                    'img_2' => $image_urls[2],
-                    'img_3' => $image_urls[3],
-                    'img_4' => $image_urls[4],
-                    'img_5' => $image_urls[5],
-                    'img_6' => $image_urls[6],
-                    'img_7' => $image_urls[7],
-                    'created_at' => $create_date,
-                    'updated_at' => $current_time,
-                ]
-            );
-            if ($success) {
-            return \Response::json([
-                'msg' => 'ok'
-            ]);
-        }
-        else {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-    }
 
-    public function modOrderInfo(Request $request){
-        $order_id = $request->post('order_id');
-        $currency_id = $request->post('currency_id');
-        $item_id = $request->post('item_id');
-        $amount = $request->post('amount');
-        $description = $request->post('description');
-        $date_string = $request->post('create_date');
-
-        $current_time = date("Y-m-d h:i:s", time());
-        $table_order = 'order_history';
-        if ($date_string == null || $date_string =='') {
-            $create_date = $current_time;
-        }
-        else {
-            $date_string = strtotime($date_string);
-            $create_date = date('Y-m-d h:i:s',$date_string);
-        }
-
-        $image_urls = array();
-        for ($i = 0; $i < 8; $i++) {
-            $image = $request->file('image_'.$i);
-            $image_url = "";
-            $currentTime = date("YmdHis");
-            $randNum = rand(1, 9);
-            $order_number = $currentTime.$randNum.$i;
-            if($image != null && $image != ''){
-                $new_name = $order_number.'.'.$image->getClientOriginalExtension();
-                $image->move(public_path('images/uploads'), $new_name);
-                $image_url = 'images/uploads/'.$new_name;
-            }
-            else{
-                $pre = $request->post('pre_'.$i);
-                if($pre != null && $pre != '')
-                {
-                    $image_url = $pre;
-                }
-            }
-            array_push($image_urls, $image_url);
-        }
-        $success =  DB::table($table_order)->where('id', $order_id)
-            ->update(
-                [
-                    'currency_id' => $currency_id,
-                    'item_id' => $item_id,
-                    'status' => 1,
-                    'amount' => $amount,
-                    'description' => $description,
-                    'img_0' => $image_urls[0],
-                    'img_1' => $image_urls[1],
-                    'img_2' => $image_urls[2],
-                    'img_3' => $image_urls[3],
-                    'img_4' => $image_urls[4],
-                    'img_5' => $image_urls[5],
-                    'img_6' => $image_urls[6],
-                    'img_7' => $image_urls[7],
-                    'created_at' => $create_date,
-                    'updated_at' => $current_time,
-                ]
-            );
-        if ($success) {
-            return \Response::json([
-                'msg' => 'ok'
-            ]);
-        }
-        else {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-    }
-    //-----------------------------------------------------
-    // Order history management part
-    //-----------------------------------------------------
-    public function csvOrderHistoryList(Request $request){
-        $search_name    = $request->post('sname');
-        $search_item = $request->post('sitem');
-        $start_date    = $request->post('start_date');
-        $end_date    = $request->post('end_date');
-        $sql = 'select * from user ';
-        $sql.= "where 1 = 1 ";
-        if ($search_name != null && $search_name != '') {
-            $sql.="and name like '%" .$search_name."%' ";
-        }
-        $rows = DB::select( DB::raw($sql));
-        foreach ($rows as $key => $row) {
-            $user_id = $row -> id;
-            $total_amount = $this -> getUserTotalAmount($user_id, $start_date, $end_date, $search_item);
-            $rows[$key]->total_amount = $total_amount;
-        }
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-            ]);
-        }
-    }
-
-    public function getOrderHistoryList(Request $request){
-        $start  = $request->post('start');
-        $count    = $request->post('count');
-        $search_name    = $request->post('sname');
-        $search_item = $request->post('sitem');
-        $start_date    = $request->post('start_date');
-        $end_date    = $request->post('end_date');
-        $start_from = ($start-1) * $count;
-        $sql = 'select * from user ';
-        $sql.= "where 1 = 1 ";
-        if ($search_name != null && $search_name != '') {
-            $sql.="and name like '%" .$search_name."%' ";
-        }
-        $lim_sql = $sql.' LIMIT '.$start_from.', '.$count.'';
-        $rows = DB::select( DB::raw($lim_sql));
-        foreach ($rows as $key => $row) {
-            $user_id = $row -> id;
-            $total_amount = $this -> getUserTotalAmount($user_id, $start_date, $end_date, $search_item);
-            $rows[$key]->total_amount = $total_amount;
-        }
-        $total_rows = DB::select( DB::raw($sql));
-        $total = count($total_rows);
-        $total_page = ceil($total / $count);
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'total'    =>  $total,
-                'start'    =>  $start,
-                'totalpage'    =>  $total_page,
-                'lists' => $rows,
-            ]);
-        }
-    }
-
-    function getUserTotalAmount($user_id, $start_date, $end_date, $search_item){
-        $sql = 'Select o.order_type , sum(o.amount) as tamount, c.name as cname, i.name as iname, c.id as cid ';
-        $sql .='From order_history as o ';
-        $sql .='Left join currency as c ';
-        $sql .='on o.currency_id = c.id ';
-        $sql.= 'Left join item as i ';
-        $sql .='on o.item_id = i.id ';
-        $sql.= 'Where o.user_id = '.$user_id.' ';
-        if ($start_date != null && $start_date != '') {
-            $start_date = strtotime($start_date);
-            $start_date = date('Y-m-d h:i:s',$start_date);
-            $sql.="and o.created_at >= '".$start_date."' ";
-        }
-        if ($end_date != null && $end_date != '') {
-            $end_date = strtotime($end_date);
-            $end_date = date('Y-m-d h:i:s',$end_date);
-            $sql.="and o.created_at <= '".$end_date."' ";
-        }
-        if ($search_item != null && $search_item != 0) {
-            $sql.="and o.item_id = ".$search_item." ";
-        }
-        $sql.= 'and o.status = 1 ';
-        $sql.='group by o.order_type, o.currency_id order by o.order_type ';
-        $rows = DB::select( DB::raw($sql));
-        return $rows;
-    }
-
-    //-----------------------------------------------------
-    // Currency management part
-    //-----------------------------------------------------
-    public function currencyDelete(Request $request){
-        $id = $request->post('id');
-        $table_user = 'currency';
-        $table_order = 'order_history';
-        $success1 = false;
-        $success2 = false;
-
-        $cnt = DB::table($table_user)->where('id', $id)->doesntExist();
-        if (!$cnt){
-            $success1 = DB::table($table_order)->where('currency_id', $id)->delete();
-            $success2 = DB::table($table_user)->delete($id);
-        }
-        return \Response::json([
-            'msg' => 'ok'
-        ]);
-    }
-
-    public function currencyAdd(Request $request){
-        $name = $request->post('name');
-        $value = $request->post('value');
-        $table_currency = 'currency';
-        $current_time = date("Y-m-d h:i:s", time());
-
-        $cnt = DB::table($table_currency)->where('name', $name)->doesntExist();
-        if ($cnt){
-            $success =  DB::table($table_currency)
+            $success = DB::table($tb_admin_info)
                 ->insert(
                     [
-                        'name' => $name,
-                        'value' => $value,
-                        'created_at' => $current_time,
-                        'updated_at' => $current_time,
+                        'user_phone' => $smart_phone, // 아이디
+                        'user_pwd' => $enc_password, // 암호
+                        'user_name' => $corporate_name, // 대표자 성명
+                        'user_email' => '', // 이메일
+                        'user_birthday' => '',
+                        'user_address' => $corporate_address, // 주소
+                        'user_photo' => $corporate_photo_name, // 사용자사진 이름
+                        'user_photo_url' => $corporate_photo_url, // 사용자사진 경로
+                        'user_type' => 0, // 1 어드민 | 0 사업자
+                        'user_regnum' => $corporate_phone, // 사업자 등록번호
+                        'company_name' => $corporate_company_name, // 상호(회사이름)
+                        'company_phone' => $company_phone, // 회사 전화번호
+                        'manager_name' => $company_manager, // 담당자 이름
+                        'manager_phone' => '', // 담당자 전화번호
+                        'certified_copy' => $corporate_doc_url, // 등록증 사본
+                        'certifice_status' => 0, // 인증여부 1: 인증됨, 0: 안됨
+                        'certified_name' => $corporate_doc_name, // 등록증 사본 실지 이름
+                        'car_count' => (int)$car_count, // 차량수량
+                        'create_date' => $create_date, // 설립일자
+                        'registe_date' => $current_time, // 가입일시
+                        'visit_date' => '', // 방문시간
+                        'website' => '',
+                        'active' => 0, // 1 이면 액티브 , 0 이면 디액티브
                     ]
                 );
             if ($success) {
                 return \Response::json([
                     'msg' => 'ok'
                 ]);
-            }
-            else {
+            } else {
                 return \Response::json([
                     'msg' => 'err'
                 ]);
             }
-        }
-        else {
+        }catch(Exception $e) {
             return \Response::json([
-                'msg' => 'du'
+                'msg' => $e->getMessage()
             ]);
         }
     }
 
-    public function getCurrencyInformation(Request $request){
-        $id = $request->post('id');
-        $table_currency = 'currency';
-        $rows =DB::table($table_currency)->where('id', $id)->first();
-
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-            ]);
-        }
-    }
-
-    public function editCurrencyInformation(Request $request){
-        $id = $request->post('id');
-        $name = $request->post('name');
-        $value = $request->post('value');
-        $table_currency = 'currency';
-        $current_time = date("Y-m-d h:i:s", time());
-
-        $cnt = DB::table($table_currency)->where('id', $id)->doesntExist();
-        if (!$cnt){
-            $success =  DB::table($table_currency)->where('id', $id)
-                ->update(
-                    [
-                        'name' => $name,
-                        'value' => $value,
-                        'updated_at' => $current_time,
-                    ]
-                );
-            if ($success) {
-                return \Response::json([
-                    'msg' => 'ok'
-                ]);
-            }
-            else {
-                return \Response::json([
-                    'msg' => 'err'
-                ]);
-            }
-        }
-        else {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-    }
-
-    //-----------------------------------------------------
-    // Outcome request management part
-    //-----------------------------------------------------
-    public function getOutcomeRequestList(Request $request){
-        $start  = $request->post('start');
-        $count    = $request->post('count');
-        $search_name    = $request->post('sname');
-        $start_date    = $request->post('start_date');
-        $end_date    = $request->post('end_date');
-        $start_from = ($start-1) * $count;
-        $sql = 'select o.*, u.name, u.account, c.name as cname, i.name as iname ';
-        $sql .= 'from order_history as o ';
-        $sql .= 'Left join user as u ';
-        $sql .= 'on o.user_id = u.id ';
-        $sql .= 'left join currency as c ';
-        $sql .= 'on o.currency_id = c.id ';
-        $sql .= 'left join item as i ';
-        $sql .= 'on o.item_id = i.id ';
-        $sql .= 'where o.status = 0 ';
-        if ($search_name != null && $search_name != '') {
-            $sql.="and u.name like '%" .$search_name."%' ";
-        }
-        if ($start_date != null && $start_date != '') {
-            $start_date = strtotime($start_date);
-            $start_date = date('Y-m-d h:i:s',$start_date);
-            $sql.="and o.created_at >= '".$start_date."' ";
-        }
-        if ($end_date != null && $end_date != '') {
-            $end_date = strtotime($end_date);
-            $end_date = date('Y-m-d h:i:s',$end_date);
-            $sql.="and o.created_at <= '".$end_date."' ";
-        }
-        $lim_sql = $sql.' LIMIT '.$start_from.', '.$count.'';
-        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
-        $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
-
-        $total = count($total_rows);
-        $total_page = ceil($total / $count);
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'total'    =>  $total,
-                'start'    =>  $start,
-                'totalpage'    =>  $total_page,
-                'lists' => $rows,
-            ]);
-        }
-    }
-
-    public function agreeOutcomeRequest(Request $request){
-        $id = $request->post('id');
-        $table_order_history = 'order_history';
-        $cnt = DB::table($table_order_history)->where('id', $id)->doesntExist();
-        if (!$cnt){
-            $success =  DB::table($table_order_history)->where('id', $id)
-                ->update(
-                    [
-                        'status' => 1,
-                    ]
-                );
-            if ($success) {
-                return \Response::json([
-                    'msg' => 'ok'
-                ]);
-            }
-            else {
-                return \Response::json([
-                    'msg' => 'err'
-                ]);
-            }
-        }
-        else {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-    }
-
-    public function rejectOutcomeRequest(Request $request){
-        $id = $request->post('id');
-        $table_order_history = 'order_history';
-        $cnt = DB::table($table_order_history)->where('id', $id)->doesntExist();
-        if (!$cnt){
-            $success =  DB::table($table_order_history)->where('id', $id)
-                ->update(
-                    [
-                        'status' => 2,
-                    ]
-                );
-            if ($success) {
-                return \Response::json([
-                    'msg' => 'ok'
-                ]);
-            }
-            else {
-                return \Response::json([
-                    'msg' => 'err'
-                ]);
-            }
-        }
-        else {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-    }
-
-    public function itemDelete(Request $request){
-        $id = $request->post('id');
-        $table_item = 'item';
-        $table_order = 'order_history';
-        $success1 = false;
-        $success2 = false;
-
-        $cnt = DB::table($table_item)->where('id', $id)->doesntExist();
-        if (!$cnt){
-            $success1 = DB::table($table_order)->where('item_id', $id)->delete();
-            $success2 = DB::table($table_item)->delete($id);
-        }
-        return \Response::json([
-            'msg' => 'ok'
-        ]);
-    }
-
-    public function itemAdd(Request $request){
-        $name = $request->post('name');
-        $value = $request->post('value');
-        $table_item = 'item';
-        $current_time = date("Y-m-d h:i:s", time());
-
-        $cnt = DB::table($table_item)->where('name', $name)->doesntExist();
-        if ($cnt){
-            $success =  DB::table($table_item)
-                ->insert(
-                    [
-                        'name' => $name,
-                        'value' => $value,
-                        'created_at' => $current_time,
-                        'updated_at' => $current_time,
-                    ]
-                );
-            if ($success) {
-                return \Response::json([
-                    'msg' => 'ok'
-                ]);
-            }
-            else {
-                return \Response::json([
-                    'msg' => 'err'
-                ]);
-            }
-        }
-        else {
-            return \Response::json([
-                'msg' => 'du'
-            ]);
-        }
-    }
-
-    public function getItemInformation(Request $request){
-        $id = $request->post('id');
-        $table_item = 'item';
-        $rows =DB::table($table_item)->where('id', $id)->first();
-
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-            ]);
-        }
-    }
-
-    public function editItemInformation(Request $request){
-        $id = $request->post('id');
-        $name = $request->post('name');
-        $value = $request->post('value');
-        $table_item = 'item';
-        $current_time = date("Y-m-d h:i:s", time());
-
-        $cnt = DB::table($table_item)->where('id', $id)->doesntExist();
-        if (!$cnt){
-            $success =  DB::table($table_item)->where('id', $id)
-                ->update(
-                    [
-                        'name' => $name,
-                        'value' => $value,
-                        'updated_at' => $current_time,
-                    ]
-                );
-            if ($success) {
-                return \Response::json([
-                    'msg' => 'ok'
-                ]);
-            }
-            else {
-                return \Response::json([
-                    'msg' => 'err'
-                ]);
-            }
-        }
-        else {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-    }
-    public function getAllItemList(Request $request){
-        $table_currency = 'item';
-        $rows = DB::table($table_currency)->get();
-        if($rows == null){
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'lists' => $rows,
-            ]);
-        }
-    }
 
     public function dashborad(Request $request){
         return \Response::json([
