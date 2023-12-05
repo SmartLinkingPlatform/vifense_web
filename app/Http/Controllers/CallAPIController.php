@@ -243,7 +243,7 @@ class CallAPIController extends BaseController
     }
 
     //차량 등록 정보
-    public function regCarInfo(Request $request)
+    public function requestRegCarInfo(Request $request)
     {
         $number = $request->post('number');
         $manufacturer = $request->post('manufacturer');
