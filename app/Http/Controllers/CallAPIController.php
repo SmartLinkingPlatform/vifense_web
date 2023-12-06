@@ -456,4 +456,56 @@ class CallAPIController extends BaseController
         exit();
     }
 
+    //메세지
+    public function requestMessageListInfo(Request $request)
+    {
+        $msg_id = $request->post('msg_id');
+        $user_phone = $request->post('user_phone');
+
+        $tb_user_info = "tb_user_info";
+        $user_rows = DB::table($tb_user_info)->where('user_phone', $user_phone)->first();
+        if ($user_rows != null) {
+            $datas = array();
+            $tb_notice = "tb_notice";
+            $sql = "SELECT * FROM ".$tb_notice;
+            $sql .= " WHERE (type = 'all' OR type = '".$user_rows->admin_id."' OR type='".$user_rows->user_id."') AND notice_id > ".$msg_id;
+            $sql .= " ORDER BY notice_id DESC";
+
+            $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+            if ($rows == null) {
+                return \Response::json([
+                    'msg' => 'nomsg'
+                ]);
+            } else {
+                foreach($rows as $row) {
+                    $adm_id = $row->from_user_id;
+                    $tb_admin = "tb_admin_info";
+                    $admin_row = DB::table($tb_admin)->where('admin_id', $adm_id)->first();
+                    if ($admin_row != null) {
+                        $data = array(
+                            'notice_id' => $row->notice_id,
+                            'msg_date' => $row->create_date,
+                            'msg_user' => $admin_row->user_name,
+                            'msg_title' => $row->title,
+                            'msg_content' => $row->content
+                        );
+                        array_push($datas, $data);
+                    } else {
+                        return \Response::json([
+                            'msg' => 'noadmin'
+                        ]);
+                    }
+                }
+                return \Response::json([
+                    'msg' => 'ok',
+                    'lists' => $datas
+                ]);
+            }
+        } else{
+            return \Response::json([
+                'msg' => 'nouser'
+            ]);
+        }
+    }
+
 } // area of class

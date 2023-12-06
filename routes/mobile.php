@@ -22,6 +22,7 @@ Route::post('mobile.modCarInfo', 'CallAPIController@requestModCarInfo');
 Route::post('mobile.delCarInfo', 'CallAPIController@requestDelCarInfo');
 Route::post('mobile.readDriving', 'CallAPIController@requestReadDrivingInfo');
 Route::post('mobile.saveDriving', 'CallAPIController@requestSaveDrivingInfo');
+Route::post('mobile.messageList', 'CallAPIController@requestMessageListInfo');
 
 
 
