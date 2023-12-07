@@ -39,12 +39,12 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="side-menu__item" href="{{ url('/' . $page='admin.order-manage') }}">
+                                <a class="side-menu__item" href="{{ url('/' . $page='admin.day-driver-info') }}">
                                     <i class="side-menu__icon fa fa-list-alt"></i><span class="side-menu__label">일별 주행 정보</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="side-menu__item" href="{{ url('/' . $page='admin.order-history') }}">
+                                <a class="side-menu__item" href="{{ url('/' . $page='admin.user-driver-info') }}">
                                     <i class="side-menu__icon fa fa-search"></i><span class="side-menu__label">사용자별 주행 정보</span>
                                 </a>
                             </li>

@@ -65,6 +65,17 @@ Route::middleware('adminsession')->group(function(){
         return view('admin.item');
     });
     */
+
+//----------------------------------------------------
+// driver info
+//----------------------------------------------------
+
+
+//-----------------------------------------------------
+// Notice part
+//-----------------------------------------------------
+    Route::post('user.noticeAdd', 'NoticeController@noticeAdd');
+
 });
 Route::get('admin', function () { return redirect('admin.login');});
 Route::post('admin.adminLogin', 'AdminController@adminLogin');
@@ -95,11 +106,20 @@ Route::post('admin.editCompanyInfo', 'CompanyController@editCompanyInfo');
 Route::post('admin.companyDelete', 'CompanyController@companyDelete');
 Route::post('admin.companyActive', 'CompanyController@companyActive');
 
+//----------------------------------------------------
+// driver info
+//----------------------------------------------------
+Route::get('admin.day-driver-info', function () {
+    return view('admin.day-driver-info');
+});
+Route::get('admin.user-driver-info', function () {
+    return view('admin.user-driver-info');
+});
+
 //-----------------------------------------------------
 // Notice part
 //-----------------------------------------------------
 Route::view('user.notice', 'user.notice-view');
-Route::post('user.noticeAdd', 'NoticeController@noticeAdd');
 
 /*
 Route::middleware('usersession')->group(function(){

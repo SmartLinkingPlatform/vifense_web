@@ -575,4 +575,10 @@ class AdminController extends BaseController
 
     }
 
+
+    public function dayDriverInfo(Request $request)
+    {
+
+    }
+
 } // area of class

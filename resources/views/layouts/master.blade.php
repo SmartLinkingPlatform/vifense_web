@@ -24,7 +24,7 @@
             @include('layouts.mobile-header')
         <div class="app-content">
         <div class="side-app">
-        <div class="page-header">
+        <div class="page-header" style="margin-bottom: 0.3rem">
             @yield('page-header')
             @include('layouts.notification')
         </div>
