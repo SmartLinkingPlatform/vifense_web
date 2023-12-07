@@ -4,10 +4,10 @@
 @section('page-header')
     <!-- PAGE-HEADER -->
     <div>
-        <h1 class="page-title">회원 계정 관리</h1>
+        <h1 class="page-title">개인 정보</h1>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">관리 시스템</a></li>
-            <li class="breadcrumb-item active" aria-current="page">회원 계정 관리</li>
+            <li class="breadcrumb-item active" aria-current="page">개인 정보</li>
         </ol>
     </div>
     <!-- PAGE-HEADER END -->
@@ -26,11 +26,11 @@
                     </div>
                     <div class="card mt-2">
                         <div class="card-header border-bottom-0 p-4">
-                            <h2 class="card-title" style="margin-left: 7px;">회원목록</h2>
+                            <h2 class="card-title" style="margin-left: 7px;">사용자 리스트</h2>
                             <div class="page-options d-flex float-right">
                                 <div class="btn btn-success" id="button_add" style="width: 80px; margin-right: 10px;">
                                     <i class="icon icon-plus"></i>
-                                    添加
+                                    추가
                                 </div>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <div id="modal_title" style="color: #5c6bc0; font-size: 20px; font-weight: 600;">新增会员</div>
+                    <div id="modal_title" style="color: #5c6bc0; font-size: 20px; font-weight: 600;">새 사용자 추가</div>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
