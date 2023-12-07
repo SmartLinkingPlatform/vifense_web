@@ -81,6 +81,7 @@ Route::post('admin.adminLogout', 'AdminController@adminLogout');
 // admin part
 //---------------------------------------------------
 Route::view('admin.findPasswordView', 'admin.find-password-view');
+Route::post('admin.getSignNumber', 'AdminController@getSignNumber');
 Route::view('admin.signupCorporateView', 'admin.signup-corporate-view');
 Route::post('admin.corporateSignup', 'AdminController@corporateSignup');
 

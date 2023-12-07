@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Dotenv\Validator;
-use mysql_xdevapi\Exception;
+use Exception;
+//use phpseclib3\Crypt\PublicKeyLoader;
 
 class AdminController extends BaseController
 {
@@ -106,7 +107,6 @@ class AdminController extends BaseController
         $userid = $request->post('userid');
         $password = $request->post('password');
         $updated_at = @date("Y-m-d h:i:s", time());
-
 
         $user = DB::table($this->tb_admin_info)->where('user_phone', $userid)->first();
 
@@ -489,9 +489,8 @@ class AdminController extends BaseController
 
         $enc_password = $this->encrypt_decrypt('encrypt', $password);
 
-        $tb_admin_info = 'tb_admin_info';
         try {
-            $cnt = DB::table($tb_admin_info)->where('user_phone', $smart_phone)->doesntExist();
+            $cnt = DB::table($this->tb_admin_info)->where('user_phone', $smart_phone)->doesntExist();
             if (!$cnt){ // exist
                 return \Response::json([
                     'msg' => 'du'
@@ -500,7 +499,7 @@ class AdminController extends BaseController
                 exit();
             }
 
-            $success = DB::table($tb_admin_info)
+            $success = DB::table($this->tb_admin_info)
                 ->insert(
                     [
                         'user_phone' => $smart_phone, // 아이디
@@ -537,11 +536,43 @@ class AdminController extends BaseController
                     'msg' => 'err'
                 ]);
             }
+        }catch(\Exception $e) {
+            return \Response::json([
+                'msg' => $e->getMessage()
+            ]);
+        }
+    }
+
+
+    /***** auth part  *****/
+    public function getSignNumber(Request $request)
+    {
+        $smart_phone = $request->post('smart_phone');
+        $user_regnum = $request->post('user_regnum');
+        try {
+            $cnt = DB::table($this->tb_admin_info)->where([
+                'user_phone'=>$smart_phone,
+                'user_regnum'=>$user_regnum
+            ])->doesntExist();
+            if ($cnt){ // exist
+                return \Response::json([
+                    'msg' => 'nonuser'
+                ]);
+                exit();
+            }
+            else{
+                return \Response::json([
+                    'msg' => 'errauth'
+                ]);
+                exit();
+            }
+
         }catch(Exception $e) {
             return \Response::json([
                 'msg' => $e->getMessage()
             ]);
         }
+
     }
 
 } // area of class

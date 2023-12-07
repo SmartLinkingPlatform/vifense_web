@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Dotenv\Validator;
-use mysql_xdevapi\Exception;
+use \Throwable;
 
 class CompanyController extends BaseController
 {
@@ -219,7 +219,7 @@ class CompanyController extends BaseController
                     'msg' => 'err'
                 ]);
             }
-        }catch(Exception $e) {
+        }catch(\Exception $e) {
             return \Response::json([
                 'msg' => $e->getMessage()
             ]);

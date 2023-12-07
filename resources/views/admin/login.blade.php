@@ -79,7 +79,7 @@
                     $('#valid_id').text("사용자 아이디를 입력해주세요").css('display','block');
                     setTimeout(function () {
                         $('#valid_id').text("사용자 아이디를 입력해주세요").css('display','none');
-                        $('#text_name').css('margin-bottom','1.5rem');
+                        $('#text_id').css('margin-bottom','1.5rem');
                     },1000);
                     return;
                 }
@@ -87,7 +87,7 @@
                     $('#valid_pass').text("비밀번호를 입력 해주세요").css('display', 'block');
                     setTimeout(function () {
                         $('#valid_pass').text("비밀번호를 입력 해주세요").css('display','none');
-                        $('#text_pwd').css('margin-bottom','1.5rem');
+                        $('#text_pass').css('margin-bottom','1.5rem');
                     },1000);
                     return;
                 }
