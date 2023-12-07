@@ -508,4 +508,144 @@ class CallAPIController extends BaseController
         }
     }
 
+    //주행 랭킹 요청
+    public function requestDrivingRankingInfo(Request $request) {
+        $car_id = $request->post('car_id');
+        $user_id = $request->post('user_id');
+        $driving_date = $request->post('driving_date');
+
+        $tb_driving_info = "tb_driving_info";
+
+        //주행 거리 랭킹
+        $idx_mieage = 0; //월 주행거리 순위
+        $total_mileage = 0; //월 총 주행거리
+        $sql = "SELECT ";
+        $sql .= "user_id, SUM(mileage) AS mileage ";
+        $sql .= "FROM ".$tb_driving_info." ";
+        $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."' ";
+        $sql .= "GROUP BY user_id ORDER BY mileage DESC";
+
+        $idx = 0;
+        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        if ($rows == null) {
+            return \Response::json([
+                'msg' => 'err1'
+            ]);
+        } else {
+            foreach ($rows as $row) {
+                $idx++;
+                if ($row->user_id == $user_id) {
+                    $idx_mieage = $idx;
+                    $total_mileage = $row->mileage;
+                    break;
+                }
+            }
+        }
+
+        //안전 운전 랭킹
+        $idx_safety = 0; //월 안전운전 순위
+        $sql = "SELECT ";
+        $sql .= "user_id, SUM(driving_score)/COUNT(user_id) AS driving_score ";
+        $sql .= "FROM ".$tb_driving_info." ";
+        $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."' ";
+        $sql .= "GROUP BY user_id ORDER BY driving_score DESC";
+
+        $idx = 0;
+        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        if ($rows == null) {
+            return \Response::json([
+                'msg' => 'err2'
+            ]);
+        } else {
+            foreach ($rows as $row) {
+                $idx++;
+                if ($row->user_id == $user_id) {
+                    $idx_safety = $idx;
+                    break;
+                }
+            }
+        }
+
+        $sql = "SELECT * FROM ".$tb_driving_info;
+        $sql .= " WHERE car_id = ".$car_id." AND user_id = ".$user_id." AND SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."'";
+        $sql .= " ORDER BY driv_id DESC";
+        $d_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        if ($d_rows == null) {
+            return \Response::json([
+                'msg' => 'err3'
+            ]);
+        }
+
+        return \Response::json([
+            'msg' => 'ok',
+            'mileage_score' => $idx_mieage,
+            'safety_score' => $idx_safety,
+            'total_mileage' => $total_mileage,
+            'lists' => $d_rows
+        ]);
+    }
+
+    //메인화면 랭킹 요청
+    public function requestRankingInfo(Request $request) {
+        $car_id = $request->post('car_id');
+        $user_id = $request->post('user_id');
+        $driving_date = $request->post('driving_date');
+
+        $tb_driving_info = "tb_driving_info";
+
+        //주행 거리 랭킹
+        $idx_mieage = 0; //월 주행거리 순위
+        $sql = "SELECT ";
+        $sql .= "user_id, SUM(mileage) AS mileage ";
+        $sql .= "FROM ".$tb_driving_info." ";
+        $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."' ";
+        $sql .= "GROUP BY user_id ORDER BY mileage DESC";
+
+        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        $idx = 0;
+        if ($rows == null) {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        } else {
+            foreach ($rows as $row) {
+                $idx++;
+                if ($row->user_id == $user_id) {
+                    $idx_mieage = $idx;
+                    break;
+                }
+            }
+        }
+
+        //안전 운전 랭킹
+        $idx_safety = 0; //월 안전운전 순위
+        $sql = "SELECT ";
+        $sql .= "user_id, SUM(driving_score)/COUNT(user_id) AS driving_score ";
+        $sql .= "FROM ".$tb_driving_info." ";
+        $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."' ";
+        $sql .= "GROUP BY user_id ORDER BY driving_score DESC";
+
+        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        $idx = 0;
+        if ($rows == null) {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        } else {
+            foreach ($rows as $row) {
+                $idx++;
+                if ($row->user_id == $user_id) {
+                    $idx_safety = $idx;
+                    break;
+                }
+            }
+        }
+
+        return \Response::json([
+            'msg' => 'ok',
+            'mileage_score' => $idx_mieage,
+            'safety_score' => $idx_safety
+        ]);
+    }
+
 } // area of class
