@@ -516,37 +516,26 @@ class CallAPIController extends BaseController
 
         $tb_driving_info = "tb_driving_info";
 
-        $sql = "SELECT * FROM ".$tb_driving_info;
-        $sql .= " WHERE car_id = ".$car_id." AND user_id = ".$user_id." AND SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."'";
-        $sql .= " ORDER BY driv_id DESC";
-        $d_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
-        if ($d_rows == null) {
-            return \Response::json([
-                'msg' => 'err'
-            ]);
-        }
-
         //주행 거리 랭킹
         $idx_mieage = 0; //월 주행거리 순위
         $total_mileage = 0; //월 총 주행거리
         $sql = "SELECT ";
-        $sql .= "ROW_NUMBER() OVER (ORDER BY mileage DESC) AS idx, ";
         $sql .= "user_id, SUM(mileage) AS mileage ";
         $sql .= "FROM ".$tb_driving_info." ";
         $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."' ";
-        $sql .= "GROUP BY user_id";
-        return \Response::json([
-            'msg' => $sql
-        ]);
+        $sql .= "GROUP BY user_id ORDER BY mileage DESC";
+
+        $idx = 0;
         $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
         if ($rows == null) {
             return \Response::json([
-                'msg' => 'err'
+                'msg' => 'err1'
             ]);
         } else {
             foreach ($rows as $row) {
+                $idx++;
                 if ($row->user_id == $user_id) {
-                    $idx_mieage = $row->idx;
+                    $idx_mieage = $idx;
                     $total_mileage = $row->mileage;
                     break;
                 }
@@ -556,24 +545,35 @@ class CallAPIController extends BaseController
         //안전 운전 랭킹
         $idx_safety = 0; //월 안전운전 순위
         $sql = "SELECT ";
-        $sql .= "ROW_NUMBER() OVER (ORDER BY driving_score DESC) AS idx, ";
         $sql .= "user_id, SUM(driving_score)/COUNT(user_id) AS driving_score ";
         $sql .= "FROM ".$tb_driving_info." ";
         $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."' ";
-        $sql .= "GROUP BY user_id";
+        $sql .= "GROUP BY user_id ORDER BY driving_score DESC";
 
+        $idx = 0;
         $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
         if ($rows == null) {
             return \Response::json([
-                'msg' => 'err'
+                'msg' => 'err2'
             ]);
         } else {
             foreach ($rows as $row) {
+                $idx++;
                 if ($row->user_id == $user_id) {
-                    $idx_safety = $row->idx;
+                    $idx_safety = $idx;
                     break;
                 }
             }
+        }
+
+        $sql = "SELECT * FROM ".$tb_driving_info;
+        $sql .= " WHERE car_id = ".$car_id." AND user_id = ".$user_id." AND SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."'";
+        $sql .= " ORDER BY driv_id DESC";
+        $d_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        if ($d_rows == null) {
+            return \Response::json([
+                'msg' => 'err3'
+            ]);
         }
 
         return \Response::json([
@@ -596,21 +596,22 @@ class CallAPIController extends BaseController
         //주행 거리 랭킹
         $idx_mieage = 0; //월 주행거리 순위
         $sql = "SELECT ";
-        $sql .= "ROW_NUMBER() OVER (ORDER BY mileage DESC) AS idx, ";
         $sql .= "user_id, SUM(mileage) AS mileage ";
         $sql .= "FROM ".$tb_driving_info." ";
         $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."' ";
-        $sql .= "GROUP BY user_id";
+        $sql .= "GROUP BY user_id ORDER BY mileage DESC";
 
         $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        $idx = 0;
         if ($rows == null) {
             return \Response::json([
                 'msg' => 'err'
             ]);
         } else {
             foreach ($rows as $row) {
+                $idx++;
                 if ($row->user_id == $user_id) {
-                    $idx_mieage = $row->idx;
+                    $idx_mieage = $idx;
                     break;
                 }
             }
@@ -619,21 +620,22 @@ class CallAPIController extends BaseController
         //안전 운전 랭킹
         $idx_safety = 0; //월 안전운전 순위
         $sql = "SELECT ";
-        $sql .= "ROW_NUMBER() OVER (ORDER BY driving_score DESC) AS idx, ";
         $sql .= "user_id, SUM(driving_score)/COUNT(user_id) AS driving_score ";
         $sql .= "FROM ".$tb_driving_info." ";
         $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '".substr($driving_date, 0, 6)."' ";
-        $sql .= "GROUP BY user_id";
+        $sql .= "GROUP BY user_id ORDER BY driving_score DESC";
 
         $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        $idx = 0;
         if ($rows == null) {
             return \Response::json([
                 'msg' => 'err'
             ]);
         } else {
             foreach ($rows as $row) {
+                $idx++;
                 if ($row->user_id == $user_id) {
-                    $idx_safety = $row->idx;
+                    $idx_safety = $idx;
                     break;
                 }
             }
