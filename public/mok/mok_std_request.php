@@ -25,12 +25,14 @@
 
     /* 결과 수신 후 전달 URL 설정 */
     $result_return_url = "https://dgt.vifense.com/mok/mok_std_result.php";
+
+    $reqCode = $_GET['code'] ?? '01001';
     /* 2. 거래 정보 호출 */
-    echo mobileOK_std_request($mobileOK, $result_return_url, $clientPrefix);
+    echo mobileOK_std_request($mobileOK, $result_return_url, $clientPrefix, $reqCode);
 ?>
 <?php
     /* 본인확인 표준창 인증 요청 예제 함수 */
-    function mobileOK_std_request($mobileOK, $result_return_url, $clientPrefix) {
+    function mobileOK_std_request($mobileOK, $result_return_url, $clientPrefix, $reqCode) {
         // local시간 설정이 다르게 될  수 있음으로 기본 시간 설정을 서울로 해놓는다.
         date_default_timezone_set('Asia/Seoul');
 
@@ -62,7 +64,7 @@
             01001 : 회원가입, 01002 : 정보변경, 01003 : ID찾기, 01004 : 비밀번호찾기,
             01005 : 본인확인용, 01006 : 성인인증, 01007 : 상품구매/결제, 01999 : 기타
             */
-            'usageCode'=> '01005'
+            'usageCode'=> $reqCode
             /* 본인확인 서비스 ID */
             , 'serviceId'=>$mobileOK->get_service_id()
             /* 암호화된 본인확인 거래 요청 정보 */

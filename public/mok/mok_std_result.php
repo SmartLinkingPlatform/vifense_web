@@ -121,9 +121,17 @@
             "resultCode" => "2000"
             , "resultMsg" => "성공"
             , "userName" => $user_name
+            , "providerId" => $provider_id
+            , "serviceType" => $service_type
+            , "userPhone" => $user_phone
+            , "userBirthday" => $user_birthday
+            , "userGender" => $user_gender
+            , "userNation" => $user_nation
+            , "reqAuthType" => $req_auth_type
+            , "reqDate" => $req_date
         );
-        $result_json = json_encode($result_array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
+        $result_json = json_encode($result_array, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         return $result_json;
     }
 

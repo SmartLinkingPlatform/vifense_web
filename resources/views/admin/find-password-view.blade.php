@@ -140,7 +140,7 @@
         function resultFunc(result) {
             try {
                 let jsresult = JSON.parse(result);
-                console.log('result >>>', jsresult);
+                console.log('resultFunc >>>', jsresult);
             } catch (error) {
                 console.log('err >>>', error.message);
             }
@@ -148,7 +148,7 @@
 
         $(document).ready(function () {
             $('#mok_popup').click(function () {
-                MOBILEOK.process("https://dgt.vifense.com/mok/mok_std_request.php", "WB", "resultFunc");
+                MOBILEOK.process("https://dgt.vifense.com/mok/mok_std_request.php?code='01004'", "WB", "resultFunc");
                 //MOBILEOK.process("http://dgt.local.com/mok/mok_std_request.php", "WB", "result");
             })
             /** Get auth */
