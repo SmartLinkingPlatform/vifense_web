@@ -185,21 +185,27 @@ class CallAPIController extends BaseController
                 'msg' => 'nonuser'
             ]);
         } else {
-            DB::table($tb_info)->where('user_phone', $user_phone)
+            $success = DB::table($tb_info)->where('user_phone', $user_phone)
                 ->update(
                     [
                         'visit_date' => $visit_date,
                         'active' => 1
                     ]
                 );
-            return \Response::json([
-                'msg' => 'ok',
-                'user_id' => $row->user_id,
-                'user_phone' => $row->user_phone,
-                'user_name' => $row->user_name,
-                'user_pwd' => $row->user_pwd,
-                'admin_id' => $row->admin_id
-            ]);
+            if ($success) {
+                return \Response::json([
+                    'msg' => 'ok',
+                    'user_id' => $row->user_id,
+                    'user_phone' => $row->user_phone,
+                    'user_name' => $row->user_name,
+                    'user_pwd' => $row->user_pwd,
+                    'admin_id' => $row->admin_id
+                ]);
+            } else {
+                return \Response::json([
+                    'msg' => 'err'
+                ]);
+            }
         }
         exit();
     }
@@ -220,7 +226,7 @@ class CallAPIController extends BaseController
                 'msg' => 'nonuser'
             ]);
         } else {
-            DB::table($tb_info)->where('user_id', $userid)
+            $success = DB::table($tb_info)->where('user_id', $userid)
                 ->update(
                     [
                         'user_pwd' => $password,
@@ -228,9 +234,15 @@ class CallAPIController extends BaseController
                         'update_date' => $update_date
                     ]
                 );
-            return \Response::json([
-                'msg' => 'ok'
-            ]);
+            if ($success) {
+                return \Response::json([
+                    'msg' => 'ok'
+                ]);
+            } else {
+                return \Response::json([
+                    'msg' => 'err'
+                ]);
+            }
         }
         exit();
     }
@@ -646,6 +658,35 @@ class CallAPIController extends BaseController
             'mileage_score' => $idx_mieage,
             'safety_score' => $idx_safety
         ]);
+    }
+
+    //새 비밀번호 설정
+    public function requestNewPasswordInfo(Request $request)
+    {
+        $user_id = $request->post('user_id');
+        $user_pwd = $request->post('user_pwd');
+        $update_date = $request->post('update_date');
+
+        $tb_info = "tb_user_info";
+        $success = DB::table($tb_info)->where('user_phone', $user_id)
+            ->update(
+                [
+                    'user_pwd' => $user_pwd,
+                    'update_date' => $update_date
+                ]
+            );
+
+        if ($success) {
+            return \Response::json([
+                'msg' => 'ok'
+            ]);
+        }
+        else {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        }
+        exit();
     }
 
 } // area of class

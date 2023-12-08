@@ -25,6 +25,7 @@ Route::post('mobile.saveDriving', 'CallAPIController@requestSaveDrivingInfo');
 Route::post('mobile.ranking', 'CallAPIController@requestRankingInfo');
 Route::post('mobile.drivingRanking', 'CallAPIController@requestDrivingRankingInfo');
 Route::post('mobile.messageList', 'CallAPIController@requestMessageListInfo');
+Route::post('mobile.newpassword', 'CallAPIController@requestNewPasswordInfo');
 
 
 
