@@ -40,7 +40,7 @@
                                                 <i class="fa fa-calendar tx-16 lh-0 op-6"></i>
                                             </div>
                                         </div>
-                                        <input id="input_from_date" class="form-control fc-datepicker" placeholder="MM/DD/YYYY" type="text">
+                                        <input id="input_from_date" class="form-control fc-datepicker" placeholder="YYYY-MM-DD" type="text">
                                     </div>
                                 </div>
                                 <div class="col-md-4 pb-md-0 pb-sm-2">
@@ -50,7 +50,7 @@
                                                 <i class="fa fa-calendar tx-16 lh-0 op-6"></i>
                                             </div>
                                         </div>
-                                        <input id="input_to_date" class="form-control fc-datepicker-2" placeholder="MM/DD/YYYY" type="text">
+                                        <input id="input_to_date" class="form-control fc-datepicker-2" placeholder="YYYY-MM-DD" type="text">
                                     </div>
                                 </div>
                                 <div class="col-md-1 pb-md-0 pb-sm-2 text-right">
@@ -77,7 +77,7 @@
                                         <th >주행점수</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="tbody_order_list">
+                                    <tbody id="tbody_day_driving_list">
                                     </tbody>
                                 </table>
                             </div>
@@ -211,8 +211,187 @@
     <script src="{{ URL::asset('assets/plugins/time-picker/toggles.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
     <script>
-        $(document).ready(function () {
+        let pstart=1;
+        let pnum = pstart;
+        let pcount=5;
+        let numg = 5;
+        let search_val = '';
 
+        $(document).ready(function () {
+            $( "#input_from_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+            $( "#input_to_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+            getDayDrivingList();
         });
+
+        function getDayDrivingList() {
+            let from_date = $('#input_from_date').val().replace(/ /g, '');
+            let to_date = $('#input_to_date').val().replace(/ /g, '');
+
+            $.ajax({
+                url: 'admin.getDayDrivingList',
+                data: {
+                    start: pstart,
+                    count:pcount,
+                    search_val:search_val,
+                    from_date:from_date,
+                    to_date:to_date
+                },
+                type: 'POST',
+                success: function (data) {
+                    console.log(data.msg);
+                    console.log(data.sql);
+                    return;
+
+                    if (data.msg === "ok") {
+                        $('#tbody_day_driving_list').html('');
+                        $('#page_nav_container').html('');
+                        let lists = data.lists;
+                        pstart=data.start;
+                        let totalpage=data.totalpage;
+                        let tags = '';
+                        for (let i = 0; i < lists.length; i++) {
+                            let list = lists[i];
+                            let admin_id = list.admin_id;
+                            let order = i + 1;
+                            let user_phone = list.user_phone;
+                            let company_name = list.company_name || '';
+                            let certifice_status = list.certifice_status || '0';
+                            let active = list.active || '0';
+                            let registe_date = list.registe_date || '';
+                            let visit_date = list.visit_date || '';
+                            let cert_check = parseInt(certifice_status) > 0 ? 'checked' : '';
+                            let act_check = parseInt(active) > 0 ? 'checked' : '';
+                            //let create_date = list.create_date;
+                            //let dateString = create_date.split(' ')[0];
+                            //let temp = dateString.split('-');
+                            //let create_string = temp[1] + '/' + temp[2] + '/' + temp[0];
+                            tags += '<tr>';
+                            tags += '<td class="text-nowrap align-middle">' + order + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + user_phone + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + company_name + '</td>';
+
+                            tags += '<td class="text-nowrap align-middle">';
+                            tags += '<div class="d-flex justify-content-center">';
+                            tags += '<input aria-disabled="true" type="checkbox" value="'+certifice_status+'" id="certiChecked_'+admin_id+'" '+cert_check+' >';
+                            tags += '</div>';
+                            tags += '</td>';
+
+                            tags += '<td class="text-nowrap align-middle">';
+                            tags += '<div class="d-flex justify-content-center">';
+                            tags += '<input  type="checkbox" value="'+active+'" id="actiChecked_'+admin_id+'" '+act_check+' >';
+                            tags += '</div>';
+                            tags += '</td>';
+
+                            tags += '<td class="text-nowrap align-middle">' + registe_date + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + visit_date + '</td>';
+                            tags += '<td class="text-nowrap align-middle"> 로그 </td>';
+                            tags += '<td class="text-center align-middle">';
+                            tags += '<div class="btn-group align-top pr-3 col-md-6 pb-1 justify-content-center">';
+                            tags += '<button class="btn btn-sm btn-primary badge p-3 " data-target="#user-form-modal" data-toggle="modal" type="button" id = "button_edit_'+admin_id + '">수정<i class="fa fa-edit"></i></button>';
+                            tags += '</div>';
+                            tags += '<div class="btn-group align-top col-md-6 pb-1 justify-content-center">';
+                            tags += '<button class="btn btn-sm btn-red badge p-3" data-target="#user-form-modal" data-toggle="modal" type="button" id="button_delete_' + admin_id + '">삭제<i class="fa fa-trash"></i></button>';
+                            tags += '</div>';
+                            tags += '</td>';
+                            tags += '</tr>';
+                        }
+                        $('#tbody_day_driving_list').html(tags);
+
+                        let nav_tag='';
+                        nav_tag+='<nav aria-label="..." class="mb-4">';
+                        nav_tag+='<ul class="pagination float-right">';
+
+                        let disble="";
+                        if(pstart===1)
+                            disble="disabled"
+
+                        let prenum= parseInt(pstart) - 1;
+
+                        nav_tag+='<li class="page-item  '+disble+' ">';
+                        nav_tag+='<a class="page-link" href="#"  id="page_nav_number_' + prenum + '" >';
+                        nav_tag+='<i class="ti-angle-left"></i>';
+                        nav_tag+='</a>';
+                        nav_tag+='</li>';
+
+                        pnum = pstart <= numg ? 1 : parseInt(pstart) - 1;
+
+                        for(let idx = 0; idx < numg; idx++)
+                        {
+                            let actv="";
+                            let aria_current='';
+                            let spantag='';
+                            let oid='';
+
+                            if(pnum===pstart)
+                            {
+                                actv='active';
+                                aria_current='aria-current="page"';
+                                spantag='<span class="sr-only">(current)</span>';
+                            }
+                            else
+                                oid="page_nav_number_" + pnum;
+
+                            nav_tag+='<li class="page-item ' + actv + '"  ' + aria_current + '>';
+                            nav_tag+='<a class="page-link" id="' + oid + '"  href="#" >' + pnum + '  ' + spantag + '</a>';
+                            nav_tag+='</li>';
+
+                            if(pnum===totalpage) break;
+                            pnum = pnum + 1;
+                        }
+                        let nextnum= parseInt(pstart) + 1;
+
+                        let edisble="";
+                        if(pstart===totalpage)
+                            edisble="disabled";
+
+                        nav_tag+='<li class="page-item '+edisble+' ">';
+                        nav_tag+='<a class="page-link" id="page_nav_number_' + nextnum + '" href="#">';
+                        nav_tag+='<i class="ti-angle-right"></i>';
+                        nav_tag+='</a>';
+                        nav_tag+='</li>';
+
+                        nav_tag+='</ul>';
+                        nav_tag+='</nav>';
+
+                        $('#page_nav_container').html(nav_tag);
+
+                        /* events { */
+                        $('a[id^="page_nav_number_"]').click(function(){
+                            let oid=$(this).attr("id");
+                            pstart=oid.split('_')[3];
+                            getCompanyList();
+                        });
+
+                        $('button[id^="button_edit_"]').click(function(){
+                            let oid = $(this).attr("id");
+                            let id = oid.split('_')[2];
+                            showEditDialog(id);
+                        });
+
+                        $('button[id^="button_delete_"]').click(function(){
+                            let oid = $(this).attr("id");
+                            let id = oid.split('_')[2];
+                            deleteCompany(id);
+                        });
+
+                        $('input[id^="actiChecked_"]').click(function(){
+                            let oid = $(this).attr("id");
+                            let id = oid.split('_')[1];
+                            let cks = $('#actiChecked_' + id).prop('checked');
+                            let act = cks ? 1 : 0;
+                            //console.log(act);
+                            activeCompany(id, act);
+                        });
+
+                    }
+                    else {
+                        $('#tbody_admin_list').html('');
+                    }
+                },
+                error: function (jqXHR, errdata, errorThrown) {
+                    console.log(errdata);
+                }
+            });
+        }
     </script>
 @endsection

@@ -39,6 +39,8 @@ Route::middleware('adminsession')->group(function(){
     Route::get('admin.companyinfo', function () {
         return view('admin.companyinfo');
     });
+
+    Route::post('admin.getDayDrivingList', 'AdminController@getDayDrivingList');
     /*
     Route::get('admin.user', function () {
         return view('admin.user');
@@ -115,6 +117,8 @@ Route::get('admin.day-driver-info', function () {
 Route::get('admin.user-driver-info', function () {
     return view('admin.user-driver-info');
 });
+
+
 
 //-----------------------------------------------------
 // Notice part

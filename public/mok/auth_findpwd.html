@@ -15,15 +15,18 @@
         alert("window 가 존재하지 않습니다.");
     }
     window.onload = function(){
-        MOBILEOK.process("https://dgt.vifense.com/mok/mok_std_request.php?code='01001'", "MWV", "resultFunc");
+        MOBILEOK.process("https://dgt.vifense.com/mok/mok_std_request.php?code='01004'", "MWV", "resultFunc");
     }
 
     function resultFunc(result) {
 		try {
 			result = JSON.parse(result);
-			DGTApp.receivedAuthInfo(result);
+            //DGTApp.receivedAuthInfo(result);
+            alert(result.resultCode);
+            window.close();
 		} catch (error) {
-		    Android.receivedAuthInfo(error);
+            //DGTApp.receivedAuthInfo(error);
+            window.close();
 		}
     }
 </script>
