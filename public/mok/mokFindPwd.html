@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<!--  개발 URL :  -->
+<script src="https://scert.mobile-ok.com/resources/js/index.js"></script>
+<!--  운영 URL : <script src="https://cert.mobile-ok.com/resources/js/index.js"></script> -->
+<script>
+    if (window) {
+
+    } else {
+        alert("window 가 존재하지 않습니다.");
+    }
+    window.onload = function(){
+        MOBILEOK.process("https://dgt.vifense.com/mok/mok_std_request.php?code='01004'", "MWV", "resultFunc");
+    }
+
+    function resultFunc(result) {
+		try {
+			result = JSON.parse(result);
+			DGTApp.receivedAuthInfo(result);
+		} catch (error) {
+		    Android.receivedAuthInfo(error);
+		}
+    }
+</script>
+
+</head>
+<body>
+</body>
+</html>
