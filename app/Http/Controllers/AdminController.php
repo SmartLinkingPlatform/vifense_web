@@ -618,10 +618,6 @@ class AdminController extends BaseController
 
         try{
             $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
-            return \Response::json([
-                'msg' => $rows,
-                'sql' => $lim_sql
-            ]);
         }catch (Exception $e){
             return \Response::json([
                 'msg' => $e->getMessage(),
