@@ -52,45 +52,47 @@
                                         실명인증
 									</div>
 								</div>
+                                <div id="new_pwd_area" style="display: none">
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_sign_number">
+                                        Error sign number!
+                                    </div>
 
-                                <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_sign_number">
-                                    Error sign number!
-                                </div>
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_new_password">
+                                        Error new password!
+                                    </div>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">신규 비밀번호</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" style="padding-left: 30px" type="text" name="input_new_password" id="input_new_password" placeholder="신규 비밀번호">
+                                            <span class="symbol-input100">
+                                                <i class="zmdi zmdi-lock" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
 
-                                <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_new_password">
-                                    Error new password!
-                                </div>
-                                <div class="form-group row d-flex">
-                                    <div class="col-md-4 pl-3">
-                                        <label class="form-label">신규 비밀번호</label>
+                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_check_new_password">
+                                        Error check new password!
                                     </div>
-                                    <div class="col-md-8">
-                                        <input class="form-control" style="padding-left: 30px" type="text" name="input_new_password" id="input_new_password" placeholder="신규 비밀번호">
-                                        <span class="symbol-input100">
-										    <i class="zmdi zmdi-lock" aria-hidden="true"></i>
-									    </span>
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">비밀번호 확인</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" style="padding-left: 30px" type="text" name="input_check_new_password" id="input_check_new_password" placeholder="비밀번호 확인">
+                                            <span class="symbol-input100">
+                                                <i class="zmdi zmdi-lock" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_check_new_password">
-                                    Error check new password!
-                                </div>
-                                <div class="form-group row d-flex">
-                                    <div class="col-md-4 pl-3">
-                                        <label class="form-label">비밀번호 확인</label>
+                                    <div class="container-login100-form-btn mb-4" style="cursor: pointer;">
+                                        <div id="button_changepassword" class="login100-form-btn btn-primary">
+                                            OK
+                                        </div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <input class="form-control" style="padding-left: 30px" type="text" name="input_check_new_password" id="input_check_new_password" placeholder="비밀번호 확인">
-                                        <span class="symbol-input100">
-										    <i class="zmdi zmdi-lock" aria-hidden="true"></i>
-									    </span>
-                                    </div>
-                                </div>
 
-                                <div class="container-login100-form-btn mb-4" style="cursor: pointer;">
-                                    <div id="button_changepassword" class="login100-form-btn btn-primary">
-                                        OK
-                                    </div>
                                 </div>
 
 							</form>
@@ -129,6 +131,27 @@
         function resultFunc(result) {
             try {
                 let jsresult = JSON.parse(result);
+                if (parseInt(jsresult.resultCode) == 2000) {
+                    $.ajax({
+                        url: 'admin.getUserRegNum',
+                        data: {
+                            user_phone: jsresult.userPhone
+                        },
+                        type: 'POST',
+                        success: function (data) {
+                            if (data.msg === "ok") {
+                                $('#input_smart_phone').val(jsresult.userPhone);
+                                $('#input_user_regnum').val(data.userRegNum);
+                                $('#new_pwd_area').css('display','block');
+                            } else {
+                                $('#new_pwd_area').css('display','none');
+                            }
+                        },
+                        error: function (jqXHR, errdata, errorThrown) {
+                            console.log(errdata);
+                        }
+                    });
+                }
                 console.log('resultFunc >>>', jsresult);
             } catch (error) {
                 console.log('err >>>', error.message);
@@ -138,7 +161,6 @@
         $(document).ready(function () {
             $('#mok_popup').click(function () {
                 MOBILEOK.process("https://dgt.vifense.com/mok/mok_std_request.php?code='01004'", "WB", "resultFunc");
-                //MOBILEOK.process("http://dgt.local.com/mok/mok_std_request.php", "WB", "result");
             })
             /** Get auth */
             $('#button_getphonesign').click(function () {
@@ -185,6 +207,52 @@
 
                         } else if (data.msg === 'errauth') {
                             const message = '간편인증받기 오류';
+                            alert(message);
+                        }
+                    },
+                    error: function (jqXHR, errdata, errorThrown) {
+                        console.log(errdata);
+                    }
+                });
+            });
+
+            $('#button_changepassword').click(function () {
+                let new_pwd = $('#input_new_password').val().replace(/\s/g, '');
+                new_pwd = new_pwd.replace(/[-_]/g, '');
+                let check_pwd = $('#input_check_new_password').val().replace(/\s/g, '');
+                check_pwd = check_pwd.replace(/_/g, '');
+                let user_phone = $('#input_smart_phone').val().replace(/\s/g, '');
+                user_phone = user_phone.replace(/[-_]/g, '');
+
+                if(new_pwd === ""){
+                    $('#valid_smart_phone').text("신규 비밀번호를 입력해주세요").css('display','block');
+                    setTimeout(function () {
+                        $('#valid_smart_phone').text("신규 비밀번호를 입력해주세요").css('display','none');
+                        $('#text_smart_phone').css('margin-bottom','1.5rem');
+                    },1000);
+                    return;
+                }
+                if(new_pwd !== check_pwd) {
+                    $('#valid_user_regnum').text("비밀번호가 일치하지 않습니다.").css('display', 'block');
+                    setTimeout(function () {
+                        $('#valid_user_regnum').text("비밀번호가 일치하지 않습니다.").css('display','none');
+                        $('#text_user_regnum').css('margin-bottom','1.5rem');
+                    },1000);
+                    return;
+                }
+
+                $.ajax({
+                    url: 'admin.regNewPwd',
+                    data: {
+                        user_phone: user_phone,
+                        new_pwd: new_pwd,
+                    },
+                    type: 'POST',
+                    success: function (data) {
+                        if (data.msg === "ok") {
+                            window.location.href = 'admin.login';
+                        } else if (data.msg === 'nonuser') {
+                            const message = '신규 비밀번호 등록이 실패하였습니다.';
                             alert(message);
                         }
                     },

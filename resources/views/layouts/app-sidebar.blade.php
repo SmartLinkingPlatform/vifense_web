@@ -34,7 +34,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="side-menu__item" href="{{ url('/' . $page='admin.user') }}">
+                                <a class="side-menu__item" href="{{ url('/' . $page='admin.personinfo') }}">
                                     <i class="side-menu__icon mdi mdi-account-circle"></i><span class="side-menu__label">개인 정보</span>
                                 </a>
                             </li>
