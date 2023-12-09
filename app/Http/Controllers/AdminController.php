@@ -618,105 +618,103 @@ class AdminController extends BaseController
 
         try{
             $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
-        }catch (Exception $e){
-            return \Response::json([
-                'msg' => $e->getMessage(),
-                'sql' => $lim_sql
-            ]);
-        }
-
-        //$total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
-
-
-        exit();
-
-        $items = array();
-        $temp_id = "";
-        $temp_phone = "";
-        $temp_company = "";
-        $temp_name = "";
-        $temp_max = "";
-        $max_speed = 0;
-        $avr_speed = 0;
-        $mileage = 0;
-        $driving_time = 0;
-        $idling_time = 0;
-        $driving_score = 0;
-        $cnt = 0;
-        $i = 0;
-        foreach($rows as $row) {
-            $user_id = $row->user_id;
-            if ($temp_id != $user_id) {
-                $i = 1;
-                if ($cnt > 0) {
-                    $item = array(
-                        'phone' => $temp_phone,
-                        'company' => $temp_company,
-                        'name' => $temp_name,
-                        'max_speed' => $max_speed,
-                        'avr_speed' => $avr_speed / $i,
-                        'mileage' => $mileage,
-                        'drv_time' => $driving_time,
-                        'idl_time' => $idling_time,
-                        'score' => $driving_score / $i
-                    );
-                    array_push($items, $item);
-                }
-                $max_speed = $row->max_speed;
-                $avr_speed = $row->average_speed;
-                $mileage = $row->mileage;
-                $times = explode(":", $row->driving_time);
-                if (count($times) > 2) {
-                    $driving_time = $times[0] * 3600 + $times[1] * 60 + $times[2];
-                } else {
-                    $driving_time = $times[0] * 60 + $times[1] ;
-                }
-                $idling_time = $row->idling_time;
-                $driving_score = $row->user_id;
+            if($rows == null){
+                return \Response::json([
+                    'msg' => 'err'
+                ]);
             } else {
-                $i++;
-                if ($temp_max > $row->max_speed)
-                    $max_speed = $temp_max;
-                else
-                    $max_speed = $row->max_speed;
-                $avr_speed += $row->average_speed;
-                $mileage += $row->mileage;
-                $times = explode(":", $row->driving_time);
-                if (count($times) > 2) {
-                    $driving_time += $times[0] * 3600 + $times[1] * 60 + $times[2];
-                } else {
-                    $driving_time += $times[0] * 60 + $times[1] ;
+
+                $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+                $items = array();
+                $temp_id = "";
+                $temp_phone = "";
+                $temp_company = "";
+                $temp_name = "";
+                $temp_max = "";
+                $max_speed = 0;
+                $avr_speed = 0;
+                $mileage = 0;
+                $driving_time = 0;
+                $idling_time = 0;
+                $driving_score = 0;
+                $cnt = 0;
+                $i = 0;
+                foreach($rows as $row) {
+                    $user_id = $row->user_id;
+                    if ($temp_id != $user_id) {
+                        $i = 1;
+                        if ($cnt > 0) {
+                            $item = array(
+                                'phone' => $temp_phone,
+                                'company' => $temp_company,
+                                'name' => $temp_name,
+                                'max_speed' => $max_speed,
+                                'avr_speed' => $avr_speed / $i,
+                                'mileage' => $mileage,
+                                'drv_time' => $driving_time,
+                                'idl_time' => $idling_time,
+                                'score' => $driving_score / $i
+                            );
+                            array_push($items, $item);
+                        }
+                        $max_speed = $row->max_speed;
+                        $avr_speed = $row->average_speed;
+                        $mileage = $row->mileage;
+                        $times = explode(":", $row->driving_time);
+                        if (count($times) > 2) {
+                            $driving_time = $times[0] * 3600 + $times[1] * 60 + $times[2];
+                        } else {
+                            $driving_time = $times[0] * 60 + $times[1] ;
+                        }
+                        $idling_time = $row->idling_time;
+                        $driving_score = $row->user_id;
+                    } else {
+                        $i++;
+                        if ($temp_max > $row->max_speed)
+                            $max_speed = $temp_max;
+                        else
+                            $max_speed = $row->max_speed;
+                        $avr_speed += $row->average_speed;
+                        $mileage += $row->mileage;
+                        $times = explode(":", $row->driving_time);
+                        if (count($times) > 2) {
+                            $driving_time += $times[0] * 3600 + $times[1] * 60 + $times[2];
+                        } else {
+                            $driving_time += $times[0] * 60 + $times[1] ;
+                        }
+                        $idling_time += $row->idling_time;
+                        $driving_score += $row->user_id;
+                    }
+                    if ($cnt == $total_rows - 1) {
+
+                    }
+                    $cnt++;
+                    $temp_id = $user_id;
+                    $temp_name = $row->user_name;
+                    $temp_company = $row->company_name;
+                    $temp_phone = $row->user_phone;
+                    $temp_max = $row->max_speed;
                 }
-                $idling_time += $row->idling_time;
-                $driving_score += $row->user_id;
-            }
-            if ($cnt == $total_rows - 1) {
 
-            }
-            $cnt++;
-            $temp_id = $user_id;
-            $temp_name = $row->user_name;
-            $temp_company = $row->company_name;
-            $temp_phone = $row->user_phone;
-            $temp_max = $row->max_speed;
-        }
+                $total = count($items);
+                $total_page = ceil($total / $count);
 
-        $total = count($items);
-        $total_page = ceil($total / $count);
-        if($rows == null){
+                return \Response::json([
+                    'msg' => 'ok',
+                    'total'    =>  $total,
+                    'start'    =>  $start,
+                    'totalpage'    =>  $total_page,
+                    'lists' => $items,
+                ]);
+            }
+
+        }catch (Exception $e){
             return \Response::json([
                 'msg' => 'err'
             ]);
         }
-        else{
-            return \Response::json([
-                'msg' => 'ok',
-                'total'    =>  $total,
-                'start'    =>  $start,
-                'totalpage'    =>  $total_page,
-                'lists' => $items,
-            ]);
-        }
+
+
 
     }
 

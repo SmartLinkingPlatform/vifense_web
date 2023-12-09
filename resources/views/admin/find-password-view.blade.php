@@ -49,23 +49,12 @@
 
 								<div class="container-login100-form-btn mb-5" style="cursor: pointer;">
 									<div id="mok_popup" class="login100-form-btn btn-primary">
-                                        인증번호 받기
+                                        실명인증
 									</div>
 								</div>
 
                                 <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_sign_number">
                                     Error sign number!
-                                </div>
-                                <div class="form-group row d-flex mb-5">
-                                    <div class="col-md-8 pl-3">
-                                        <input class="form-control" style="padding: 0 55px 0 22px" type="text" name="input_sign_number" id="input_sign_number" value="" placeholder="인증번호">
-                                        <span class="symbol-right-input100" id="sign_num_counter">(60s)</span>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div id="button_sign_check" class="login100-form-btn btn btn-primary">
-                                            완료
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_new_password">
