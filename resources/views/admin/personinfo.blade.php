@@ -544,7 +544,7 @@
             let smart_phone = $('#input_smart_phone').val().replace(/ /g, '');
             smart_phone = smart_phone.replace(/-/g, '');
             smart_phone = smart_phone.replace(/_/g, '');
-            let user_name = $('#input_user_name').val().replace(/ /g, '');
+            let user_name = $('#input_user_name').val();
             let user_email = $('#input_user_email').val().replace(/ /g, '');
             let password = $('#input_password').val().replace(/ /g, '');
             let check_password = $('#input_check_password').val().replace(/ /g, '');
@@ -649,7 +649,7 @@
             let smart_phone = $('#input_smart_phone').val().replace(/ /g, '');
             smart_phone = smart_phone.replace(/-/g, '');
             smart_phone = smart_phone.replace(/_/g, '');
-            let user_name = $('#input_user_name').val().replace(/ /g, '');
+            let user_name = $('#input_user_name').val();
             let user_email = $('#input_user_email').val().replace(/ /g, '');
             let password = $('#input_password').val().replace(/ /g, '');
             let check_password = $('#input_check_password').val().replace(/ /g, '');

@@ -720,13 +720,13 @@
             smart_phone = smart_phone.replace(/_/g, '');
             let password = $('#input_password').val().replace(/ /g, '');
             let check_password = $('#input_check_password').val().replace(/ /g, '');
-            let corporate_company_name = $('#input_corporate_company_name').val().replace(/ /g, '');
+            let corporate_company_name = $('#input_corporate_company_name').val();
             let corporate_phone = $('#input_corporate_phone').val().replace(/ /g, '');
-            let corporate_address = $('#input_corporate_address').val().replace(/ /g, '');
-            let corporate_name = $('#input_corporate_name').val().replace(/ /g, '');
+            let corporate_address = $('#input_corporate_address').val();
+            let corporate_name = $('#input_corporate_name').val();
             let company_phone = $('#input_company_phone').val().replace(/ /g, '');
             let create_date = $('#input_create_date').val().replace(/ /g, '');
-            let company_manager = $('#input_company_manager').val().replace(/ /g, '');
+            let company_manager = $('#input_company_manager').val();
             let car_count = $('#input_car_count').val().replace(/ /g, '');
 
             if(smart_phone === ""){
@@ -912,13 +912,13 @@
             smart_phone = smart_phone.replace(/_/g, '');
             let password = $('#input_password').val().replace(/ /g, '');
             let check_password = $('#input_check_password').val().replace(/ /g, '');
-            let corporate_company_name = $('#input_corporate_company_name').val().replace(/ /g, '');
+            let corporate_company_name = $('#input_corporate_company_name').val();
             let corporate_phone = $('#input_corporate_phone').val().replace(/ /g, '');
-            let corporate_address = $('#input_corporate_address').val().replace(/ /g, '');
-            let corporate_name = $('#input_corporate_name').val().replace(/ /g, '');
+            let corporate_address = $('#input_corporate_address').val();
+            let corporate_name = $('#input_corporate_name').val();
             let company_phone = $('#input_company_phone').val().replace(/ /g, '');
             let create_date = $('#input_create_date').val().replace(/ /g, '');
-            let company_manager = $('#input_company_manager').val().replace(/ /g, '');
+            let company_manager = $('#input_company_manager').val();
             let car_count = $('#input_car_count').val().replace(/ /g, '');
 
             if(smart_phone === ""){
