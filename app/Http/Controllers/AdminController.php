@@ -124,7 +124,13 @@ class AdminController extends BaseController
                 ]);
             }
             else{
-                DB::table($this->tb_admin_info)->where('admin_id', $userid)->update(['active' => 1]);
+                DB::table($this->tb_admin_info)->where('admin_id', $userid)
+                    ->update(
+                        [
+                            'visit_date' => $updated_at,
+                            'active' => 1
+                        ]
+                    );
                 $request->session()->put('user', 'admin');
                 $request->session()->put('admin_id', $user->admin_id);
                 $request->session()->put('user_phone', $user->user_phone);
@@ -615,5 +621,50 @@ class AdminController extends BaseController
 
     }
 
+    public function getDashboardInfo(Request $request){
+        $admin_id = $request->session()->get('admin_id');
+        $user_type = $request->session()->get('user_type');
+        $now_date = date("Y-m-d", time());
+
+        //총유저수
+        $sql = "SELECT COUNT(user_id) AS cnt FROM tb_user_info ";
+        if ($user_type == 0) {
+            $sql .= " WHERE admin_id = ".$admin_id;
+        }
+        $total_users = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+
+        //신규 유저수
+        $sql = "SELECT COUNT(user_id) AS cnt FROM tb_user_info ";
+        $sql .= " WHERE SUBSTRING(create_date, 1, 6) = '".$now_date."'";
+        if ($user_type == 0) {
+            $sql .= " AND admin_id = ".$admin_id;
+        }
+        $new_users = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+
+        //일 사용 유저수
+        $sql = "SELECT COUNT(user_id) AS cnt FROM tb_user_info ";
+        $sql .= " WHERE SUBSTRING(visit_date, 1, 6) = '".$now_date."'";
+        if ($user_type == 0) {
+            $sql .= " AND admin_id = ".$admin_id;
+        }
+        $visit_users = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+
+        //총 회사수
+        $sql = "SELECT COUNT(admin_id) AS cnt FROM tb_admin_info ";
+        $sql .= " WHERE user_type = 0 ";
+        if ($user_type == 0) {
+            $sql .= " AND admin_id = ".$admin_id;
+        }
+        $total_companys = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+
+        return \Response::json([
+            'msg' => 'ok',
+            'total_users' => $total_users[0]->cnt,
+            'new_users' => $new_users[0]->cnt,
+            'visit_users' => $visit_users[0]->cnt,
+            'total_companys' => $total_companys[0]->cnt
+        ]);
+
+    }
 
 } // area of class

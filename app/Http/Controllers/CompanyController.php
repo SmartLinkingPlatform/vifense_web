@@ -96,7 +96,7 @@ class CompanyController extends BaseController
         if(!is_null($search_val))
             $sql .= ' AND (user_phone like "%'.$search_val.'%" OR company_name like "%'.$search_val.'%") ';
 
-        $lim_sql = $sql.'LIMIT '.$start_from.', '.$count;
+        $lim_sql = $sql.' ORDER BY admin_id DESC LIMIT '.$start_from.', '.$count;
         $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
         $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
 
@@ -138,11 +138,11 @@ class CompanyController extends BaseController
         $corporate_doc_name = '';
 
         if ($date_string === null || $date_string ==='') {
-            $create_date = $current_time;
+            $create_date = date('Y-m-d',$current_time);
         }
         else {
             $date_string = strtotime($date_string);
-            $create_date = date('Y-m-d h:i:s',$date_string);
+            $create_date = date('Y-m-d',$date_string);
         }
 
         $corporate_photo_url='';
@@ -272,11 +272,11 @@ class CompanyController extends BaseController
         $corporate_doc_name = '';
 
         if ($date_string === null || $date_string ==='') {
-            $create_date = $current_time;
+            $create_date = date('Y-m-d',$current_time);;
         }
         else {
             $date_string = strtotime($date_string);
-            $create_date = date('Y-m-d h:i:s',$date_string);
+            $create_date = date('Y-m-d',$date_string);
         }
 
         $corporate_photo_url='';
@@ -538,5 +538,26 @@ class CompanyController extends BaseController
         }
     }
 
+    public function showCompanyInfo(Request $request){
+        $admin_id = $request->post('admin_id');
 
+        $row = DB::table($this->tb_company)->where('admin_id', $admin_id)->first();
+        if($row == null){
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        }
+        else{
+            return \Response::json([
+                'msg' => 'ok',
+                'user_regnum' => $row->user_regnum,
+                'user_address' => $row->user_address,
+                'user_name' => $row->user_name,
+                'company_phone' => $row->company_phone,
+                'create_date' => $row->create_date,
+                'website' => $row->website,
+                'user_email' => $row->user_email
+            ]);
+        }
+    }
 }

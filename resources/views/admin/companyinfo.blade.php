@@ -78,7 +78,92 @@
 					</div>
 				</div>
 				<!-- CONTAINER CLOSED -->
+                <!-- company info modal part -->
+                <div class="modal fade" id="showCompanyModal" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div id="company_modal_title" style="color: #5c6bc0; font-size: 20px; font-weight: 600;">회사 정보 보기</div>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col"  id="dlgErr" style="display: none;"></div>
+                                <div >
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">사업자 등록번호</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div id="info_company_regnum" class="form-control"></div>
+                                        </div>
+                                    </div>
 
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">주소</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div id="info_company_address" class="form-control"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">대표자 성명</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div id="info_user_name" class="form-control"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">회사 전화번호</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div id="info_company_phone" class="form-control"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">설립일자</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div id="info_create_date" class="form-control"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">홈페이지</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div id="info_web_site" class="form-control"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row d-flex">
+                                        <div class="col-md-4 pl-3">
+                                            <label class="form-label">이메일</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div id="info_company_email" class="form-control"></div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer text-center" style="height: auto; justify-content: center;">
+                                        <div class="">
+                                            <div class="btn btn-success text-center" id="modal_button_ok" style="width: 80px;">
+                                                확인
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- modal part -->
                 <div class="modal fade" id="addCompanyModal" role="dialog">
                     <div class="modal-dialog modal-dialog-centered">
@@ -318,6 +403,9 @@
                     editCompany();
                 }
             });
+            $('#modal_button_ok').click(function(){
+                $('#showCompanyModal').modal('hide');
+            });
 
             $('div[id="corporate_photo_btn"]').on('mouseup', function () {
                 $('#corporate_photo').trigger('click');
@@ -427,6 +515,42 @@
                 }
             });
         }
+        function showCompanyInfoDialog(adminid) {
+            $('#dlgErr').text('').css({'display':'none'});
+            $('#showCompanyModal').modal('show');
+            $('#company_modal_title').text('회사 정보 보기');
+            $('#modal_button_ok').text('확인');
+            $('#info_company_regnum').text('');
+            $('#info_company_address').text('');
+            $('#info_user_name').text('');
+            $('#info_company_phone').text('');
+            $('#info_create_date').text('');
+            $('#info_web_site').text('');
+            $('#info_company_email').text('');
+            $.ajax({
+                url: 'admin.showCompanyInfo',
+                data: {
+                    admin_id:adminid
+                },
+                type: 'POST',
+                success: function (data) {
+                    if (data.msg === "ok") {
+                        $('#info_company_regnum').text(data.user_regnum);
+                        $('#info_company_address').text(data.user_address);
+                        $('#info_user_name').text(data.user_name);
+                        $('#info_company_phone').text(data.company_phone);
+                        $('#info_create_date').text(data.create_date);
+                        $('#info_web_site').text(data.website);
+                        $('#info_company_email').text(data.user_email);
+                    }
+                    else {
+                    }
+                },
+                error: function (jqXHR, errdata, errorThrown) {
+                    console.log(errdata);
+                }
+            });
+        }
 
         function getCompanyList() {
             $.ajax({
@@ -448,7 +572,7 @@
                         for (let i = 0; i < lists.length; i++) {
                             let list = lists[i];
                             let admin_id = list.admin_id;
-                            let order = i + 1;
+                            let order = i + (pstart - 1) * pcount + 1;
                             let user_phone = list.user_phone;
                             let company_name = list.company_name || '';
                             let certifice_status = list.certifice_status || '0';
@@ -464,7 +588,7 @@
                             tags += '<tr>';
                             tags += '<td class="text-nowrap align-middle">' + order + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + user_phone + '</td>';
-                            tags += '<td class="text-nowrap align-middle">' + company_name + '</td>';
+                            tags += '<td class="text-nowrap align-middle" onclick="showCompanyInfoDialog('+admin_id+');" style="text-decoration: underline; cursor: pointer">' + company_name + '</td>';
 
                             tags += '<td class="text-nowrap align-middle">';
                             tags += '<div class="d-flex justify-content-center">';

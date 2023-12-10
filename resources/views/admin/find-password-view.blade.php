@@ -32,7 +32,7 @@
                                     Error smart phone!
                                 </div>
 								<div class="wrap-input100 validate-input" data-validate = "Valid phone number is required: 010 123 4567">
-									<input class="form-control" style="padding-left: 2.5rem" type="text" name="input_smart_phone" id="input_smart_phone" placeholder="휴대폰 번호" readonly>
+									<input class="form-control" style="padding-left: 2.5rem" type="text" name="input_smart_phone" id="input_smart_phone" placeholder="휴대폰 번호">
 									<span class="symbol-input100" style="padding-left: 0.9rem">
 										<i class="zmdi zmdi-smartphone" aria-hidden="true"></i>
 									</span>
@@ -41,7 +41,7 @@
                                     Error corporate phone!
                                 </div>
 								<div class="wrap-input100 validate-input" data-validate = "corporate number is required:888-88-88888">
-									<input class="form-control" style="padding-left: 2.5rem" type="text" name="input_user_regnum" id="input_user_regnum" placeholder="사업자 등록번호" readonly>
+									<input class="form-control" style="padding-left: 2.5rem" type="text" name="input_user_regnum" id="input_user_regnum" placeholder="사업자 등록번호">
 									<span class="symbol-input100" style="padding-left: 0.9rem">
 										<i class="zmdi zmdi-phone" aria-hidden="true"></i>
 									</span>
@@ -132,25 +132,15 @@
             try {
                 let jsresult = JSON.parse(result);
                 if (parseInt(jsresult.resultCode) == 2000) {
-                    $.ajax({
-                        url: 'admin.getUserRegNum',
-                        data: {
-                            user_phone: jsresult.userPhone
-                        },
-                        type: 'POST',
-                        success: function (data) {
-                            if (data.msg === "ok") {
-                                $('#input_smart_phone').val(jsresult.userPhone);
-                                $('#input_user_regnum').val(data.userRegNum);
-                                $('#new_pwd_area').css('display','block');
-                            } else {
-                                $('#new_pwd_area').css('display','none');
-                            }
-                        },
-                        error: function (jqXHR, errdata, errorThrown) {
-                            console.log(errdata);
-                        }
-                    });
+                    let smart_phone = $('#input_smart_phone').val().replace(/\s/g, '');
+                    smart_phone = smart_phone.replace(/[-_]/g, '');
+                    if (smart_phone === jsresult.userPhone) {
+                        $('#new_pwd_area').css('display','block');
+                        $('#input_smart_phone').attr("readonly",true);
+                        $('#input_user_regnum').attr("readonly",true);
+                    } else {
+                        $('#new_pwd_area').css('display','none');
+                    }
                 }
                 console.log('resultFunc >>>', jsresult);
             } catch (error) {
@@ -160,10 +150,6 @@
 
         $(document).ready(function () {
             $('#mok_popup').click(function () {
-                MOBILEOK.process("https://dgt.vifense.com/mok/mok_std_request.php?code='01004'", "WB", "resultFunc");
-            })
-            /** Get auth */
-            $('#button_getphonesign').click(function () {
                 let smart_phone = $('#input_smart_phone').val().replace(/\s/g, '');
                 smart_phone = smart_phone.replace(/[-_]/g, '');
                 let user_regnum = $('#input_user_regnum').val().replace(/\s/g, '');
@@ -185,36 +171,8 @@
                     },1000);
                     return;
                 }
-
-                $.ajax({
-                    url: 'admin.getSignNumber',
-                    data: {
-                        smart_phone: smart_phone,
-                        user_regnum: user_regnum,
-                    },
-                    type: 'POST',
-                    success: function (data) {
-                        if (data.msg === "ok") {
-                            // alert('ok');
-                            //window.location.href = 'admin.admin';
-                            //gotoMainPage();
-                            sign_time_num = 60;
-                            signCounter();
-
-                        } else if (data.msg === 'nonuser') {
-                            const message = '계정이 존재하지 않습니다';
-                            alert(message);
-
-                        } else if (data.msg === 'errauth') {
-                            const message = '간편인증받기 오류';
-                            alert(message);
-                        }
-                    },
-                    error: function (jqXHR, errdata, errorThrown) {
-                        console.log(errdata);
-                    }
-                });
-            });
+                MOBILEOK.process("https://dgt.vifense.com/mok/mok_std_request.php?code='01004'", "WB", "resultFunc");
+            })
 
             $('#button_changepassword').click(function () {
                 let new_pwd = $('#input_new_password').val().replace(/\s/g, '');

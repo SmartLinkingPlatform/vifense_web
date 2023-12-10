@@ -122,6 +122,7 @@ class CallAPIController extends BaseController
         $user_name = $request->post('user_name');
         $user_phone = $request->post('user_phone');
         $user_pwd = $request->post('user_pwd');
+        $user_birthday = $request->post('user_birthday');
         $admin_id = $request->post('admin_id');
         $certifice_status = $request->post('certifice_status');
         $active = $request->post('active');
@@ -129,21 +130,13 @@ class CallAPIController extends BaseController
 
         $table_info = 'tb_user_info';
         try {
-            $cnt = DB::table($table_info)->where('user_phone', $user_phone)->doesntExist();
-            if (!$cnt) { // exist
-                return \Response::json([
-                    'msg' => 'du'
-                ]);
-
-                exit();
-            }
-
             $success = DB::table($table_info)
                 ->insert(
                     [
                         'user_phone' => $user_phone, // 아이디
                         'user_name' => $user_name, // 성명
                         'user_pwd' => $user_pwd, // 암호
+                        'user_birthday' => $user_birthday, //생년월일
                         'admin_id' => $admin_id, // 회사 아이디
                         'certifice_status' => $certifice_status,
                         'active' => $active,
@@ -244,13 +237,6 @@ class CallAPIController extends BaseController
                 ]);
             }
         }
-        exit();
-    }
-
-    //비밀번호 찾기 및 변화
-    public function requestUserFindPassword(Request $request)
-    {
-
         exit();
     }
 

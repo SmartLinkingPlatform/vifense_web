@@ -43,35 +43,13 @@ Route::middleware('adminsession')->group(function(){
         return view('admin.personinfo');
     });
 
+    Route::post('admin.getDashboardInfo', 'AdminController@getDashboardInfo');
+
     Route::post('admin.getDayDrivingList', 'CompanyController@getDayDrivingList');
 
     Route::post('admin.getUserList', 'UserController@getUserList');
-    /*
-    Route::get('admin.user', function () {
-        return view('admin.user');
-    });
-    Route::get('admin.order-manage', function () {
-        return view('admin.order-manage');
-    });
-    Route::get('admin.new-order', function () {
-        return view('admin.new-order');
-    });
-    Route::get('admin.mod-order', function () {
-        return view('admin.mod-order');
-    });
-    Route::get('admin.outcome', function () {
-        return view('admin.outcome');
-    });
-    Route::get('admin.order-history', function () {
-        return view('admin.order-history');
-    });
-    Route::get('admin.currency', function () {
-        return view('admin.currency');
-    });
-    Route::get('admin.item', function () {
-        return view('admin.item');
-    });
-    */
+    Route::post('admin.getCompanyName', 'UserController@getCompanyName');
+    Route::post('admin.getUserinInfo', 'UserController@getUserinInfo');
 
 //----------------------------------------------------
 // driver info
@@ -89,7 +67,7 @@ Route::post('admin.adminLogin', 'AdminController@adminLogin');
 Route::post('admin.adminLogout', 'AdminController@adminLogout');
 Route::post('admin.getUserRegNum', 'AdminController@getUserRegisterNumber');
 Route::post('admin.regNewPwd', 'AdminController@registerNewPassword');
-//Route::post('admin.getAdminList', 'AdminController@getAdminList');
+
 
 //Route::post('admin.adminRegister', 'AdminController@adminRegister');
 //Route::post('admin.adminDelete', 'AdminController@adminDelete');
@@ -114,15 +92,15 @@ Route::post('admin.getCompanyinInfo', 'CompanyController@getCompanyinInfo');
 Route::post('admin.editCompanyInfo', 'CompanyController@editCompanyInfo');
 Route::post('admin.companyDelete', 'CompanyController@companyDelete');
 Route::post('admin.companyActive', 'CompanyController@companyActive');
+Route::post('admin.showCompanyInfo', 'CompanyController@showCompanyInfo');
 //---------------------------------------------------
 // person part
 //---------------------------------------------------
+Route::post('admin.addNewUserInfo', 'UserController@addNewUserInfo');
+Route::post('admin.editUserInfo', 'UserController@editUserInfo');
+Route::post('admin.userDelete', 'UserController@userDelete');
+Route::post('admin.showUserInfo', 'UserController@showUserInfo');
 
-Route::post('admin.addNewCompany', 'UserController@addNewCompany');
-Route::post('admin.getCompanyinInfo', 'UserController@getCompanyinInfo');
-Route::post('admin.editCompanyInfo', 'UserController@editCompanyInfo');
-Route::post('admin.companyDelete', 'UserController@companyDelete');
-Route::post('admin.companyActive', 'UserController@companyActive');
 
 //----------------------------------------------------
 // driver info
