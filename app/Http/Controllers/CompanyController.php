@@ -132,9 +132,9 @@ class CompanyController extends BaseController
         $current_time = date("Y-m-d h:i:s", time());
         $company_manager = $request->post('company_manager');
         $car_count = $request->post('car_count');
-        $corporate_photo_file = $request->file('corporate_photo_file');
+        //$corporate_photo_file = $request->file('corporate_photo_file');
         $corporate_doc_file = $request->file('corporate_doc_file');
-        $corporate_photo_name = '';
+        //$corporate_photo_name = '';
         $corporate_doc_name = '';
 
         if ($date_string === null || $date_string ==='') {
@@ -145,8 +145,8 @@ class CompanyController extends BaseController
             $create_date = date('Y-m-d',$date_string);
         }
 
-        $corporate_photo_url='';
         $file_currentTime = date("YmdHis");
+        /*$corporate_photo_url='';
         $randNump= rand(1, 9);
         $order_numberp = $file_currentTime.$randNump;
         if($corporate_photo_file != null && $corporate_photo_file != ''){
@@ -154,7 +154,7 @@ class CompanyController extends BaseController
             $corporate_photo_file->move(public_path('images/uploads'), $new_namep);
             $corporate_photo_url = 'images/uploads/'.$new_namep;
             $corporate_photo_name = $corporate_photo_file->getClientOriginalName();
-        }
+        }*/
 
         $corporate_doc_url='';
         $randNum = rand(1, 9);
@@ -188,8 +188,8 @@ class CompanyController extends BaseController
                         'user_birthday' => '',
 
                         'user_address' => $user_address, // 사용자 주소
-                        'user_photo' => $corporate_photo_name, // 사용자사진 이름
-                        'user_photo_url' => $corporate_photo_url, // 사용자사진 경로
+                        //'user_photo' => $corporate_photo_name, // 사용자사진 이름
+                        //'user_photo_url' => $corporate_photo_url, // 사용자사진 경로
                         'user_type' => 0, // 1 어드민 | 0 사업자
                         'user_regnum' => $corporate_phone, // 사업자 등록번호
 
@@ -262,8 +262,8 @@ class CompanyController extends BaseController
         $current_time = date("Y-m-d h:i:s", time());
         $company_manager = $request->post('company_manager');
         $car_count = $request->post('car_count');
-        $corporate_photo_file = $request->file('corporate_photo_file');
-        $old_corporate_photo_url = $request->post('old_corporate_photo_url');
+        //$corporate_photo_file = $request->file('corporate_photo_file');
+        //$old_corporate_photo_url = $request->post('old_corporate_photo_url');
 
         $corporate_doc_file = $request->file('corporate_doc_file');
         $old_uploadcorporate_doc_url = $request->post('old_uploadcorporate_doc_url');
@@ -279,8 +279,8 @@ class CompanyController extends BaseController
             $create_date = date('Y-m-d',$date_string);
         }
 
-        $corporate_photo_url='';
         $file_currentTime = date("YmdHis");
+        /*$corporate_photo_url='';
         $randNump= rand(1, 9);
         $order_numberp = $file_currentTime.$randNump;
         if($corporate_photo_file != null && $corporate_photo_file != ''){
@@ -288,7 +288,7 @@ class CompanyController extends BaseController
             $corporate_photo_file->move(public_path('images/uploads'), $new_namep);
             $corporate_photo_url = 'images/uploads/'.$new_namep;
             $corporate_photo_name = $corporate_photo_file->getClientOriginalName();
-        }
+        }*/
 
         $corporate_doc_url='';
         $randNum = rand(1, 9);
@@ -316,10 +316,10 @@ class CompanyController extends BaseController
             $upValues['create_date'] = $create_date;
             $upValues['update_date'] = $current_time;
 
-            if($corporate_photo_name != '' && $corporate_photo_url != '') {
+            /*if($corporate_photo_name != '' && $corporate_photo_url != '') {
                 $upValues['user_photo'] = $corporate_photo_name;
                 $upValues['user_photo_url'] = $corporate_photo_url;
-            }
+            }*/
             if($corporate_doc_name != '' && $corporate_doc_url != '') {
                 $upValues['certified_name'] = $corporate_doc_name;
                 $upValues['certified_copy'] = $corporate_doc_url;
@@ -327,9 +327,9 @@ class CompanyController extends BaseController
 
             $success =  DB::table($this->tb_company)->where('admin_id', $admin_id)->update($upValues);
             if ($success) {
-                if ($corporate_photo_url != '' && !is_null($old_corporate_photo_url)){
+                /*if ($corporate_photo_url != '' && !is_null($old_corporate_photo_url)){
                     unlink($old_corporate_photo_url);
-                }
+                }*/
                 if ($corporate_doc_url != '' && !is_null($old_uploadcorporate_doc_url)){
                     unlink($old_uploadcorporate_doc_url);
                 }
@@ -436,7 +436,7 @@ class CompanyController extends BaseController
             $sql .= " c.company_name like '%" . $search_val . "%') ";
         }
 
-        $sql .= " GROUP BY a.user_id ORDER BY a.user_id ASC ";
+        $sql .= " ORDER BY a.user_id ASC ";
         $lim_sql = $sql." LIMIT ".$start_from.", ".$count;
 
         try{

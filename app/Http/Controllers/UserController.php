@@ -248,6 +248,7 @@ class UserController extends BaseController
         $user_name = $request->post('user_name');
         $user_email = $request->post('user_email');
         $password = $request->post('password');
+        $enc_password = $this->encrypt_decrypt('encrypt', $password);
         $admin_id = $request->post('admin_id');
         $user_id = $request->post('user_id');
         $update_date = date("Y-m-d h:i:s", time());
@@ -258,7 +259,7 @@ class UserController extends BaseController
                     'user_phone' => $smart_phone,
                     'user_name' => $user_name,
                     'user_email' => $user_email,
-                    'user_pwd' => $password,
+                    'user_pwd' => $enc_password,
                     'admin_id' => $admin_id,
                     'update_date' => $update_date,
                     'certifice_status' => '1',

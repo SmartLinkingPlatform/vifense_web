@@ -314,7 +314,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_corporate_photo">
+                                    {{--<div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_corporate_photo">
                                         Error corporate photo!
                                     </div>
                                     <div class="form-group row d-flex">
@@ -326,7 +326,7 @@
                                             <input type="hidden" name="old_corporate_photo_url" id="old_corporate_photo_url" value="">
                                             <div id="corporate_photo_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
                                         </div>
-                                    </div>
+                                    </div>--}}
 
                                     <div class="form-group" style="display:none; margin-bottom: 0px; color: red; height: 1.5rem" id="valid_uploadcorporate_doc">
                                         Error corporate doc!
@@ -407,7 +407,7 @@
                 $('#showCompanyModal').modal('hide');
             });
 
-            $('div[id="corporate_photo_btn"]').on('mouseup', function () {
+            /*$('div[id="corporate_photo_btn"]').on('mouseup', function () {
                 $('#corporate_photo').trigger('click');
             });
             $('input[id="corporate_photo"]').change(function(){
@@ -421,7 +421,7 @@
                     }
                     reader.readAsDataURL(this.files[0]); // convert to base64 string
                 }
-            });
+            });*/
 
             $('div[id="uploadcorporate_btn"]').on('mouseup', function () {
                 $('#uploadcorporate_doc').trigger('click');
@@ -459,9 +459,9 @@
             $('#input_company_manager').val('');
             $('#input_car_count').val('');
 
-            $('#corporate_photo').val('');
+            /*$('#corporate_photo').val('');
             $('#corporate_photo_btn').text('파일 찾기');
-            $('#old_corporate_photo_url').val('');
+            $('#old_corporate_photo_url').val('');*/
 
             $('#uploadcorporate_doc').val('');
             $('#uploadcorporate_btn').text('파일 찾기');
@@ -856,7 +856,7 @@
                 return;
             }
 
-            let corporate_photo_file =  $('#corporate_photo').prop('files')[0];
+            //let corporate_photo_file =  $('#corporate_photo').prop('files')[0];
             let corporate_doc_file =  $('#uploadcorporate_doc').prop('files')[0];
 
             let form_data = new FormData();
@@ -870,7 +870,7 @@
             form_data.append('create_date', create_date);
             form_data.append('company_manager', company_manager);
             form_data.append('car_count', car_count);
-            form_data.append('corporate_photo_file', corporate_photo_file);
+            //form_data.append('corporate_photo_file', corporate_photo_file);
             form_data.append('corporate_doc_file', corporate_doc_file);
 
             $.ajax({
@@ -1048,7 +1048,7 @@
                 return;
             }
 
-            let corporate_photo_file =  $('#corporate_photo').prop('files')[0];
+            //let corporate_photo_file =  $('#corporate_photo').prop('files')[0];
             let corporate_doc_file =  $('#uploadcorporate_doc').prop('files')[0];
 
             let form_data = new FormData();
@@ -1064,9 +1064,9 @@
             form_data.append('company_manager', company_manager);
             form_data.append('car_count', car_count);
 
-            form_data.append('corporate_photo_file', corporate_photo_file);
+            /*form_data.append('corporate_photo_file', corporate_photo_file);
             let old_corporate_photo_url = $('#old_corporate_photo_url').val();
-            form_data.append('old_corporate_photo_url', old_corporate_photo_url);
+            form_data.append('old_corporate_photo_url', old_corporate_photo_url);*/
 
             form_data.append('corporate_doc_file', corporate_doc_file);
             let old_uploadcorporate_doc_url = $('#old_uploadcorporate_doc_url').val();

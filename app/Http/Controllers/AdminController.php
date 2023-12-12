@@ -499,9 +499,9 @@ class AdminController extends BaseController
         $current_time = date("Y-m-d h:i:s", time());
         $company_manager = $request->post('company_manager');
         $car_count = $request->post('car_count');
-        $corporate_photo_file = $request->file('corporate_photo_file');
+        //$corporate_photo_file = $request->file('corporate_photo_file');
         $corporate_doc_file = $request->file('corporate_doc_file');
-        $corporate_photo_name = '';
+        //$corporate_photo_name = '';
         $corporate_doc_name = '';
 
         if ($date_string === null || $date_string ==='') {
@@ -516,12 +516,12 @@ class AdminController extends BaseController
         $file_currentTime = date("YmdHis");
         $randNump= rand(1, 9);
         $order_numberp = $file_currentTime.$randNump;
-        if($corporate_photo_file != null && $corporate_photo_file != ''){
+        /*if($corporate_photo_file != null && $corporate_photo_file != ''){
             $new_namep = $order_numberp.'.'.$corporate_photo_file->getClientOriginalExtension();
             $corporate_photo_file->move(public_path('images/uploads'), $new_namep);
             $corporate_photo_url = 'images/uploads/'.$new_namep;
             $corporate_photo_name = $corporate_photo_file->getClientOriginalName();
-        }
+        }*/
 
         $corporate_doc_url='';
         $randNum = rand(1, 9);
@@ -554,7 +554,7 @@ class AdminController extends BaseController
                         'user_email' => '', // 이메일
                         'user_birthday' => '',
                         'user_address' => $corporate_address, // 주소
-                        'user_photo' => $corporate_photo_name, // 사용자사진 이름
+                        //'user_photo' => $corporate_photo_name, // 사용자사진 이름
                         'user_photo_url' => $corporate_photo_url, // 사용자사진 경로
                         'user_type' => 0, // 1 어드민 | 0 사업자
                         'user_regnum' => $corporate_phone, // 사업자 등록번호

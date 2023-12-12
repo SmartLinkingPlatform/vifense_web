@@ -239,7 +239,6 @@
                 type: 'POST',
                 success: function (data) {
                     console.log(data.msg);
-                    console.log(data.sql);
                     return;
 
                     if (data.msg === "ok") {
