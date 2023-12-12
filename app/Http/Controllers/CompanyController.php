@@ -416,14 +416,15 @@ class CompanyController extends BaseController
         $tb_driving_info = "tb_driving_info";
         $sql = "SELECT ";
         $sql .= "a.user_id, a.max_speed, a.average_speed, a.mileage, a.driving_time, a.idling_time, ";
-        $sql .= "a.driving_date, a.driving_score, b.admin_id, b.user_phone, b.user_name, c.company_name ";
+        $sql .= "a.driving_date, a.driving_score, b.admin_id, b.user_phone, b.user_name, c.company_name, ";
+        $sql .= "a.quick_speed_cnt, a.brake_speed_cnt, a.fast_speed_cnt, a.fast_speed_time ";
         $sql .= "FROM ".$tb_driving_info." AS a ";
         $sql .= "LEFT JOIN tb_user_info AS b ON a.user_id = b.user_id ";
         $sql .= "LEFT JOIN tb_admin_info AS c ON b.admin_id = c.admin_id ";
         $sql .= "WHERE ";
 
         if(!is_null($from_date) && !is_null($to_date)) {
-            $sql .= "a.driving_date >= '" . $from_date . "' AND a.driving_date <= '" . $to_date . "' ";
+            $sql .= "a.driving_date >= '" . substr($from_date, 0, 8) . "' AND a.driving_date <= '" . substr($to_date, 0, 8) . "' ";
         } else {
             $sql .= "a.driving_date = '" . $current_date . "' ";
         }
@@ -433,7 +434,7 @@ class CompanyController extends BaseController
         }
 
         if(!is_null($search_val)) {
-            $sql .= " AND (b.user_phone like '%" . $search_val . "%' OR b.user_name like '%" . $search_val . "%' ";
+            $sql .= " AND (b.user_phone like '%" . $search_val . "%' OR b.user_name like '%" . $search_val . "%' OR ";
             $sql .= " c.company_name like '%" . $search_val . "%') ";
         }
 
@@ -444,7 +445,7 @@ class CompanyController extends BaseController
             $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
             if($rows == null){
                 return \Response::json([
-                    'msg' => 'err'
+                    'msg' => 'nouser'
                 ]);
             } else {
 
@@ -461,12 +462,16 @@ class CompanyController extends BaseController
                 $driving_time = 0;
                 $idling_time = 0;
                 $driving_score = 0;
+                $quick_cnt = 0;
+                $brake_cnt = 0;
+                $fast_cnt = 0;
+                $fast_time = 0;
+
                 $cnt = 0;
-                $i = 0;
+                $i = 1;
                 foreach($rows as $row) {
                     $user_id = $row->user_id;
                     if ($temp_id != $user_id) {
-                        $i = 1;
                         if ($cnt > 0) {
                             $item = array(
                                 'phone' => $temp_phone,
@@ -477,7 +482,11 @@ class CompanyController extends BaseController
                                 'mileage' => $mileage,
                                 'drv_time' => $driving_time,
                                 'idl_time' => $idling_time,
-                                'score' => $driving_score / $i
+                                'score' => $driving_score / $i,
+                                'quick_cnt' => $quick_cnt,
+                                'brake_cnt' => $brake_cnt,
+                                'fast_cnt' => $fast_cnt,
+                                'fast_time' => $fast_time
                             );
                             array_push($items, $item);
                         }
@@ -491,7 +500,13 @@ class CompanyController extends BaseController
                             $driving_time = $times[0] * 60 + $times[1] ;
                         }
                         $idling_time = $row->idling_time;
-                        $driving_score = $row->user_id;
+                        $driving_score = $row->driving_score;
+                        $quick_cnt = $row->quick_speed_cnt;
+                        $brake_cnt = $row->brake_speed_cnt;
+                        $fast_cnt = $row->fast_speed_cnt;
+                        $fast_time = $row->fast_speed_time;
+
+                        $i = 1;
                     } else {
                         $i++;
                         if ($temp_max > $row->max_speed)
@@ -507,10 +522,29 @@ class CompanyController extends BaseController
                             $driving_time += $times[0] * 60 + $times[1] ;
                         }
                         $idling_time += $row->idling_time;
-                        $driving_score += $row->user_id;
+                        $driving_score += $row->driving_score;
+                        $quick_cnt += $row->quick_speed_cnt;
+                        $brake_cnt += $row->brake_speed_cnt;
+                        $fast_cnt += $row->fast_speed_cnt;
+                        $fast_time += $row->fast_speed_time;
                     }
                     if ($cnt == count($total_rows) - 1) {
-
+                        $item = array(
+                            'phone' => $row->user_phone,
+                            'company' => $row->company_name,
+                            'name' => $row->user_name,
+                            'max_speed' => $max_speed,
+                            'avr_speed' => $avr_speed / $i,
+                            'mileage' => $mileage,
+                            'drv_time' => $driving_time,
+                            'idl_time' => $idling_time,
+                            'score' => $driving_score / $i,
+                            'quick_cnt' => $quick_cnt,
+                            'brake_cnt' => $brake_cnt,
+                            'fast_cnt' => $fast_cnt,
+                            'fast_time' => $fast_time
+                        );
+                        array_push($items, $item);
                     }
                     $cnt++;
                     $temp_id = $user_id;
@@ -560,5 +594,10 @@ class CompanyController extends BaseController
                 'user_email' => $row->user_email
             ]);
         }
+    }
+
+    public function getUserDriverInfo(Request $request, $id=null) {
+
+        return view('admin.user-driver-info');
     }
 }

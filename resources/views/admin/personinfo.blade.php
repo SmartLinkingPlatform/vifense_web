@@ -89,7 +89,6 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <div class="col"  id="dlgErr" style="display: none;"></div>
                                 <div >
                                     <div class="form-group row d-flex">
                                         <div class="col-md-4 pl-3">
@@ -106,13 +105,6 @@
                                         </div>
                                         <div class="col-md-8">
                                             <div id="info_user_email" class="form-control"></div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer text-center" style="height: auto; justify-content: center;">
-                                        <div class="">
-                                            <div class="btn btn-success text-center" id="modal_button_ok" style="width: 80px;">
-                                                확인
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -264,10 +256,6 @@
                 }
             });
 
-            $('#modal_button_ok').click(function(){
-                $('#showUserInfoModal').modal('hide');
-            });
-
         });
         function showAddDialog() {
             $.ajax({
@@ -350,10 +338,8 @@
             });
         }
         function showUserInfoDialog(userid) {
-            $('#dlgErr').text('').css({'display':'none'});
             $('#showUserInfoModal').modal('show');
             $('#user_modal_title').text('개인 정보 보기');
-            $('#modal_button_ok').text('확인');
             $('#info_user_birthday').text('');
             $('#info_user_email').text('');
             $.ajax({

@@ -108,9 +108,13 @@ Route::post('admin.showUserInfo', 'UserController@showUserInfo');
 Route::get('admin.day-driver-info', function () {
     return view('admin.day-driver-info');
 });
+/*
 Route::get('admin.user-driver-info', function () {
     return view('admin.user-driver-info');
 });
+*/
+
+Route::get('admin.user-driver-info/{id}', 'CompanyController@getUserDriverInfo');
 
 
 

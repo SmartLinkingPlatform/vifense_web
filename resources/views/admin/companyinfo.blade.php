@@ -88,7 +88,6 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <div class="col"  id="dlgErr" style="display: none;"></div>
                                 <div >
                                     <div class="form-group row d-flex">
                                         <div class="col-md-4 pl-3">
@@ -150,13 +149,6 @@
                                         </div>
                                         <div class="col-md-8">
                                             <div id="info_company_email" class="form-control"></div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer text-center" style="height: auto; justify-content: center;">
-                                        <div class="">
-                                            <div class="btn btn-success text-center" id="modal_button_ok" style="width: 80px;">
-                                                확인
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -403,9 +395,6 @@
                     editCompany();
                 }
             });
-            $('#modal_button_ok').click(function(){
-                $('#showCompanyModal').modal('hide');
-            });
 
             /*$('div[id="corporate_photo_btn"]').on('mouseup', function () {
                 $('#corporate_photo').trigger('click');
@@ -516,10 +505,8 @@
             });
         }
         function showCompanyInfoDialog(adminid) {
-            $('#dlgErr').text('').css({'display':'none'});
             $('#showCompanyModal').modal('show');
             $('#company_modal_title').text('회사 정보 보기');
-            $('#modal_button_ok').text('확인');
             $('#info_company_regnum').text('');
             $('#info_company_address').text('');
             $('#info_user_name').text('');

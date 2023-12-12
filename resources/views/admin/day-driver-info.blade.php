@@ -93,104 +93,50 @@
     </div>
     <!-- CONTAINER CLOSED -->
 
-    <!-- modal part -->
+    <!-- company info modal part -->
     <div class="modal fade" id="showMoreModal" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered">
             <!-- Modal content-->
-            <div class="modal-content mt-7">
+            <div class="modal-content">
                 <div class="modal-header">
                     <div id="modal_title" style="color: #5c6bc0; font-size: 20px; font-weight: 600;">상세 정보 보기</div>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="row"  id="dlgErr" style="display: none; padding-left: 15px;">
-                        <div class="col">
-                            error;
+                    <div >
+                        <div class="form-group row d-flex">
+                            <div class="col-md-4 pl-3">
+                                <label class="form-label">과속시간</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div id="fast_speed_time" class="form-control"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group d-flex align">
-                                        <div class="col-md-4 align-content-center">
-                                            <label class="form-label">회원 계정</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" id="minput_user_account" placeholder="" value="" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group d-flex">
-                                        <div class="col-md-4">
-                                            <label class="form-label">회원 이름</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" id="minput_user_name" placeholder="" value="" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group d-flex align">
-                                        <div class="col-md-4 align-content-center">
-                                            <label class="form-label">통화</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" id="minput_currency_name" placeholder="" value="" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group d-flex">
-                                        <div class="col-md-4">
-                                            <label class="form-label">수량</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" id="minput_amount" placeholder="" value="" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row ">
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group d-flex align">
-                                        <div class="col-md-4 align-content-center">
-                                            <label class="form-label">프로젝트 유형</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" id="minput_item_name" placeholder="" value="" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group d-flex align">
-                                        <div class="col-md-4 align-content-center">
-                                            <label class="form-label">날짜</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" id="minput_date" placeholder="" value="" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group" style="display: flex;">
-                                <div class="col-md-2">
-                                    <label class="form-label">상세 정보 입력</label>
-                                </div>
-                                <div class="col-md-10">
-                                    <textarea class="form-control" rows="6" id="mtext_detail" readonly></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group" style="display: flex;">
-                                <div class="col-md-2">
-                                    <label class="form-label">상세 사진</label>
-                                </div>
-                                <div class="col-md-10 text-center" id="chooseicon-container">
 
-                                </div>
+                        <div class="form-group row d-flex">
+                            <div class="col-md-4 pl-3">
+                                <label class="form-label">주행속도(110km이상)</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div id="fast_speed_cnt" class="form-control"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row d-flex">
+                            <div class="col-md-4 pl-3">
+                                <label class="form-label">급가속</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div id="quick_speed_cnt" class="form-control"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row d-flex">
+                            <div class="col-md-4 pl-3">
+                                <label class="form-label">급제동</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div id="brake_speed_cnt" class="form-control"></div>
                             </div>
                         </div>
                     </div>
@@ -198,6 +144,7 @@
             </div>
         </div>
     </div>
+
     </div>
 @endsection
 @section('js')
@@ -216,17 +163,65 @@
         let pcount=5;
         let numg = 5;
         let search_val = '';
+        let from_date = '';
+        let to_date = '';
 
         $(document).ready(function () {
             $( "#input_from_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
             $( "#input_to_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
             getDayDrivingList();
+
+
+            $('#button_search').click(function(){
+                let sval = $('#input_search_name').val();
+                search_val = sval.replace(/\s/g, '');
+                from_date = $('#input_from_date').val().replace(/ /g, '');
+                to_date = $('#input_to_date').val().replace(/ /g, '');
+
+                getDayDrivingList();
+            });
         });
 
-        function getDayDrivingList() {
-            let from_date = $('#input_from_date').val().replace(/ /g, '');
-            let to_date = $('#input_to_date').val().replace(/ /g, '');
+        function getSecToTime(time_sec) {
+            let str_h = "";
+            let str_m = "";
+            let str_s = "";
+            let hour = Math.floor(time_sec / 3600);
+            if (hour <= 9) {
+                str_h = "0" + hour + ":"
+            } else {
+                str_h = hour + ":"
+            }
+            let min = Math.floor((time_sec % 3600) / 60);
+            if (min <= 9) {
+                str_m = "0" + min + ":";
+            } else {
+                str_m = min + ":";
+            }
+            let sec = (time_sec % 3600) % 60;
+            if (sec <= 9) {
+                str_s = "0" + sec;
+            } else {
+                str_s = sec;
+            }
 
+            return str_h + str_m + str_s;
+        }
+
+        function showEveryUserDrivingInfo(id) {
+            window.location.href = "admin.user-driver-info?id="+id;
+        }
+
+        function showDrivingDetailInfo(fast_time, fast_cnt, quick_cnt, brake_cnt) {
+            $('#showMoreModal').modal('show');
+            $('#modal_title').text('상세 정보 보기');
+            $('#fast_speed_time').text(fast_time);
+            $('#fast_speed_cnt').text(fast_cnt);
+            $('#quick_speed_cnt').text(quick_cnt);
+            $('#brake_speed_cnt').text(brake_cnt);
+        }
+
+        function getDayDrivingList() {
             $.ajax({
                 url: 'admin.getDayDrivingList',
                 data: {
@@ -238,9 +233,6 @@
                 },
                 type: 'POST',
                 success: function (data) {
-                    console.log(data.msg);
-                    return;
-
                     if (data.msg === "ok") {
                         $('#tbody_day_driving_list').html('');
                         $('#page_nav_container').html('');
@@ -250,48 +242,39 @@
                         let tags = '';
                         for (let i = 0; i < lists.length; i++) {
                             let list = lists[i];
-                            let admin_id = list.admin_id;
                             let order = i + 1;
-                            let user_phone = list.user_phone;
-                            let company_name = list.company_name || '';
-                            let certifice_status = list.certifice_status || '0';
-                            let active = list.active || '0';
-                            let registe_date = list.registe_date || '';
-                            let visit_date = list.visit_date || '';
-                            let cert_check = parseInt(certifice_status) > 0 ? 'checked' : '';
-                            let act_check = parseInt(active) > 0 ? 'checked' : '';
-                            //let create_date = list.create_date;
-                            //let dateString = create_date.split(' ')[0];
-                            //let temp = dateString.split('-');
-                            //let create_string = temp[1] + '/' + temp[2] + '/' + temp[0];
+                            let phone = list.phone;
+                            let company = list.company || '';
+                            let name = list.name || '';
+                            let max_speed = list.max_speed || '0';
+                            let avr_speed = list.avr_speed || '0';
+                            let mileage = list.mileage || '0';
+                            let drv_time = getSecToTime(parseInt(list.drv_time));
+                            let idl_time = getSecToTime(parseInt(list.idl_time));
+                            let score = list.score || '';
+
+                            let quick_cnt = list.quick_cnt || '0';
+                            let brake_cnt = list.brake_cnt || '0';
+                            let fast_cnt = list.fast_cnt || '0';
+                            let fast_time = getSecToTime(parseInt(list.fast_time));
+
                             tags += '<tr>';
                             tags += '<td class="text-nowrap align-middle">' + order + '</td>';
-                            tags += '<td class="text-nowrap align-middle">' + user_phone + '</td>';
-                            tags += '<td class="text-nowrap align-middle">' + company_name + '</td>';
-
-                            tags += '<td class="text-nowrap align-middle">';
-                            tags += '<div class="d-flex justify-content-center">';
-                            tags += '<input aria-disabled="true" type="checkbox" value="'+certifice_status+'" id="certiChecked_'+admin_id+'" '+cert_check+' >';
-                            tags += '</div>';
-                            tags += '</td>';
-
-                            tags += '<td class="text-nowrap align-middle">';
-                            tags += '<div class="d-flex justify-content-center">';
-                            tags += '<input  type="checkbox" value="'+active+'" id="actiChecked_'+admin_id+'" '+act_check+' >';
-                            tags += '</div>';
-                            tags += '</td>';
-
-                            tags += '<td class="text-nowrap align-middle">' + registe_date + '</td>';
-                            tags += '<td class="text-nowrap align-middle">' + visit_date + '</td>';
-                            tags += '<td class="text-nowrap align-middle"> 로그 </td>';
-                            tags += '<td class="text-center align-middle">';
-                            tags += '<div class="btn-group align-top pr-3 col-md-6 pb-1 justify-content-center">';
-                            tags += '<button class="btn btn-sm btn-primary badge p-3 " data-target="#user-form-modal" data-toggle="modal" type="button" id = "button_edit_'+admin_id + '">수정<i class="fa fa-edit"></i></button>';
-                            tags += '</div>';
-                            tags += '<div class="btn-group align-top col-md-6 pb-1 justify-content-center">';
-                            tags += '<button class="btn btn-sm btn-red badge p-3" data-target="#user-form-modal" data-toggle="modal" type="button" id="button_delete_' + admin_id + '">삭제<i class="fa fa-trash"></i></button>';
-                            tags += '</div>';
-                            tags += '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + phone + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + company + '</td>';
+                            tags += '<td class="text-nowrap align-middle" onclick="showEveryUserDrivingInfo('+phone+');" style="text-decoration: underline; cursor: pointer">' + name + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + max_speed + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + avr_speed + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + mileage + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + drv_time + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + idl_time + '</td>';
+                            tags += '<td class="text-nowrap align-middle" onclick="showDrivingDetailInfo(';
+                            tags += "'"+fast_time+"'";
+                            tags += ','+fast_cnt;
+                            tags += ','+quick_cnt;
+                            tags += ','+brake_cnt;
+                            tags += ');" ';
+                            tags += 'style="text-decoration: underline; cursor: pointer">' + score + '</td>';
                             tags += '</tr>';
                         }
                         $('#tbody_day_driving_list').html(tags);
@@ -384,7 +367,7 @@
 
                     }
                     else {
-                        $('#tbody_admin_list').html('');
+                        $('#tbody_day_driving_list').html('');
                     }
                 },
                 error: function (jqXHR, errdata, errorThrown) {
