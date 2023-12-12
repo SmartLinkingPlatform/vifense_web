@@ -403,8 +403,8 @@ class CompanyController extends BaseController
         $search_val = $request->post('search_val');
         $start  = $request->post('start');
         $count    = $request->post('count');
-        $from_date    = $request->post('from_date');
-        $to_date    = $request->post('to_date');
+        $from_date    = str_replace("-", "", $request->post('from_date'));
+        $to_date    = str_replace("-", "", $request->post('to_date'));
         $admin_id = $request->session()->get('admin_id');
         $user_type = $request->session()->get('user_type');
 
@@ -423,7 +423,7 @@ class CompanyController extends BaseController
         $sql .= "LEFT JOIN tb_admin_info AS c ON b.admin_id = c.admin_id ";
         $sql .= "WHERE ";
 
-        if(!is_null($from_date) && !is_null($to_date)) {
+        if($from_date !== "" && $to_date !== "") {
             $sql .= "a.driving_date >= '" . substr($from_date, 0, 8) . "' AND a.driving_date <= '" . substr($to_date, 0, 8) . "' ";
         } else {
             $sql .= "a.driving_date = '" . $current_date . "' ";
