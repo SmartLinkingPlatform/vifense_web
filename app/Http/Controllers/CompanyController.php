@@ -409,6 +409,7 @@ class CompanyController extends BaseController
         $user_type = $request->session()->get('user_type');
 
         $start_from = ($start-1) * $count;
+        date_default_timezone_set('Asia/Seoul');
         $current_date = @date("Y-m-d", time());
         $current_date = str_replace("-", "", $current_date);
 
@@ -508,7 +509,7 @@ class CompanyController extends BaseController
                         $idling_time += $row->idling_time;
                         $driving_score += $row->user_id;
                     }
-                    if ($cnt == $total_rows - 1) {
+                    if ($cnt == count($total_rows) - 1) {
 
                     }
                     $cnt++;
