@@ -404,7 +404,7 @@
                             tags += '<td class="text-nowrap align-middle" onclick="showUserInfoDialog('+user_id+');" style="text-decoration: underline; cursor: pointer">' + user_name + '</td>';
                             tags += '<td class="text-nowrap align-middle">';
                             tags += '<div class="d-flex justify-content-center">';
-                            tags += '<input aria-disabled="true" type="checkbox" value="'+certifice_status+'" id="certiChecked_'+user_id+'" '+cert_check+' >';
+                            tags += '<input type="checkbox" value="'+certifice_status+'" id="certiChecked_'+user_id+'" '+cert_check+' >';
                             tags += '</div>';
                             tags += '</td>';
 
@@ -512,7 +512,15 @@
                             let id = oid.split('_')[1];
                             let cks = $('#actiChecked_' + id).prop('checked');
                             let act = cks ? 1 : 0;
-                            activeCompany(id, act);
+                            activeUser(id, act);
+                        });
+
+                        $('input[id^="certiChecked_"]').click(function(){
+                            let oid = $(this).attr("id");
+                            let id = oid.split('_')[1];
+                            let cks = $('#certiChecked_' + id).prop('checked');
+                            let act = cks ? 1 : 0;
+                            certifyUser(id, act);
                         });
 
                     }
@@ -749,11 +757,32 @@
             });
         }
 
-        function activeCompany(id, status) {
+        function certifyUser(id, status) {
             $.ajax({
-                url: 'admin.companyActive',
+                url: 'admin.userCertify',
                 data: {
-                    admin_id:id,
+                    user_id:id,
+                    certify : status
+                },
+                type: 'POST',
+                success: function (data) {
+                    if (data.msg === 'ok') {
+                    }
+                    else{
+                        console.log("error certification");
+                    }
+                },
+                error: function (jqXHR, errdata, errorThrown) {
+                    console.log(errdata);
+                }
+            });
+        }
+
+        function activeUser(id, status) {
+            $.ajax({
+                url: 'admin.userActive',
+                data: {
+                    user_id:id,
                     active : status
                 },
                 type: 'POST',

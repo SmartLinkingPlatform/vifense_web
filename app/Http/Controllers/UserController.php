@@ -320,4 +320,60 @@ class UserController extends BaseController
             ]);
         }
     }
+
+    public function setUserActive(Request $request){
+        $user_id = $request->post('user_id');
+        $active = $request->post('active');
+        $success = false;
+        $act = 0;
+        if((int)$active> 0)
+            $act = 1;
+
+        $cnt = DB::table($this->tb_user_info)->where('user_id', $user_id)->doesntExist();
+        if (!$cnt){
+            $success =  DB::table($this->tb_user_info)->where('user_id', $user_id)->update(
+                [
+                    'active' => $act,
+                ]
+            );
+        }
+        if ($success) {
+            return \Response::json([
+                'msg' => 'ok'
+            ]);
+        }
+        else {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        }
+    }
+
+    public function setUserCertify(Request $request){
+        $user_id = $request->post('user_id');
+        $certify = $request->post('certify');
+        $success = false;
+        $act = 0;
+        if((int)$certify> 0)
+            $act = 1;
+
+        $cnt = DB::table($this->tb_user_info)->where('user_id', $user_id)->doesntExist();
+        if (!$cnt){
+            $success =  DB::table($this->tb_user_info)->where('user_id', $user_id)->update(
+                [
+                    'certifice_status' => $act,
+                ]
+            );
+        }
+        if ($success) {
+            return \Response::json([
+                'msg' => 'ok'
+            ]);
+        }
+        else {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        }
+    }
 }

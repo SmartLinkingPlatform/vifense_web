@@ -399,6 +399,34 @@ class CompanyController extends BaseController
         }
     }
 
+    public function companyCertify(Request $request){
+        $admin_id = $request->post('admin_id');
+        $certify = $request->post('certify');
+        $success = false;
+        $act = 0;
+        if((int)$certify> 0)
+            $act = 1;
+
+        $cnt = DB::table($this->tb_company)->where('admin_id', $admin_id)->doesntExist();
+        if (!$cnt){
+            $success =  DB::table($this->tb_company)->where('admin_id', $admin_id)->update(
+                [
+                    'certifice_status' => $act,
+                ]
+            );
+        }
+        if ($success) {
+            return \Response::json([
+                'msg' => 'ok'
+            ]);
+        }
+        else {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        }
+    }
+
     public function getDayDrivingList(Request $request){
         $search_val = $request->post('search_val');
         $start  = $request->post('start');
@@ -421,12 +449,12 @@ class CompanyController extends BaseController
         $sql .= "FROM ".$tb_driving_info." AS a ";
         $sql .= "LEFT JOIN tb_user_info AS b ON a.user_id = b.user_id ";
         $sql .= "LEFT JOIN tb_admin_info AS c ON b.admin_id = c.admin_id ";
-        $sql .= "WHERE ";
+        $sql .= "WHERE 1 ";
 
         if($from_date !== "" && $to_date !== "") {
-            $sql .= "a.driving_date >= '" . substr($from_date, 0, 8) . "' AND a.driving_date <= '" . substr($to_date, 0, 8) . "' ";
+            $sql .= "AND a.driving_date >= '" . substr($from_date, 0, 8) . "' AND a.driving_date <= '" . substr($to_date, 0, 8) . "' ";
         } else {
-            $sql .= "a.driving_date = '" . $current_date . "' ";
+            $sql .= "AND a.driving_date = '" . $current_date . "' ";
         }
 
         if ($user_type == 0) {
@@ -439,16 +467,15 @@ class CompanyController extends BaseController
         }
 
         $sql .= " ORDER BY a.user_id ASC ";
-        $lim_sql = $sql." LIMIT ".$start_from.", ".$count;
+        //$lim_sql = $sql." LIMIT ".$start_from.", ".$count;
 
         try{
-            $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
+            $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
             if($rows == null){
                 return \Response::json([
                     'msg' => 'nouser'
                 ]);
             } else {
-
                 $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
                 $items = array();
                 $temp_id = "";
@@ -478,11 +505,11 @@ class CompanyController extends BaseController
                                 'company' => $temp_company,
                                 'name' => $temp_name,
                                 'max_speed' => $max_speed,
-                                'avr_speed' => $avr_speed / $i,
-                                'mileage' => $mileage,
+                                'avr_speed' => round($avr_speed / $i),
+                                'mileage' => round($mileage, 1),
                                 'drv_time' => $driving_time,
                                 'idl_time' => $idling_time,
-                                'score' => $driving_score / $i,
+                                'score' => round($driving_score / $i),
                                 'quick_cnt' => $quick_cnt,
                                 'brake_cnt' => $brake_cnt,
                                 'fast_cnt' => $fast_cnt,
@@ -534,11 +561,11 @@ class CompanyController extends BaseController
                             'company' => $row->company_name,
                             'name' => $row->user_name,
                             'max_speed' => $max_speed,
-                            'avr_speed' => $avr_speed / $i,
-                            'mileage' => $mileage,
+                            'avr_speed' => round($avr_speed / $i, 1),
+                            'mileage' => round($mileage, 1),
                             'drv_time' => $driving_time,
                             'idl_time' => $idling_time,
-                            'score' => $driving_score / $i,
+                            'score' => round($driving_score / $i),
                             'quick_cnt' => $quick_cnt,
                             'brake_cnt' => $brake_cnt,
                             'fast_cnt' => $fast_cnt,
@@ -599,5 +626,164 @@ class CompanyController extends BaseController
     public function getUserDriverInfo(Request $request, $id=null) {
 
         return view('admin.user-driver-info');
+    }
+
+    public function getEveryDrivingInfo(Request $request){
+        $search_val = $request->post('search_val');
+        $start  = $request->post('start');
+        $count    = $request->post('count');
+        $search_date = $request->post('search_date');
+        $radio_idx = $request->post('radio_idx');
+        $admin_id = $request->session()->get('admin_id');
+        $user_type = $request->session()->get('user_type');
+
+        if(is_null($search_val)) {
+            return \Response::json([
+                'msg' => 'nouser'
+            ]);
+        }
+
+        $start_from = ($start-1) * $count;
+
+        $tb_driving_info = "tb_driving_info";
+        $sql = "SELECT ";
+        $sql .= "a.user_id, a.max_speed, a.average_speed, a.mileage, a.driving_time, a.idling_time, ";
+        $sql .= "a.driving_date, a.driving_score, b.admin_id, b.user_name, c.company_name ";
+        $sql .= "FROM ".$tb_driving_info." AS a ";
+        $sql .= "LEFT JOIN tb_user_info AS b ON a.user_id = b.user_id ";
+        $sql .= "LEFT JOIN tb_admin_info AS c ON b.admin_id = c.admin_id ";
+        $sql .= "WHERE 1 ";
+
+        if($search_date !== "") {
+            if ($radio_idx == 1) {
+                $sql .= "AND a.driving_date = '".$search_date."' ";
+            }
+            else if ($radio_idx == 2) {
+                $sql .= "AND SUBSTRING(a.driving_date, 1, 6) = '".$search_date."' ";
+            }
+            else if ($radio_idx == 3) {
+                $sql .= "AND SUBSTRING(a.driving_date, 1, 4) = '".$search_date."' ";
+            }
+        }
+
+        if ($user_type == 0) {
+            $sql .= "AND b.admin_id = '" . $admin_id . "' ";
+        }
+
+        if(!is_null($search_val)) {
+            $sql .= " AND (b.user_name like '%" . $search_val . "%' OR ";
+            $sql .= " c.company_name like '%" . $search_val . "%') ";
+        }
+
+        $sql .= " ORDER BY a.user_id ASC ";
+        //$lim_sql = $sql." LIMIT ".$start_from.", ".$count;
+
+        try{
+            $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+            if($rows == null){
+                return \Response::json([
+                    'msg' => 'nouser'
+                ]);
+            } else {
+                $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+                $items = array();
+                $temp_id = "";
+                $temp_company = "";
+                $temp_name = "";
+                $temp_max = "";
+                $max_speed = 0;
+                $avr_speed = 0;
+                $mileage = 0;
+                $driving_time = 0;
+                $idling_time = 0;
+                $driving_score = 0;
+
+                $cnt = 0;
+                $i = 1;
+                foreach($rows as $row) {
+                    $user_id = $row->user_id;
+                    if ($temp_id != $user_id) {
+                        if ($cnt > 0) {
+                            $item = array(
+                                'drv_date' => $search_date,
+                                'company' => $temp_company,
+                                'name' => $temp_name,
+                                'max_speed' => $max_speed,
+                                'avr_speed' => round($avr_speed / $i),
+                                'mileage' => round($mileage, 1),
+                                'drv_time' => $driving_time,
+                                'idl_time' => $idling_time,
+                                'score' => round($driving_score / $i)
+                            );
+                            array_push($items, $item);
+                        }
+                        $max_speed = $row->max_speed;
+                        $avr_speed = $row->average_speed;
+                        $mileage = $row->mileage;
+                        $times = explode(":", $row->driving_time);
+                        if (count($times) > 2) {
+                            $driving_time = $times[0] * 3600 + $times[1] * 60 + $times[2];
+                        } else {
+                            $driving_time = $times[0] * 60 + $times[1] ;
+                        }
+                        $idling_time = $row->idling_time;
+                        $driving_score = $row->driving_score;
+
+                        $i = 1;
+                    } else {
+                        $i++;
+                        if ($temp_max > $row->max_speed)
+                            $max_speed = $temp_max;
+                        else
+                            $max_speed = $row->max_speed;
+                        $avr_speed += $row->average_speed;
+                        $mileage += $row->mileage;
+                        $times = explode(":", $row->driving_time);
+                        if (count($times) > 2) {
+                            $driving_time += $times[0] * 3600 + $times[1] * 60 + $times[2];
+                        } else {
+                            $driving_time += $times[0] * 60 + $times[1] ;
+                        }
+                        $idling_time += $row->idling_time;
+                        $driving_score += $row->driving_score;
+                    }
+                    if ($cnt == count($total_rows) - 1) {
+                        $item = array(
+                            'drv_date' => $search_date,
+                            'company' => $row->company_name,
+                            'name' => $row->user_name,
+                            'max_speed' => $max_speed,
+                            'avr_speed' => round($avr_speed / $i, 1),
+                            'mileage' => round($mileage, 1),
+                            'drv_time' => $driving_time,
+                            'idl_time' => $idling_time,
+                            'score' => round($driving_score / $i)
+                        );
+                        array_push($items, $item);
+                    }
+                    $cnt++;
+                    $temp_id = $user_id;
+                    $temp_name = $row->user_name;
+                    $temp_company = $row->company_name;
+                    $temp_max = $row->max_speed;
+                }
+
+                $total = count($items);
+                $total_page = ceil($total / $count);
+
+                return \Response::json([
+                    'msg' => 'ok',
+                    'total'    =>  $total,
+                    'start'    =>  $start,
+                    'totalpage'    =>  $total_page,
+                    'lists' => $items
+                ]);
+            }
+
+        }catch (Exception $e){
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        }
     }
 }

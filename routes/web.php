@@ -51,6 +51,8 @@ Route::middleware('adminsession')->group(function(){
     Route::post('admin.getCompanyName', 'UserController@getCompanyName');
     Route::post('admin.getUserinInfo', 'UserController@getUserinInfo');
 
+    Route::post('admin.everyInfo', 'CompanyController@getEveryDrivingInfo');
+
 //----------------------------------------------------
 // driver info
 //----------------------------------------------------
@@ -92,6 +94,7 @@ Route::post('admin.getCompanyinInfo', 'CompanyController@getCompanyinInfo');
 Route::post('admin.editCompanyInfo', 'CompanyController@editCompanyInfo');
 Route::post('admin.companyDelete', 'CompanyController@companyDelete');
 Route::post('admin.companyActive', 'CompanyController@companyActive');
+Route::post('admin.companyCertify', 'CompanyController@companyCertify');
 Route::post('admin.showCompanyInfo', 'CompanyController@showCompanyInfo');
 //---------------------------------------------------
 // person part
@@ -100,7 +103,8 @@ Route::post('admin.addNewUserInfo', 'UserController@addNewUserInfo');
 Route::post('admin.editUserInfo', 'UserController@editUserInfo');
 Route::post('admin.userDelete', 'UserController@userDelete');
 Route::post('admin.showUserInfo', 'UserController@showUserInfo');
-
+Route::post('admin.userActive', 'UserController@setUserActive');
+Route::post('admin.userCertify', 'UserController@setUserCertify');
 
 //----------------------------------------------------
 // driver info

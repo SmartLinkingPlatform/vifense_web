@@ -341,28 +341,7 @@
                         $('a[id^="page_nav_number_"]').click(function(){
                             let oid=$(this).attr("id");
                             pstart=oid.split('_')[3];
-                            getCompanyList();
-                        });
-
-                        $('button[id^="button_edit_"]').click(function(){
-                            let oid = $(this).attr("id");
-                            let id = oid.split('_')[2];
-                            showEditDialog(id);
-                        });
-
-                        $('button[id^="button_delete_"]').click(function(){
-                            let oid = $(this).attr("id");
-                            let id = oid.split('_')[2];
-                            deleteCompany(id);
-                        });
-
-                        $('input[id^="actiChecked_"]').click(function(){
-                            let oid = $(this).attr("id");
-                            let id = oid.split('_')[1];
-                            let cks = $('#actiChecked_' + id).prop('checked');
-                            let act = cks ? 1 : 0;
-                            //console.log(act);
-                            activeCompany(id, act);
+                            getDayDrivingList();
                         });
 
                     }

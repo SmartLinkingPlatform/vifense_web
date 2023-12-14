@@ -171,33 +171,40 @@ class CallAPIController extends BaseController
         $tb_info = 'tb_user_info';
 
 
-        $row = DB::table($tb_info)->where('user_phone', $user_phone)->where('user_pwd', $user_pwd)->first();
+        $urow = DB::table($tb_info)->where('user_phone', $user_phone)->first();
 
-        if ($row == null) {
+        if ($urow == null) {
             return \Response::json([
                 'msg' => 'nonuser'
             ]);
         } else {
-            $success = DB::table($tb_info)->where('user_phone', $user_phone)
-                ->update(
-                    [
-                        'visit_date' => $visit_date,
-                        'active' => 1
-                    ]
-                );
-            if ($success) {
+            $row = DB::table($tb_info)->where('user_phone', $user_phone)->where('user_pwd', $user_pwd)->first();
+            if ($row == null) {
                 return \Response::json([
-                    'msg' => 'ok',
-                    'user_id' => $row->user_id,
-                    'user_phone' => $row->user_phone,
-                    'user_name' => $row->user_name,
-                    'user_pwd' => $row->user_pwd,
-                    'admin_id' => $row->admin_id
+                    'msg' => 'errpwd'
                 ]);
             } else {
-                return \Response::json([
-                    'msg' => 'err'
-                ]);
+                $success = DB::table($tb_info)->where('user_phone', $user_phone)
+                    ->update(
+                        [
+                            'visit_date' => $visit_date,
+                            'active' => 1
+                        ]
+                    );
+                if ($success) {
+                    return \Response::json([
+                        'msg' => 'ok',
+                        'user_id' => $row->user_id,
+                        'user_phone' => $row->user_phone,
+                        'user_name' => $row->user_name,
+                        'user_pwd' => $row->user_pwd,
+                        'admin_id' => $row->admin_id
+                    ]);
+                } else {
+                    return \Response::json([
+                        'msg' => 'err'
+                    ]);
+                }
             }
         }
         exit();

@@ -106,6 +106,7 @@ class AdminController extends BaseController
     public function adminLogin(Request $request){
         $userid = $request->post('userid');
         $password = $request->post('password');
+        date_default_timezone_set('Asia/Seoul');
         $updated_at = @date("Y-m-d h:i:s", time());
 
         $user = DB::table($this->tb_admin_info)->where('user_phone', $userid)->first();

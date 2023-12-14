@@ -579,7 +579,7 @@
 
                             tags += '<td class="text-nowrap align-middle">';
                             tags += '<div class="d-flex justify-content-center">';
-                            tags += '<input aria-disabled="true" type="checkbox" value="'+certifice_status+'" id="certiChecked_'+admin_id+'" '+cert_check+' >';
+                            tags += '<input type="checkbox" value="'+certifice_status+'" id="certiChecked_'+admin_id+'" '+cert_check+' >';
                             tags += '</div>';
                             tags += '</td>';
 
@@ -686,8 +686,15 @@
                             let id = oid.split('_')[1];
                             let cks = $('#actiChecked_' + id).prop('checked');
                             let act = cks ? 1 : 0;
-                            //console.log(act);
                             activeCompany(id, act);
+                        });
+
+                        $('input[id^="certiChecked_"]').click(function(){
+                            let oid = $(this).attr("id");
+                            let id = oid.split('_')[1];
+                            let cks = $('#certiChecked_' + id).prop('checked');
+                            let act = cks ? 1 : 0;
+                            certifyCompany(id, act);
                         });
 
                     }
@@ -1096,6 +1103,27 @@
                 success: function (data) {
                     if (data.msg === 'ok') {
                         getCompanyList();
+                    }
+                },
+                error: function (jqXHR, errdata, errorThrown) {
+                    console.log(errdata);
+                }
+            });
+        }
+
+        function certifyCompany(id, status) {
+            $.ajax({
+                url: 'admin.companyCertify',
+                data: {
+                    admin_id:id,
+                    certify : status
+                },
+                type: 'POST',
+                success: function (data) {
+                    if (data.msg === 'ok') {
+                    }
+                    else{
+                        console.log("error certification");
                     }
                 },
                 error: function (jqXHR, errdata, errorThrown) {
