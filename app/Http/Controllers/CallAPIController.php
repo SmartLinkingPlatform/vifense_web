@@ -169,8 +169,6 @@ class CallAPIController extends BaseController
         $visit_date = $request->post('visit_date');
 
         $tb_info = 'tb_user_info';
-
-
         $urow = DB::table($tb_info)->where('user_phone', $user_phone)->first();
 
         if ($urow == null) {

@@ -283,9 +283,21 @@ class UserController extends BaseController
 
         $cnt = DB::table($this->tb_user_info)->where('user_id', $user_id)->doesntExist();
         if (!$cnt){
+            $tb_car_info = 'tb_car_info';
+            $tb_user_car = 'tb_user_car';
+
+            $crow =DB::table($tb_user_car)->where('user_id', $user_id)->first();
+            if ($crow != null) {
+                $success = DB::table($tb_user_car)->where('car_id', $crow->car_id)->delete();
+                if ($success) {
+                    DB::table($tb_car_info)->where('car_id', $crow->car_id)->delete();
+                }
+            }
+
             $success = DB::table($this->tb_user_info)->where('user_id', $user_id)->delete();
         }
         if ($success) {
+
             return \Response::json([
                 'msg' => 'ok'
             ]);
