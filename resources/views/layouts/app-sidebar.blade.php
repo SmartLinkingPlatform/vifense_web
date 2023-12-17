@@ -45,7 +45,8 @@
                             </a>
                         </li>
                         <li>
-                            <a class="side-menu__item" href="{{ url('/' . $page='admin.user-driver-info') }}">
+                            {{$search = ""}}
+                            <a class="side-menu__item" href="{{ url('/' . $page='admin.user-driver-info/'.$search) }}">
                                 <i class="side-menu__icon fa fa-search"></i><span class="side-menu__label">사용자별 주행 정보</span>
                             </a>
                         </li>

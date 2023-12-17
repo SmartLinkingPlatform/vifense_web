@@ -208,8 +208,8 @@
             return str_h + str_m + str_s;
         }
 
-        function showEveryUserDrivingInfo(id) {
-            window.location.href = "admin.user-driver-info?id="+id;
+        function showEveryUserDrivingInfo(name) {
+            window.location.href = "admin.user-driver-info/"+name;
         }
 
         function showDrivingDetailInfo(fast_time, fast_cnt, quick_cnt, brake_cnt) {
@@ -262,7 +262,7 @@
                             tags += '<td class="text-nowrap align-middle">' + order + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + phone + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + company + '</td>';
-                            tags += '<td class="text-nowrap align-middle" onclick="showEveryUserDrivingInfo('+phone+');" style="text-decoration: underline; cursor: pointer">' + name + '</td>';
+                            tags += '<td class="text-nowrap align-middle" onclick="showEveryUserDrivingInfo(\''+name+'\');" style="text-decoration: underline; cursor: pointer">' + name + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + max_speed + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + avr_speed + '</td>';
                             tags += '<td class="text-nowrap align-middle">' + mileage + '</td>';

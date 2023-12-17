@@ -33,7 +33,7 @@
                 <div class="row px-5 py-5">
                     <div class="row w-100 m-0 pl-3 pr-3 justify-content-around">
                         <div class="col-md-4 pb-md-0 pb-sm-2">
-                            <input type="text" id="input_search_name" class="form-control" placeholder="검색">
+                            <input type="text" id="input_search_name" class="form-control" value="{{ $search }}" placeholder="검색">
                         </div>
                         <div class="col-md-3 pb-md-0 pb-sm-2">
                             <div class="input-group justify-content-end d-flex p-2" >
@@ -130,7 +130,6 @@
         let search_val = '';
         let search_date = '';
         let radio_idx = 1;
-
         $(document).ready(function () {
             $('#datepicker2').css({'display':'none'});
             $('#datepicker3').css({'display':'none'});
@@ -201,6 +200,11 @@
 
                 searchUserName();
             });
+
+            search_val = $('#input_search_name').val();
+            if(search_val.toString().trim().length > 0){
+                searchUserName();
+            }
         });
 
         function showEveryUserDrivingInfo(drv_date, company, max_speed, avr_speed, mileage, drv_time, idl_time, score) {

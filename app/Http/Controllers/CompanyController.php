@@ -623,9 +623,11 @@ class CompanyController extends BaseController
         }
     }
 
-    public function getUserDriverInfo(Request $request, $id=null) {
-
-        return view('admin.user-driver-info');
+    public function getSearchUserDriverInfo(Request $request, $search=null) {
+        $data = array(
+            'search' => $search
+        );
+        return view('admin.user-driver-info')->with($data);
     }
 
     public function getEveryDrivingInfo(Request $request){

@@ -118,7 +118,7 @@ Route::get('admin.user-driver-info', function () {
 });
 */
 
-Route::get('admin.user-driver-info/{id}', 'CompanyController@getUserDriverInfo');
+Route::get('admin.user-driver-info/{search}', 'CompanyController@getSearchUserDriverInfo');
 
 
 
