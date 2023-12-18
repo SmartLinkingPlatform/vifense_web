@@ -117,7 +117,7 @@ class AdminController extends BaseController
             ]);
         }
         else{
-            $md5pwd = $this->encrypt_decrypt('encrypt', $password);
+            $md5pwd = $this->encrypt($password);
             $pwd = DB::table($this->tb_admin_info)->where('user_phone', $userid)->where('user_pwd', $md5pwd)->first();
             if($pwd == null){
                 return \Response::json([
@@ -190,7 +190,7 @@ class AdminController extends BaseController
     public function registerNewPassword(Request $request){
         $user_phone = $request->post('user_phone');
         $new_pwd = $request->post('new_pwd');
-        $enc_password = $this->encrypt_decrypt('encrypt', $new_pwd);
+        $enc_password = $this->encrypt($new_pwd);
 
         $success = DB::table($this->tb_admin_info)->where('user_phone', $user_phone)
             ->update(
@@ -255,7 +255,7 @@ class AdminController extends BaseController
 
         $cnt = DB::table($this->tb_admin_info)->where('admin_id', $admin_id)->doesntExist();
         if (!$cnt){
-            $enc_password = $this->encrypt_decrypt('encrypt', $password);
+            $enc_password = $this->encrypt($password);
             $success =  DB::table($this->tb_admin_info)->where('admin_id', $admin_id)
                 ->update(
                     [
@@ -291,7 +291,7 @@ class AdminController extends BaseController
 
         $cnt = DB::table($this->tb_admin_info)->where('user_phone', $user_phone)->doesntExist();
         if ($cnt){
-            $enc_password = $this->encrypt_decrypt('encrypt', $password);
+            $enc_password = $this->encrypt($password);
             $success =  DB::table($this->tb_admin_info)
                 ->insert(
                     [
@@ -424,7 +424,7 @@ class AdminController extends BaseController
             $corporate_doc_name = $corporate_doc_file->getClientOriginalName();
         }
 
-        $enc_password = $this->encrypt_decrypt('encrypt', $password);
+        $enc_password = $this->encrypt($password);
 
         $tb_admin_info = 'tb_admin_info';
         try {
@@ -534,7 +534,7 @@ class AdminController extends BaseController
             $corporate_doc_name = $corporate_doc_file->getClientOriginalName();
         }
 
-        $enc_password = $this->encrypt_decrypt('encrypt', $password);
+        $enc_password = $this->encrypt($password);
 
         try {
             $cnt = DB::table($this->tb_admin_info)->where('user_phone', $smart_phone)->doesntExist();

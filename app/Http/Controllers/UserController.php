@@ -217,7 +217,7 @@ class UserController extends BaseController
         $user_name = $rows->user_name;
         $user_email = $rows->user_email;
         $password = $rows->user_pwd;
-        $dec_password = $this->encrypt_decrypt('decrypt', $password);
+        $dec_password = $this->decrypt($password);
 
 
         $sql = "SELECT admin_id, company_name FROM tb_admin_info ";
@@ -248,7 +248,7 @@ class UserController extends BaseController
         $user_name = $request->post('user_name');
         $user_email = $request->post('user_email');
         $password = $request->post('password');
-        $enc_password = $this->encrypt_decrypt('encrypt', $password);
+        $enc_password = $this->encrypt($password);
         $admin_id = $request->post('admin_id');
         $user_id = $request->post('user_id');
         $update_date = date("Y-m-d h:i:s", time());
