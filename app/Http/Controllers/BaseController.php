@@ -22,8 +22,8 @@ class BaseController extends Controller
         $output = false;
 
         $encrypt_method = "AES-256-CBC";
-        $secret_key = 'c4ca4238a0b923820dcc';
-        $secret_iv = 'c4ca4238a0b923820dcc';
+        $secret_key = 'dgtsplatformcypt';
+        $secret_iv = 'dgtsplatformcypt';
 
         // hash
         $key = hash('sha256', $secret_key);
