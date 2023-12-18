@@ -1,9 +1,9 @@
 @extends('layouts.master')
 @section('css')
-    <link href="{{ URL::asset('assets/plugins/time-picker/jquery.timepicker.css')}}" rel="stylesheet" />
-    <link href="{{ URL::asset('assets/css/components.css')}}" rel="stylesheet" />
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
+    {{--  <link href="{{ URL::asset('assets/plugins/time-picker/jquery.timepicker.css')}}" rel="stylesheet" /> --}}
+     <link href="{{ URL::asset('assets/css/components.css')}}" rel="stylesheet" />
+ {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet"> --}}
+    <link href="{{ URL::asset('assets/plugins/bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker3.standalone.css')}}" rel="stylesheet" />
 @endsection
 @section('page-header')
     <!-- PAGE-HEADER -->
@@ -58,9 +58,10 @@
                                         <i class="fa fa-calendar tx-16 lh-0 op-6"></i>
                                     </div>
                                 </div>
-                                <input type="text" class="form-control" name="datepicker" id="datepicker1" />
-                                <input type="text" class="form-control" name="datepicker" id="datepicker2" />
-                                <input type="text" class="form-control" name="datepicker" id="datepicker3" />
+
+                                <input id="input_user_driver_date_1" class="form-control" placeholder="YYYY-MM-DD" type="text" style="display: block">
+                                <input id="input_user_driver_date_2" class="form-control" placeholder="YYYY-MM" type="text" style="display: none">
+                                <input id="input_user_driver_date_3" class="form-control" placeholder="YYYY" type="text" style="display: none">
 
                             </div>
                         </div>
@@ -112,71 +113,63 @@
 @endsection
 @section('js')
     <script src="{{ URL::asset('assets/js/popover.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/date-picker/spectrum.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/date-picker/jquery-ui.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/time-picker/jquery.timepicker.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/time-picker/toggles.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
-
-    <script>
+    {{--
+        <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+        <script src="{{ URL::asset('assets/plugins/date-picker/spectrum.js') }}"></script>
+        <script src="{{ URL::asset('assets/plugins/date-picker/jquery-ui.js') }}"></script>
+        <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/plugins/time-picker/jquery.timepicker.js') }}"></script>
+        <script src="{{ URL::asset('assets/plugins/time-picker/togglin.js') }}"></script>
+        <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
+        <script src="{{ URL::asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
+      --}}
+       <script src="{{ URL::asset('assets/plugins/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js') }}"></script>
+       <script src="{{ URL::asset('assets/plugins/bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.ko.min.js') }}"></script>
+     <script>
         let pstart=1;
         let pnum = pstart;
         let pcount=5;
         let numg = 5;
-        let search_val = '';
+        let search_val = '{{$search}}';
         let search_date = '';
         let radio_idx = 1;
-        $(document).ready(function () {
-            $('#datepicker2').css({'display':'none'});
-            $('#datepicker3').css({'display':'none'});
 
-            let now = new Date();
-            $(function () {
-                $("#datepicker1").datepicker( {
-                    format: "yyyy-mm-dd",
-                    autoclose: true
-                }).datepicker("setDate", now);
+        let now = new Date();
+        $(document).ready(function () {
+
+            $("#input_user_driver_date_1").datepicker( {
+                language: "ko",
+                format: "yyyy-mm-dd",
+                autoclose: true,
+                orientation: "bottom auto"
+            });
+            $("#input_user_driver_date_2").datepicker( {
+                minViewMode: 1,
+                maxViewMode: 2,
+                autoclose: true,
+                language: "ko",
+                format: "yyyy-mm",
+                orientation: "bottom auto"
+            });
+            $("#input_user_driver_date_3").datepicker( {
+                minViewMode: 2,
+                maxViewMode: 2,
+                autoclose: true,
+                language: "ko",
+                format: "yyyy",
+                orientation: "bottom auto"
             });
 
-
             $('input[id^="radio_"]').click(function(){
+
                 let oid=$(this).attr("id");
                 radio_idx = oid.split('_')[1];
-                if (parseInt(radio_idx) === 1) {
-                    $('#datepicker1').css({'display':'block'});
-                    $('#datepicker2').css({'display':'none'});
-                    $('#datepicker3').css({'display':'none'});
-                    $("#datepicker1").datepicker( {
-                        format: "yyyy-mm-dd",
-                        autoclose: true
-                    });
-                }
-                if (parseInt(radio_idx) === 2) {
-                    $('#datepicker1').css({'display':'none'});
-                    $('#datepicker2').css({'display':'block'});
-                    $('#datepicker3').css({'display':'none'});
-                    $("#datepicker2").datepicker( {
-                        format: "yyyy-mm",
-                        startView: "months",
-                        minViewMode: "months",
-                        autoclose: true
-                    });
-                }
-                if (parseInt(radio_idx) === 3) {
-                    $('#datepicker1').css({'display':'none'});
-                    $('#datepicker2').css({'display':'none'});
-                    $('#datepicker3').css({'display':'block'});
-                    $("#datepicker3").datepicker( {
-                        format: "yyyy",
-                        startView: 'years',
-                        minViewMode: 'years',
-                        autoclose: true
-                    });
-                }
+
+                $('input[id^="input_user_driver_date_"]').css("display","none");
+                $('input[id^="input_user_driver_date_"]').val();
+
+                $('input[id^="input_user_driver_date_'+radio_idx+'"]').css("display","block");
 
             });
 
@@ -193,17 +186,18 @@
                 if (parseInt(radio_idx) === 1) {
                     search_date = $('#datepicker1').val().replace(/-/g, '');
                 } else if (parseInt(radio_idx) === 2) {
-                    search_date = $('#datepicker2').val().replace(/-/g, '');
+                    search_date = $('#datepicker1').val().replace(/-/g, '');
                 } else {
-                    search_date = $('#datepicker3').val().replace(/-/g, '');
+                    search_date = $('#datepicker1').val().replace(/-/g, '');
                 }
 
-                searchUserName();
+               // searchUserName();
             });
 
-            search_val = $('#input_search_name').val();
-            if(search_val.toString().trim().length > 0){
-                searchUserName();
+            if(search_val!=null && search_val.toString().trim().length > 0){
+                alert(search_val);
+               let timeval = $('input[id^="input_user_driver_date_'+radio_idx+'"]').val();
+               // searchUserName();
             }
         });
 

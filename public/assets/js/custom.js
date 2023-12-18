@@ -6,7 +6,7 @@
 		$("head link#theme").attr("href", $(this).data("theme"));
 		$(this).toggleClass('active').siblings().removeClass('active');
 	});
-	
+
 	// ______________Full screen
 	$(document).on("click", ".fullscreen-button", function toggleFullScreen() {
 		if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
@@ -31,12 +31,12 @@
 			}
 		}
 	})
-	
+
 	// ______________ PAGE LOADING
 	$(window).on("load", function(e) {
 		$("#global-loader").fadeOut("slow");
 	})
-	
+
 	// ______________ BACK TO TOP BUTTON
 	$(window).on("scroll", function(e) {
 		if ($(this).scrollTop() > 0) {
@@ -51,7 +51,7 @@
 		}, 600);
 		return false;
 	});
-	
+
 	// ______________Active Class
 	$(document).ready(function() {
 		$(".horizontalMenu-list li a").each(function() {
@@ -82,8 +82,8 @@
 			}
 		});
 	});
-	
-	
+
+
 	// ______________ COVER IMAGE
 	$(".cover-image").each(function() {
 		var attr = $(this).attr('data-image-src');
@@ -91,7 +91,7 @@
 			$(this).css('background', 'url(' + attr + ') center center');
 		}
 	});
-	
+
 	// ______________ RATING STAR
 	var ratingOptions = {
 		selectors: {
@@ -104,7 +104,7 @@
 		}
 	};
 	$(".rating-stars").ratingStars(ratingOptions);
-	
+
 	// ______________ mCustomScrollbar
 	$(".vscroll").mCustomScrollbar();
 	$(".app-sidebar").mCustomScrollbar({
@@ -117,13 +117,13 @@
 		autoHideScrollbar: true,
 		scrollbarPosition: "outside"
 	});
-	
+
 	$(".sidebar-right").mCustomScrollbar({
 		theme:"minimal",
 		autoHideScrollbar: true,
 		scrollbarPosition: "outside"
 	});
-	
+
 	$(".notifications-menu").mCustomScrollbar({
 		theme:"minimal",
 		autoHideScrollbar: true,
@@ -139,7 +139,7 @@
 		autoHideScrollbar: true,
 		scrollbarPosition: "outside"
 	});
-	
+
 	// ______________Chart-circle
 	if ($('.chart-circle').length) {
 		$('.chart-circle').each(function() {
@@ -158,15 +158,15 @@
 
 	// ______________ CARD
 	const DIV_CARD = 'div.card';
-	
+
 	// ______________ TOOLTIP
 	$('[data-toggle="tooltip"]').tooltip();
-	
+
 	// ______________ POPOVER
 	$('[data-toggle="popover"]').popover({
 		html: true
 	});
-	
+
 	// ______________ FUNCTION FOR REMOVE CARD
 	$(document).on('click', '[data-toggle="card-remove"]', function(e) {
 		let $card = $(this).closest(DIV_CARD);
@@ -174,8 +174,8 @@
 		e.preventDefault();
 		return false;
 	});
-	
-	
+
+
 	// ______________ FUNCTIONS FOR COLLAPSED CARD
 	$(document).on('click', '[data-toggle="card-collapse"]', function(e) {
 		let $card = $(this).closest(DIV_CARD);
@@ -183,7 +183,7 @@
 		e.preventDefault();
 		return false;
 	});
-	
+
 	// ______________ CARD FULL SCREEN
 	$(document).on('click', '[data-toggle="card-fullscreen"]', function(e) {
 		let $card = $(this).closest(DIV_CARD);
@@ -191,45 +191,57 @@
 		e.preventDefault();
 		return false;
 	});
-	
+
 	// ______________Active Class
 	$(".app-sidebar a").each(function() {
-	  var pageUrl = window.location.href.split(/[?#]/)[0];
-		if (this.href == pageUrl) { 
+	  let pageUrl = window.location.href.split(/[?#]/)[0];
+        /*
+        let href = this.href;
+        let protocol= window.location.protocol;
+        let hostname= window.location.hostname;
+        let pathname = window.location.pathname;
+       if(pageUrl.includes(href)) {
+            console.log("href", "okokok");
+            console.log("href", this.href);
+            console.log("pageUrl", pageUrl);
+        }
+        */
+
+        if (this.href == pageUrl || pageUrl.includes(this.href)) {
 			$(this).addClass("active");
 			$(this).parent().addClass("active"); // add active to li of the current link
 			$(this).parent().parent().prev().addClass("active"); // add active class to an anchor
 			$(this).parent().parent().prev().click(); // click the item to make it drop
 		}
 	});
-	
+
 	// ______________ Styles ______________//
-	
-	
+
+
 	//$('body').addClass('transparent-mode');//
-	
+
 	//$('body').addClass('sidemenu-bgimage');//
-	
+
 	//$('body').addClass('color-menu');//
-	
+
 	//$('body').addClass('light-menu');//
-	
+
 	//$('body').addClass('dark-menu');//
-	
+
 	//$('body').addClass('gradient-menu');//
-	
+
 	//$('body').addClass('light-hor-header');//
-	
+
 	//$('body').addClass('color-hor-header');//
-	
+
 	//$('body').addClass('gradient-hor-header');//
-	
+
 	//$('body').addClass('color-hor-menu');//
-	
+
 	//$('body').addClass('light-hor-menu');//
-	
+
 	//$('body').addClass('gradient-hor-menu');//
-	
+
 	//$('body').addClass('dark-hor-menu');//
-	
+
 })(jQuery);
