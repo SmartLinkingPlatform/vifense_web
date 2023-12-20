@@ -113,7 +113,7 @@
     <script src="{{ URL::asset('assets/js/popover.js') }}"></script>
        <script src="{{ URL::asset('assets/plugins/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js') }}"></script>
        <script src="{{ URL::asset('assets/plugins/bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.ko.min.js') }}"></script>
-     <script>
+    <script>
         let pstart=1;
         let pnum = pstart;
         let pcount=5;
@@ -185,6 +185,9 @@
                 radio_idx = 1;
                 let date = dataFormat();
                 $('#input_user_driver_date_1').val(date);
+                let sval = $('#input_search_name').val();
+                search_val = sval.replace(/\s/g, '');
+                search_date = $('#input_user_driver_date_1').val().replace(/-/g, '');
                 searchUserName();
             }
         });
@@ -262,8 +265,8 @@
                         $('#finded_user_name').html('');
 
                         let lists = data.lists;
-                        pstart=data.start;
-                        let totalpage=data.totalpage;
+                        pstart = parseInt(data.start);
+                        let totalpage = parseInt(data.totalpage);
                         let names = '';
 
                         for (let i = 0; i < lists.length; i++) {
@@ -303,7 +306,7 @@
                         if(pstart===1)
                             disble="disabled"
 
-                        let prenum= parseInt(pstart) - 1;
+                        let prenum= pstart - 1;
 
                         nav_tag+='<li class="page-item  '+disble+' ">';
                         nav_tag+='<a class="page-link" href="#"  id="page_nav_number_' + prenum + '" >';
@@ -311,7 +314,7 @@
                         nav_tag+='</a>';
                         nav_tag+='</li>';
 
-                        pnum = pstart <= numg ? 1 : parseInt(pstart) - 1;
+                        pnum = pstart <= numg ? 1 : prenum;
 
                         for(let idx = 0; idx < numg; idx++)
                         {

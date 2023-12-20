@@ -108,7 +108,7 @@ class UserController extends BaseController
         $admin_id = $request->session()->get('admin_id');
         $user_type = $request->session()->get('user_type');
 
-        $sql = "SELECT a.admin_id, a.user_id, a.user_phone, b.company_name, a.user_name, a.certifice_status, a.active, a.create_date, a.update_date ";
+        $sql = "SELECT a.admin_id, a.user_id, a.user_phone, b.company_name, a.user_name, a.certifice_status, a.actived, a.create_date, a.update_date ";
         $sql .= "FROM tb_user_info AS a LEFT JOIN tb_admin_info AS b ON a.admin_id = b.admin_id ";
         $sql .= "WHERE 1 ";
 

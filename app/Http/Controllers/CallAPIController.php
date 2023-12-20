@@ -471,7 +471,8 @@ class CallAPIController extends BaseController
             $datas = array();
             $tb_notice = "tb_notice";
             $sql = "SELECT * FROM ".$tb_notice;
-            $sql .= " WHERE (type = 'all' OR type = '".$user_rows->admin_id."' OR type='".$user_rows->user_id."') AND notice_id > ".$msg_id;
+            $sql .= " WHERE (type = 'all' OR (type = 'company' AND type_id='".$user_rows->admin_id."')";
+            $sql .= " OR (type = 'persion' AND type_id='".$user_rows->user_id."')) AND notice_id > ".$msg_id;
             $sql .= " ORDER BY notice_id DESC";
 
             $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));

@@ -85,12 +85,13 @@ class NoticeController extends BaseController
 
 
     /* This function equal corporateSignup of AdminController */
-    public function noticeAdd(Request $request){
+    public function sendMessageUsers(Request $request){
 
         $selectedTab = $request->post('selectedTab');
         $title_val = $request->post('title_val');
         $text_val = $request->post('text_val');
         $to_notices = $request->post('to_notices') ?? '';
+        $type_id = $request->post('type_id') ?? '';
         $create_date = date("Y-m-d h:i:s", time());
         $admin_id = $request->session()->get('admin_id');
 
@@ -101,6 +102,7 @@ class NoticeController extends BaseController
                         'title' => $title_val, // 공지제목
                         'content' => $text_val, // 공지내용
                         'type' => $selectedTab, // 공지타입   all/company/persion/noticeinner 전체/회사/개인/공지내역
+                        'type_id' => $type_id,
                         'to_notices' => $to_notices, // 공지를 받을 유저/회사  '1, 2, 3' :: 앞으로 모든 회사나 개인이 아니고 선택하여 보내야 할때 필요
                         'from_user_id' => $admin_id, // 공지를 낸 유저 아이디
                         'create_date' => $create_date, // 공지 창조 일자
@@ -121,6 +123,48 @@ class NoticeController extends BaseController
                 'msg' => $e->getMessage()
             ]);
         }
+    }
+
+    public function getMessageUserList(Request  $request) {
+        $admin_id = $request->session()->get('admin_id');
+        $user_type = $request->session()->get('user_type');
+        $search_val = $request->post('search_val');
+        $start  = $request->post('start');
+        $count    = $request->post('count');
+        $start_from = ($start-1) * $count;
+
+        if(is_null($search_val)) {
+            return \Response::json([
+                'msg' => 'nouser'
+            ]);
+        }
+
+        $sql = "SELECT user_id, user_phone, user_name FROM tb_user_info ";
+        $sql .= " WHERE 1 ";
+        if ($user_type == 0) {
+            $sql .= " AND admin_id = ".$admin_id;
+        }
+        if(!is_null($search_val)) {
+            $sql .= " AND (user_name like '%" . $search_val . "%' OR ";
+            $sql .= " user_phone like '%" . $search_val . "%') ";
+        }
+        $lim_sql = $sql.' ORDER BY user_id ASC LIMIT '.$start_from.', '.$count;
+
+        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
+        $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        $total = count($total_rows);
+        $total_page = ceil($total / $count);
+
+        if($rows != null){
+            return \Response::json([
+                'msg' => 'ok',
+                'total' => $total,
+                'start' => $start,
+                'totalpage' => $total_page,
+                'lists' => $rows
+            ]);
+        }
+        exit();
     }
 
 

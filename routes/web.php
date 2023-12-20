@@ -61,7 +61,8 @@ Route::middleware('adminsession')->group(function(){
 //-----------------------------------------------------
 // Notice part
 //-----------------------------------------------------
-    Route::post('user.noticeAdd', 'NoticeController@noticeAdd');
+    Route::post('user.sendMessage', 'NoticeController@sendMessageUsers');
+    Route::post('admin.messageUser', 'NoticeController@getMessageUserList');
 
 });
 Route::get('admin', function () { return redirect('admin.login');});

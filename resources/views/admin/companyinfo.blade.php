@@ -553,8 +553,8 @@
                         $('#tbody_admin_list').html('');
                         $('#page_nav_container').html('');
                         let lists = data.lists;
-                        pstart=data.start;
-                        let totalpage=data.totalpage;
+                        pstart = parseInt(data.start);
+                        let totalpage = parseInt(data.totalpage);
                         let tags = '';
                         for (let i = 0; i < lists.length; i++) {
                             let list = lists[i];
@@ -612,7 +612,7 @@
                         if(pstart===1)
                             disble="disabled"
 
-                        let prenum= parseInt(pstart) - 1;
+                        let prenum = pstart - 1;
 
                         nav_tag+='<li class="page-item  '+disble+' ">';
                         nav_tag+='<a class="page-link" href="#"  id="page_nav_number_' + prenum + '" >';
@@ -620,7 +620,7 @@
                         nav_tag+='</a>';
                         nav_tag+='</li>';
 
-                        pnum = pstart <= numg ? 1 : parseInt(pstart) - 1;
+                        pnum = pstart <= numg ? 1 : prenum;
 
                         for(let idx = 0; idx < numg; idx++)
                         {
@@ -629,7 +629,7 @@
                             let spantag='';
                             let oid='';
 
-                            if(pnum===pstart)
+                            if(pnum === pstart)
                             {
                                 actv='active';
                                 aria_current='aria-current="page"';
@@ -642,7 +642,7 @@
                             nav_tag+='<a class="page-link" id="' + oid + '"  href="#" >' + pnum + '  ' + spantag + '</a>';
                             nav_tag+='</li>';
 
-                            if(pnum===totalpage) break;
+                            if(pnum === totalpage) break;
                             pnum = pnum + 1;
                         }
                         let nextnum= parseInt(pstart) + 1;

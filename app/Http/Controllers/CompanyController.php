@@ -654,6 +654,8 @@ class CompanyController extends BaseController
             ]);
         }
 
+        $count = (int)$count;
+
         $start_from = ($start-1) * $count;
 
         $tb_driving_info = "tb_driving_info";
@@ -782,12 +784,19 @@ class CompanyController extends BaseController
                 $total = count($items);
                 $total_page = ceil($total / $count);
 
+                $lists = array();
+                for ($i = $start_from ; $i < $start_from + $count; $i++) {
+                    if(count($items) <= $i)
+                        break;
+                    array_push($lists, $items[$i]);
+                }
+
                 return \Response::json([
                     'msg' => 'ok',
                     'total'    =>  $total,
                     'start'    =>  $start,
-                    'totalpage'    =>  $total_page,
-                    'lists' => $items
+                    'totalpage'    =>  1,
+                    'lists' => $lists
                 ]);
             }
 
