@@ -348,6 +348,7 @@
                     }
                     else {
                         $('#tbody_day_driving_list').html('');
+                        console.log('err :: '+ data.msg);
                     }
                 },
                 error: function (jqXHR, errdata, errorThrown) {

@@ -247,7 +247,7 @@
 
         function searchUserName() {
             $.ajax({
-                url: 'admin.everyInfo',
+                url: '/admin.everyInfo',
                 data: {
                     start: pstart,
                     count:pcount,

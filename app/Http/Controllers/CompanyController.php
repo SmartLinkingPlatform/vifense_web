@@ -436,6 +436,8 @@ class CompanyController extends BaseController
         $admin_id = $request->session()->get('admin_id');
         $user_type = $request->session()->get('user_type');
 
+        $count = (int)$count;
+
         $start_from = ($start-1) * $count;
         date_default_timezone_set('Asia/Seoul');
         $current_date = @date("Y-m-d", time());
@@ -586,9 +588,10 @@ class CompanyController extends BaseController
 
                 $lists = array();
                 for ($i = $start_from ; $i < $start_from + $count; $i++) {
+                    if(count($items) <= $i)
+                        break;
                     array_push($lists, $items[$i]);
                 }
-
 
                 return \Response::json([
                     'msg' => 'ok',
@@ -601,7 +604,7 @@ class CompanyController extends BaseController
 
         }catch (Exception $e){
             return \Response::json([
-                'msg' => 'err'
+                'msg' => $e->getMessage(),
             ]);
         }
     }
