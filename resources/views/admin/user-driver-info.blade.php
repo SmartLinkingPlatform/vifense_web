@@ -1,8 +1,6 @@
 @extends('layouts.master')
 @section('css')
-    {{--  <link href="{{ URL::asset('assets/plugins/time-picker/jquery.timepicker.css')}}" rel="stylesheet" /> --}}
      <link href="{{ URL::asset('assets/css/components.css')}}" rel="stylesheet" />
- {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet"> --}}
     <link href="{{ URL::asset('assets/plugins/bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker3.standalone.css')}}" rel="stylesheet" />
 @endsection
 @section('page-header')
@@ -173,22 +171,27 @@
                 let sval = $('#input_search_name').val();
                 search_val = sval.replace(/\s/g, '');
                 if (parseInt(radio_idx) === 1) {
-                    search_date = $('#datepicker1').val().replace(/-/g, '');
+                    search_date = $('#input_user_driver_date_1').val().replace(/-/g, '');
                 } else if (parseInt(radio_idx) === 2) {
-                    search_date = $('#datepicker1').val().replace(/-/g, '');
+                    search_date = $('#input_user_driver_date_2').val().replace(/-/g, '');
                 } else {
-                    search_date = $('#datepicker1').val().replace(/-/g, '');
+                    search_date = $('#input_user_driver_date_3').val().replace(/-/g, '');
                 }
 
-               // searchUserName();
+                searchUserName();
             });
 
             if(search_val!=null && search_val.toString().trim().length > 0) {
-                console.log(search_val);
-                let timeval = $('input[id^="input_user_driver_date_' + radio_idx + '"]').val();
-                // searchUserName();
+                radio_idx = 1;
+                let date = dataFormat();
+                $('#input_user_driver_date_1').val(date);
+                searchUserName();
             }
         });
+
+        function dataFormat() {
+            return new Date(+new Date() + 3240 * 10000).toISOString().split("T")[0];
+        }
 
         function showEveryUserDrivingInfo(drv_date, company, max_speed, avr_speed, mileage, drv_time, idl_time, score) {
             $('#user_driving_info').css({'display':'block'});

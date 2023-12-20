@@ -584,12 +584,18 @@ class CompanyController extends BaseController
                 $total = count($items);
                 $total_page = ceil($total / $count);
 
+                $lists = array();
+                for ($i = $start_from ; $i < $start_from + $count; $i++) {
+                    array_push($lists, $items[$i]);
+                }
+
+
                 return \Response::json([
                     'msg' => 'ok',
                     'total'    =>  $total,
                     'start'    =>  $start,
                     'totalpage'    =>  $total_page,
-                    'lists' => $items,
+                    'lists' => $lists
                 ]);
             }
 

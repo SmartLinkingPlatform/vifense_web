@@ -129,7 +129,7 @@ class AdminController extends BaseController
                     ->update(
                         [
                             'visit_date' => $updated_at,
-                            'active' => 1
+                            'actived' => 1
                         ]
                     );
                 $request->session()->put('user', 'admin');

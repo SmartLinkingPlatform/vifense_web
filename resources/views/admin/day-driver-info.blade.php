@@ -173,6 +173,7 @@
 
 
             $('#button_search').click(function(){
+                pstart = 1;
                 let sval = $('#input_search_name').val();
                 search_val = sval.replace(/\s/g, '');
                 from_date = $('#input_from_date').val().replace(/ /g, '');
