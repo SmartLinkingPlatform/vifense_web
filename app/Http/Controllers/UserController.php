@@ -192,7 +192,7 @@ class UserController extends BaseController
                     'create_date' => $create_date,
                     'update_date' => '',
                     'certifice_status' => '0',
-                    'active' => '0'
+                    'actived' => '0'
                 ]
             );
         if ($success) {
@@ -263,7 +263,7 @@ class UserController extends BaseController
                     'admin_id' => $admin_id,
                     'update_date' => $update_date,
                     'certifice_status' => '1',
-                    'active' => '0'
+                    'actived' => '0'
                 ]
             );
         if ($success) {
@@ -345,7 +345,7 @@ class UserController extends BaseController
         if (!$cnt){
             $success =  DB::table($this->tb_user_info)->where('user_id', $user_id)->update(
                 [
-                    'active' => $act,
+                    'actived' => $act,
                 ]
             );
         }

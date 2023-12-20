@@ -113,17 +113,6 @@
 @endsection
 @section('js')
     <script src="{{ URL::asset('assets/js/popover.js') }}"></script>
-    {{--
-        <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
-        <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-        <script src="{{ URL::asset('assets/plugins/date-picker/spectrum.js') }}"></script>
-        <script src="{{ URL::asset('assets/plugins/date-picker/jquery-ui.js') }}"></script>
-        <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
-        <script src="{{ URL::asset('assets/plugins/time-picker/jquery.timepicker.js') }}"></script>
-        <script src="{{ URL::asset('assets/plugins/time-picker/togglin.js') }}"></script>
-        <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
-        <script src="{{ URL::asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
-      --}}
        <script src="{{ URL::asset('assets/plugins/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js') }}"></script>
        <script src="{{ URL::asset('assets/plugins/bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.ko.min.js') }}"></script>
      <script>
@@ -194,10 +183,10 @@
                // searchUserName();
             });
 
-            if(search_val!=null && search_val.toString().trim().length > 0){
-                alert(search_val);
-               let timeval = $('input[id^="input_user_driver_date_'+radio_idx+'"]').val();
-               // searchUserName();
+            if(search_val!=null && search_val.toString().trim().length > 0) {
+                console.log(search_val);
+                let timeval = $('input[id^="input_user_driver_date_' + radio_idx + '"]').val();
+                // searchUserName();
             }
         });
 

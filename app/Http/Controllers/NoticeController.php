@@ -104,7 +104,7 @@ class NoticeController extends BaseController
                         'to_notices' => $to_notices, // 공지를 받을 유저/회사  '1, 2, 3' :: 앞으로 모든 회사나 개인이 아니고 선택하여 보내야 할때 필요
                         'from_user_id' => $admin_id, // 공지를 낸 유저 아이디
                         'create_date' => $create_date, // 공지 창조 일자
-                        'active' => 1, // 1 이면 공지발송 , 0 이면 지연
+                        'actived' => 1, // 1 이면 공지발송 , 0 이면 지연
                     ]
                 );
             if ($success) {

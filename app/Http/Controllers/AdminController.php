@@ -159,7 +159,7 @@ class AdminController extends BaseController
     {
         $user_phone = session('user_phone',null);
         if(!is_null($user_phone))
-            DB::table($this->tb_admin_info)->where('user_phone', $user_phone)->update(['active' => 0]);
+            DB::table($this->tb_admin_info)->where('user_phone', $user_phone)->update(['actived' => 0]);
 
         session()->forget('user');
         session()->forget('admin_id');
@@ -462,7 +462,7 @@ class AdminController extends BaseController
                         'registe_date' => $current_time, // 가입일시
                         'visit_date' => '', // 방문시간
                         'website' => '',
-                        'active' => 0, // 1 이면 액티브 , 0 이면 디액티브
+                        'actived' => 0, // 1 이면 액티브 , 0 이면 디액티브
                     ]
                 );
             if ($success) {
@@ -571,7 +571,7 @@ class AdminController extends BaseController
                         'registe_date' => $current_time, // 가입일시
                         'visit_date' => '', // 방문시간
                         'website' => '',
-                        'active' => 0, // 1 이면 액티브 , 0 이면 디액티브
+                        'actived' => 0, // 1 이면 액티브 , 0 이면 디액티브
                     ]
                 );
             if ($success) {

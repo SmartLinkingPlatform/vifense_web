@@ -139,7 +139,7 @@ class CallAPIController extends BaseController
                         'user_birthday' => $user_birthday, //생년월일
                         'admin_id' => $admin_id, // 회사 아이디
                         'certifice_status' => $certifice_status,
-                        'active' => $active,
+                        'actived' => $active,
                         'create_date' => $create_date, // 가입일시
                         'visit_date' => '', // 방문시간
                     ]
@@ -186,7 +186,7 @@ class CallAPIController extends BaseController
                     ->update(
                         [
                             'visit_date' => $visit_date,
-                            'active' => 1
+                            'actived' => 1
                         ]
                     );
                 if ($success) {

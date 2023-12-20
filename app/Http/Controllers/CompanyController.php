@@ -208,7 +208,7 @@ class CompanyController extends BaseController
                         'registe_date' => $current_time, // 가입일시
                         'visit_date' => '', // 방문시간
                         'website' => '',
-                        'active' => 0, // 1 이면 액티브 , 0 이면 디액티브
+                        'actived' => 0, // 1 이면 액티브 , 0 이면 디액티브
                     ]
                 );
             if ($success) {
@@ -383,7 +383,7 @@ class CompanyController extends BaseController
         if (!$cnt){
             $success =  DB::table($this->tb_company)->where('admin_id', $admin_id)->update(
                 [
-                    'active' => $act,
+                    'actived' => $act,
                 ]
             );
         }
