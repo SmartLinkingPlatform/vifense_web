@@ -97,6 +97,34 @@ class CallAPIController extends BaseController
         //
     }
 
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'vifense',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
+    }
+
+    //token 얻기
+    public function requestAuthToken(Request $request) {
+        $user_phone = $request->post('user_phone');
+        $user_pwd = $request->post('user_pwd');
+
+        $tb_user_info = 'tb_user_info';
+        $row = DB::table($tb_user_info)->where('user_phone', $user_phone)->where('user_pwd', $user_pwd)->first();
+        if ($row == null) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $credentials = request([$user_phone, $user_pwd]);
+        if (! $token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
+    }
+
     //회사 정보 요청
     public function requestCompanyInfo()
     {
@@ -161,7 +189,7 @@ class CallAPIController extends BaseController
         exit();
     }
 
-    //모바일 유저 로그인
+    //모바일 로그인
     public function requestUserLogin(Request $request)
     {
         $user_phone = $request->post('user_phone');
@@ -189,7 +217,7 @@ class CallAPIController extends BaseController
                             'actived' => 1
                         ]
                     );
-                if ($success) {
+                //if ($success) {
                     return \Response::json([
                         'msg' => 'ok',
                         'user_id' => $row->user_id,
@@ -198,11 +226,11 @@ class CallAPIController extends BaseController
                         'user_pwd' => $row->user_pwd,
                         'admin_id' => $row->admin_id
                     ]);
-                } else {
-                    return \Response::json([
-                        'msg' => 'err'
-                    ]);
-                }
+                    /*} else {
+                        return \Response::json([
+                            'msg' => 'err'
+                        ]);
+                    }*/
             }
         }
         exit();
@@ -312,6 +340,40 @@ class CallAPIController extends BaseController
             ]);
         }
 
+        exit();
+    }
+
+    //차량 정보 조회
+    public function requestListCarInfo(Request $request)
+    {
+        $user_id = $request->post('user_id');
+
+        $tb_car_info = 'tb_car_info';
+        $tb_user_car = 'tb_user_car';
+
+        $sql = "SELECT car_id FROM " . $tb_user_car;
+        $sql .= " WHERE user_id = " . $user_id;
+        $sql .= " ORDER BY user_id DESC LIMIT 1";
+        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        if ($rows != null) { // exist
+            $car_rows = DB::table($tb_car_info)->where('car_id', $rows[0]->car_id)->first();
+            if ($car_rows != null) {
+                return \Response::json([
+                    'msg' => 'ok',
+                    'car_id' => $car_rows->car_id,
+                    'number' => $car_rows->number,
+                    'manufacturer' => $car_rows->manufacturer,
+                    'car_model' => $car_rows->car_model,
+                    'car_date' => $car_rows->car_date,
+                    'car_fuel' => $car_rows->car_fuel,
+                    'car_gas' => $car_rows->car_gas
+                ]);
+            }
+        } else {
+            return \Response::json([
+                'msg' => 'nocar'
+            ]);
+        }
         exit();
     }
 
