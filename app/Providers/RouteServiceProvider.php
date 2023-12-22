@@ -31,7 +31,6 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-
         parent::boot();
     }
 
@@ -42,12 +41,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
-
+        $this->mapAdminRoutes();
+        // $this->mapMobileRoutes();
         $this->mapWebRoutes();
-
-        $this->mapMobileRoutes();
-        //
     }
 
     /**
@@ -66,9 +62,15 @@ class RouteServiceProvider extends ServiceProvider
 
 	 protected function mapMobileRoutes()
     {
-        Route::middleware('mobile')
+        /*Route::middleware('mobile')
             ->namespace($this->namespace)
             ->group(base_path('routes/mobile.php'));
+       */
+        Route::prefix('api_mobile')
+            ->middleware('mobile')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/mobile.php'));
+
     }
 
     /**
@@ -78,12 +80,20 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapAdminRoutes()
     {
-        Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+        /*
+         Route::middleware('admin')
+           ->namespace($this->namespace)
+           ->group(base_path('routes/api.php'));
+      */
+
+        Route::prefix('apiw')
+            ->middleware('apiw')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
+
+
     }
 
 

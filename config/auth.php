@@ -40,12 +40,24 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
-        'api' => [
+        /*'api' => [
             'driver' => 'token',
             'provider' => 'users',
             'hash' => false,
         ],
+        */
+        'admin' => [
+            'driver' => 'jwt',
+            'provider' => 'wclients',
+            'hash' => false,
+        ],
+
+        'mobile' => [
+            'driver' => 'jwt',
+            'provider' => 'mclients',
+            'hash' => false,
+        ],
+
     ],
 
     /*
@@ -66,15 +78,28 @@ return [
     */
 
     'providers' => [
-        'users' => [
+       /* 'api' => [
+            'driver' => 'eloquent',
+            'model' => App\User::class,
+        ],
+       */
+         'users' => [
+             'driver' => 'database',
+             'table' => 'users',
+        ],
+
+
+        'wclients' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'mclients' => [
+            'driver' => 'eloquent',
+            'model' => App\Client::class,
+        ],
+
+
     ],
 
     /*

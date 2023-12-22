@@ -38,20 +38,16 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'mobile' => [
-            \App\Http\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+       'apiw' => [
+           \Illuminate\Session\Middleware\StartSession::class,
+           \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+
+        'apim' => [
             \Illuminate\Session\Middleware\StartSession::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'api' => [
-            'throttle:60,1',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
     ];
 
     /**
@@ -74,5 +70,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'usersession' => \App\Http\Middleware\CheckUserSession::class,
         'adminsession' => \App\Http\Middleware\CheckAdminSession::class,
+
+        'w.jwt.verify' => \App\Http\Middleware\AdminAuthenticate::class,
+        'm.jwt.verify' => \App\Http\Middleware\MobileAuthenticate::class,
     ];
 }

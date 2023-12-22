@@ -410,8 +410,8 @@
                 let corporate_doc_file =  $('#uploadcorporate_doc').prop('files')[0];
 
                 let form_data = new FormData();
-                form_data.append('smart_phone', smart_phone);
-                form_data.append('password', password);
+                form_data.append('user_phone', smart_phone);
+                form_data.append('user_pwd', password);
                 form_data.append('corporate_company_name', corporate_company_name);
                 form_data.append('corporate_phone', corporate_phone);
                 form_data.append('corporate_address', corporate_address);
@@ -424,7 +424,8 @@
                 form_data.append('corporate_doc_file', corporate_doc_file);
 
                 $.ajax({
-                    url: 'admin.corporateSignup',
+                    url: '/api/admin/register',
+                    //url: 'admin.corporateSignup',
                     // dataType: 'text',  // what to expect back from the PHP script, if anything
                     cache: false,
                     contentType: false,
@@ -435,8 +436,18 @@
                         if (data.msg === "ok") {
                             window.location.href = 'admin';
                         }else if (data.msg === 'err') {
-                            const message = '회원가입에 실패하였습니다.';
-                            alert(message);
+                            //const message = '회원가입에 실패하였습니다.';
+                            //alert(message);
+                            let errdata = data.cont;
+                            if(Array.isArray(errdata)){
+                                let phone = errdata['user_phone'];
+                                let pwd = errdata['user_pwd'];
+                                console.log("err >>>", phone ? phone[0] : pwd ? pwd[0] : ' error can not know err ');
+                                alert(phone ? phone[0] : pwd ? pwd[0] : ' error can not know err ');
+                            }
+                            else{
+                                alert(errdata);
+                            }
                         } else if (data.msg === 'du') {
                             //const message = '이미 같은 아이디로 회원가입이 되여있습니다.';
                             //alert(message);

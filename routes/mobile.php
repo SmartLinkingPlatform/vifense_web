@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::group([
+    'middleware' => 'mobile',
+    'prefix' => 'api'
+], function () {
+    Route::post('register', 'JWTAuthController@register'); //  /mobile/auth/register
+    Route::post('login', 'JWTAuthController@login');
+    Route::post('logout', 'JWTAuthController@logout');
+});
+
 //Auth::routes();
 Route::post('mobile.auth', 'CallAPIController@requestAuthToken');
 Route::post('mobile.companyInfo', 'CallAPIController@requestCompanyInfo');

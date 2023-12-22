@@ -93,29 +93,75 @@
                 }
 
                 $.ajax({
-                    url: 'admin.adminLogin',
+                    url:'/apiw/login',
                     data: {
-                        userid: userid,
-                        password: password,
+                        user_phone: userid,
+                        user_pwd: password,
                     },
                     type: 'POST',
-                    success: function (data) {
+                    cache: false,
+                    dataType : 'json',
+                    success: function (data, textStatus, jqXHR) {
                         if (data.msg === "ok") {
-                            // alert('ok');
-                            window.location.href = 'admin.dashboard-view';
-                            //gotoMainPage();
-
-                        } else if (data.msg === 'nonuser') {
+                            let access_token = data.access_token;
+                            let token_type = data.token_type;
+                            let expires_in = data.expires_in;
+                            window.localStorage.authToken = access_token;
+                            $.ajax({
+                                url:'/apiw/admin/get_user',
+                                headers: {'Authorization': `Bearer ${access_token}`},
+                                data: {
+                                    'token': `${access_token}`
+                                },
+                                type: 'POST',
+                                success: function (data) {
+                                    if (data.msg !== "ok")
+                                    {
+                                        alert(data.cont);
+                                    }
+                                    else{
+                                        window.location.href = 'admin.dashboard-view';
+                                    }
+                                }, error: function (jqXHR, errdata, errorThrown) {
+                                    console.log(jqXHR['responseText'] ?? errdata);
+                                }
+                            });
+                        }
+                        else if (data.msg === 'nonuser') {
                             const message = '아이디가 존재하지 않습니다';
                             alert(message);
-
                         } else if (data.msg === 'nonpwd') {
                             const message = '비밀번호 오류';
                             alert(message);
                         }
+                        else if (data.msg === 'err') {
+                            let errdata = data.cont;
+                            if(Array.isArray(errdata)){
+                                let phone = errdata['user_phone'];
+                                let pwd = errdata['user_pwd'];
+                                console.log("err >>>", phone ? phone[0] : pwd ? pwd[0] : ' error can not know err ');
+                                alert(phone ? phone[0] : pwd ? pwd[0] : ' error can not know err ');
+                            }
+                            else{
+                                alert(errdata);
+                            }
+                        }
+                        else{
+                            let errdata = data.msg;
+                            if(Array.isArray(errdata)){
+                                let phone = errdata['user_phone'];
+                                let pwd = errdata['user_pwd'];
+                                console.log("err >>>", phone ? phone[0] : pwd ? pwd[0] : ' error can not know err ');
+                                alert(phone ? phone[0] : pwd ? pwd[0] : ' error can not know err ');
+                            }
+                            else{
+                                alert(errdata);
+                            }
+
+                        }
                     },
                     error: function (jqXHR, errdata, errorThrown) {
-                        console.log(errdata);
+                        console.log(jqXHR['responseText'] ?? errdata);
                     }
                 });
             });

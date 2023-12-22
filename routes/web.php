@@ -16,15 +16,12 @@ use Illuminate\Support\Str;
 
 Route::get('/', function () {
    if(Str::startsWith($_SERVER['HTTP_HOST'],'www.vifense.com')){
-		//echo '<br>  strstr >>>  '.$_SERVER['HTTP_HOST'];
         return view('user.apkdown');
     }
 	else if(Str::startsWith($_SERVER['HTTP_HOST'],'vifense.com')){
-		//echo '<br>  stristr >>>  '.$_SERVER['HTTP_HOST'];
         return view('user.apkdown');
     }
     else{
-		//echo '<br> else strstr >>>  '.$_SERVER['HTTP_HOST'];
         return view('admin.login');
 	}
 });
@@ -42,15 +39,11 @@ Route::middleware('adminsession')->group(function(){
     Route::get('admin.personinfo', function () {
         return view('admin.personinfo');
     });
-
     Route::post('admin.getDashboardInfo', 'AdminController@getDashboardInfo');
-
     Route::post('admin.getDayDrivingList', 'CompanyController@getDayDrivingList');
-
     Route::post('admin.getUserList', 'UserController@getUserList');
     Route::post('admin.getCompanyName', 'UserController@getCompanyName');
     Route::post('admin.getUserinInfo', 'UserController@getUserinInfo');
-
     Route::post('admin.everyInfo', 'CompanyController@getEveryDrivingInfo');
 
 //----------------------------------------------------
@@ -65,6 +58,7 @@ Route::middleware('adminsession')->group(function(){
     Route::post('admin.messageUser', 'NoticeController@getMessageUserList');
 
 });
+
 Route::get('admin', function () { return redirect('admin.login');});
 Route::post('admin.adminLogin', 'AdminController@adminLogin');
 Route::post('admin.adminLogout', 'AdminController@adminLogout');
@@ -142,7 +136,7 @@ Route::post('user.changeUserPassword', 'UserController@changeUserPassword');
 Route::post('user.getUserTotalAmount', 'UserController@getUserTotalAmount');
 */
 
-include ('mobile.php');
+//include ('user.php');
 Route::get('/{page}', 'AdminController@index'); // don't call this part for mobile.php route
 // Route::get('/{page}', 'AdminController@index')->where('page', '!(^[mobile.]?)');
 

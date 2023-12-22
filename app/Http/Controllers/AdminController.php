@@ -489,8 +489,8 @@ class AdminController extends BaseController
     }
 
     public function corporateSignup(Request $request){
-        $smart_phone = $request->post('smart_phone');
-        $password = $request->post('password');
+        $user_phone = $request->post('user_phone');
+        $user_pwd = $request->post('user_pwd');
         $corporate_company_name = $request->post('corporate_company_name');
         $corporate_phone = $request->post('corporate_phone');
         $corporate_address = $request->post('corporate_address');
@@ -534,10 +534,10 @@ class AdminController extends BaseController
             $corporate_doc_name = $corporate_doc_file->getClientOriginalName();
         }
 
-        $enc_password = $this->encrypt($password);
+        $enc_password = $this->encrypt($user_pwd);
 
         try {
-            $cnt = DB::table($this->tb_admin_info)->where('user_phone', $smart_phone)->doesntExist();
+            $cnt = DB::table($this->tb_admin_info)->where('user_phone', $user_phone)->doesntExist();
             if (!$cnt){ // exist
                 return \Response::json([
                     'msg' => 'du'
@@ -549,7 +549,7 @@ class AdminController extends BaseController
             $success = DB::table($this->tb_admin_info)
                 ->insert(
                     [
-                        'user_phone' => $smart_phone, // 아이디
+                        'user_phone' => $user_phone, // 아이디
                         'user_pwd' => $enc_password, // 암호
                         'user_name' => $corporate_name, // 대표자 성명
                         'user_email' => '', // 이메일
