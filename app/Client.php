@@ -2,13 +2,11 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Database\Eloquent\Model;
 
-class Client extends Authenticatable implements JWTSubject
+
+class Client extends BasicModel implements JWTSubject
 {
     use Notifiable;
     protected $table = 'tb_user_info';
@@ -19,9 +17,9 @@ class Client extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $fillable = [
-        'user_phone', 'password'
-    ];
+    protected $fillable = [];
+
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
