@@ -26,7 +26,7 @@ Route::post('register', '\App\Http\Controllers\JWTAdminAuthController@register')
 Route::post('login', '\App\Http\Controllers\JWTAdminAuthController@login');// /apiw/login
 
 Route::group([
-    'middleware' => 'w.jwt.verify',
+    'middleware' => 'jwt.verify',
     'prefix'=>'admin'
     ], function() {
     Route::post('logout', [JWTAdminAuthController::class, 'logout']);

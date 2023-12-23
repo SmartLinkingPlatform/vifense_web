@@ -27,8 +27,9 @@ Route::get('/', function () {
 });
 
 //-----------------------------------------------------
-// Admin part
+// Admin part with adminsession
 //-----------------------------------------------------
+
 Route::middleware('adminsession')->group(function(){
     Route::get('admin.dashboard', function () {
         return view('admin.dashborad-view');
@@ -39,13 +40,22 @@ Route::middleware('adminsession')->group(function(){
     Route::get('admin.personinfo', function () {
         return view('admin.personinfo');
     });
-    Route::post('admin.getDashboardInfo', 'AdminController@getDashboardInfo');
+
     Route::post('admin.getDayDrivingList', 'CompanyController@getDayDrivingList');
     Route::post('admin.getUserList', 'UserController@getUserList');
     Route::post('admin.getCompanyName', 'UserController@getCompanyName');
     Route::post('admin.getUserinInfo', 'UserController@getUserinInfo');
     Route::post('admin.everyInfo', 'CompanyController@getEveryDrivingInfo');
 
+    Route::group([
+        'middleware' => 'jwt.verify',
+    ], function() {
+        Route::post('admin.logout', [JWTAdminAuthController::class, 'logout']);
+        Route::post('admin.refresh', [JWTAdminAuthController::class, 'refresh']);
+        Route::get('admin.profile', [JWTAdminAuthController::class, 'profile']);
+
+        Route::post('admin.getDashboardInfo', 'AdminController@getDashboardInfo');
+    });
 //----------------------------------------------------
 // driver info
 //----------------------------------------------------
@@ -57,13 +67,25 @@ Route::middleware('adminsession')->group(function(){
     Route::post('user.sendMessage', 'NoticeController@sendMessageUsers');
     Route::post('admin.messageUser', 'NoticeController@getMessageUserList');
 
-});
+}); // end adminsession
+
+//-----------------------------------------------------
+// Admin part without adminsession
+//-----------------------------------------------------
 
 Route::get('admin', function () { return redirect('admin.login');});
-Route::post('admin.adminLogin', 'AdminController@adminLogin');
-Route::post('admin.adminLogout', 'AdminController@adminLogout');
+Route::post('admin.register', 'JWTAdminAuthController@Register');
+Route::post('admin.adminLogin', 'JWTAdminAuthController@login');
+
+//Route::post('admin.adminLogout', 'AdminController@adminLogout');
 Route::post('admin.getUserRegNum', 'AdminController@getUserRegisterNumber');
 Route::post('admin.regNewPwd', 'AdminController@registerNewPassword');
+
+Route::group([
+    'middleware' => 'jwt.verify'
+], function() {
+    Route::post('admin.get_user', 'JWTAdminAuthController@get_user');
+});
 
 
 //Route::post('admin.adminRegister', 'AdminController@adminRegister');
@@ -122,21 +144,8 @@ Route::get('admin.user-driver-info/{search}', 'CompanyController@getSearchUserDr
 //-----------------------------------------------------
 Route::view('user.notice', 'user.notice-view');
 
-/*
-Route::middleware('usersession')->group(function(){
-    Route::get('user.user', function () {
-        return view('user.user');
-    });
-});
-Route::get('user', function () { return redirect('user.login');});
-Route::post('user.userLogin', 'UserController@userLogin');
-Route::post('user.userLogout', 'UserController@userLogout');
-Route::post('user.getUserInformation', 'UserController@getUserInformation');
-Route::post('user.changeUserPassword', 'UserController@changeUserPassword');
-Route::post('user.getUserTotalAmount', 'UserController@getUserTotalAmount');
-*/
 
-//include ('user.php');
+include ('mobile.php');
 Route::get('/{page}', 'AdminController@index'); // don't call this part for mobile.php route
 // Route::get('/{page}', 'AdminController@index')->where('page', '!(^[mobile.]?)');
 

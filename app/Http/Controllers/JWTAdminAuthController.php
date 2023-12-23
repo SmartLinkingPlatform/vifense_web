@@ -14,7 +14,7 @@ class JWTAdminAuthController extends BaseController
 {
     //
     public function __construct(){
-       // $this->middleware('w.jwt.verify', ['except'=>['login', 'register']]);
+       // $this->middleware('jwt.verify', ['except'=>['login', 'register']]);
     }
 
     /**
@@ -30,7 +30,7 @@ class JWTAdminAuthController extends BaseController
         $credentials['password'] = $user_pwd;
 
         $validator = Validator::make($credentials, [
-            'user_phone' =>'required|between:8,13',
+            'user_phone' =>'required|between:6,13',
             'password' =>'required|string|min:3',
         ]);
 
@@ -232,13 +232,22 @@ class JWTAdminAuthController extends BaseController
             $user = auth()->guard('admin')->authenticate($request->token);
             if($user){
                 $updated_at = @date("Y-m-d h:i:s", time());
-                $request->session()->put('user', 'admin');
-                $request->session()->put('admin_id', $user->admin_id);
-                $request->session()->put('user_phone', $user->user_phone);
-                $request->session()->put('user_type', $user->user_type);
-                $request->session()->put('user_name', $user->user_name);
-                $request->session()->put('logintime', $updated_at);
-                $request->session()->put('checktime', $updated_at);
+
+                session()->forget('user');
+                session()->forget('admin_id');
+                session()->forget('user_phone');
+                session()->forget('user_type');
+                session()->forget('user_name');
+                session()->forget('logintime');
+                session()->forget('checktime');
+
+                session()->put('user', 'admin');
+                session()->put('admin_id', $user->admin_id);
+                session()->put('user_phone', $user->user_phone);
+                session()->put('user_type', $user->user_type);
+                session()->put('user_name', $user->user_name);
+                session()->put('logintime', $updated_at);
+                session()->put('checktime', $updated_at);
 
                 return response()->json([
                     'msg' => 'ok'

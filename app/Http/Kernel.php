@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-
+/*
        'apiw' => [
            \Illuminate\Session\Middleware\StartSession::class,
            \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -46,7 +46,7 @@ class Kernel extends HttpKernel
         'apim' => [
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
+        ],*/
 
     ];
 
@@ -70,8 +70,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'usersession' => \App\Http\Middleware\CheckUserSession::class,
         'adminsession' => \App\Http\Middleware\CheckAdminSession::class,
-
-        'w.jwt.verify' => \App\Http\Middleware\AdminAuthenticate::class,
-        'm.jwt.verify' => \App\Http\Middleware\MobileAuthenticate::class,
+        'jwt.verify' => \App\Http\Middleware\AdminAuthenticate::class,
+        //'m.jwt.verify' => \App\Http\Middleware\MobileAuthenticate::class,
     ];
 }

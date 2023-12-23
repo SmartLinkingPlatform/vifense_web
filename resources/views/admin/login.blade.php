@@ -93,7 +93,7 @@
                 }
 
                 $.ajax({
-                    url:'/apiw/login',
+                    url:'admin.adminLogin',
                     data: {
                         user_phone: userid,
                         user_pwd: password,
@@ -108,7 +108,7 @@
                             let expires_in = data.expires_in;
                             window.localStorage.authToken = access_token;
                             $.ajax({
-                                url:'/apiw/admin/get_user',
+                                url:'admin.get_user',
                                 headers: {'Authorization': `Bearer ${access_token}`},
                                 data: {
                                     'token': `${access_token}`
