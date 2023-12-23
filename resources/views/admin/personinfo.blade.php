@@ -50,7 +50,7 @@
 									</div>
 									<div class="e-table px-5 pb-5">
 										<div class="table-responsive table-lg">
-											<table class="table table-bordered mb-0">
+											<table class="table table-bordered mb-0 text-center">
 												<thead>
 													<tr>
 														<th >번호</th>
@@ -260,6 +260,7 @@
         function showAddDialog() {
             $.ajax({
                 url: 'admin.getCompanyName',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 type: 'POST',
                 success: function (data) {
                     if (data.msg === "ok") {
@@ -301,6 +302,7 @@
 
             $.ajax({
                 url: 'admin.getUserinInfo',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     user_id:userid
                 },
@@ -316,8 +318,8 @@
                         $('#input_smart_phone').val(user_phone);
                         $('#input_user_name').val(user_name);
                         $('#input_user_email').val(user_email);
-                        $('#input_password').val(user_pwd);
-                        $('#input_check_password').val(user_pwd);
+                        $('#input_password').val('');
+                        $('#input_check_password').val('');
 
                         $('#company_name').html('');
                         let tags = '';
@@ -344,6 +346,7 @@
             $('#info_user_email').text('');
             $.ajax({
                 url: 'admin.showUserInfo',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     user_id:userid
                 },
@@ -365,6 +368,7 @@
         function getUserList() {
             $.ajax({
                 url: 'admin.getUserList',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     start: pstart,
                     count:pcount,
@@ -388,7 +392,7 @@
                             let company_name = list.company_name || '';
                             let user_name = list.user_name;
                             let certifice_status = list.certifice_status || '0';
-                            let active = list.active || '0';
+                            let active = list.actived || '0';
                             let create_date = list.create_date || '';
                             let update_date = list.update_date || '';
                             let cert_check = parseInt(certifice_status) > 0 ? 'checked' : '';
@@ -608,6 +612,7 @@
 
             $.ajax({
                 url: 'admin.addNewUserInfo',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -714,6 +719,7 @@
 
             $.ajax({
                 url: 'admin.editUserInfo',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -742,6 +748,7 @@
                 return;
             $.ajax({
                 url: 'admin.userDelete',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     user_id:id,
                 },
@@ -760,6 +767,7 @@
         function certifyUser(id, status) {
             $.ajax({
                 url: 'admin.userCertify',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     user_id:id,
                     certify : status
@@ -781,6 +789,7 @@
         function activeUser(id, status) {
             $.ajax({
                 url: 'admin.userActive',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     user_id:id,
                     active : status

@@ -79,7 +79,7 @@
                 </div>
                 <div class="e-table px-5 pb-5">
                     <div class="table-responsive table-lg" id="user_driving_info">
-                        <table class="table table-bordered mb-0">
+                        <table class="table table-bordered mb-0 text-center">
                             <thead>
                             <tr>
                                 <th >날짜</th>
@@ -93,6 +93,7 @@
                             </tr>
                             </thead>
                             <tbody id="tbody_day_driving_list">
+                            
                             </tbody>
                         </table>
                     </div>
@@ -185,8 +186,8 @@
                 radio_idx = 1;
                 let date = dataFormat();
                 $('#input_user_driver_date_1').val(date);
-                let sval = $('#input_search_name').val();
-                search_val = sval.replace(/\s/g, '');
+                //let sval = $('#input_search_name').val();
+                search_val = $('#input_search_name').val();
                 search_date = $('#input_user_driver_date_1').val().replace(/-/g, '');
                 searchUserName();
             }
@@ -251,6 +252,7 @@
         function searchUserName() {
             $.ajax({
                 url: '/admin.everyInfo',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     start: pstart,
                     count:pcount,

@@ -56,5 +56,4 @@ class BaseController extends Controller
         return $pwd;
     }
 
-
 }

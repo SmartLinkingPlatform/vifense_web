@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 use Closure;
 use JWTAuth;
 use Exception;
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 //use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
@@ -13,7 +14,13 @@ class AdminAuthenticate extends BaseMiddleware
     {
         try {
             //$request_all = $request->all();
-            $user = auth()->guard('admin')->authenticate();
+            $url = $request->getPathInfo();
+            $contains = Str::of($url)->contains('mobile.');
+            $guard = 'admin';
+            if ($contains) {
+                $guard = 'mobile';
+            }
+            $user = auth($guard)->authenticate();
             /*
             $pathinfo = $request->getPathInfo();
             $path_arr = explode("/", $pathinfo);

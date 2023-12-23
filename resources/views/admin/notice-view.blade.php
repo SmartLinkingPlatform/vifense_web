@@ -7,7 +7,7 @@
     <div>
         <h1 class="page-title">공지 사항</h1>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">관리  체계</a></li>
+            <li class="breadcrumb-item"><a href="#">관리 시스템</a></li>
             <li class="breadcrumb-item active" aria-current="page" id="notice_selected_tab"></li>
         </ol>
     </div>
@@ -100,7 +100,7 @@
                                     <div class="col-md-12">
                                         <div class="e-table">
                                             <div class="table-responsive table-lg">
-                                                <table class="table table-bordered mb-0">
+                                                <table class="table table-bordered mb-0 text-center">
                                                     <thead>
                                                     <tr>
                                                         <th style="width: 20%" >유저번호</th>
@@ -145,15 +145,15 @@
                             </div>
                         </div>
 
-                        <div class="card-body notice-card-body-noticeinner" style="display: none; border-top: 0; width: 60%; margin: 0 auto">
+                        <div class="card-body notice-card-body-noticeinner" style="display: none; border-top: 0; width: 80%; margin: 0 auto">
                             <div class="e-table">
                                 <div class="table-responsive table-lg">
-                                    <table class="table table-bordered mb-0">
+                                    <table class="table table-bordered mb-0 text-center">
                                         <thead>
                                         <tr>
-                                            <th style="width: 20%">일자</th>
+                                            <th style="width: 15%">일자</th>
                                             <th style="width: 15%">대상</th>
-                                            <th style="width: 20%">제목</th>
+                                            <th style="width: 25%">제목</th>
                                             <th style="width: 35%">내용</th>
                                             <th style="width: 10%">비고</th>
                                         </tr>
@@ -222,7 +222,7 @@
                 if(setv==='persion')
                     txt = '개인';
                 if(setv==='noticeinner')
-                    txt = '공지';
+                    txt = '공지내역';
                 $('#notice_selected_tab').text(txt);
 
                 $('.notice-card-header .nav-link').attr('class','nav-link');
@@ -268,7 +268,8 @@
                 }
 
                 $.ajax({
-                    url: 'user.sendMessage',
+                    url: 'admin.sendMessage',
+                    headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                     data: {
                         selectedTab:setv,
                         title_val: title_val,
@@ -331,7 +332,8 @@
 
         function searchUserInfo() {
             $.ajax({
-                url: '/user.messageUser',
+                url: '/admin.messageUser',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     start: pstart,
                     count:pcount,
@@ -443,7 +445,8 @@
 
         function getMessageList() {
             $.ajax({
-                url: '/user.messageList',
+                url: '/admin.messageList',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     start: pstart,
                     count:pcount

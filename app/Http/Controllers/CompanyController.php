@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Dotenv\Validator;
+use Illuminate\Support\Facades\Hash;
 use \Throwable;
 
 class CompanyController extends BaseController
@@ -166,7 +167,7 @@ class CompanyController extends BaseController
             $corporate_doc_name = $corporate_doc_file->getClientOriginalName();
         }
 
-        $enc_password = $this->encrypt($password);
+        $enc_password = Hash::make($password);
 
         try {
             $cnt = DB::table($this->tb_company)->where('user_phone', $smart_phone)->doesntExist();
@@ -231,7 +232,8 @@ class CompanyController extends BaseController
         $admin_id = $request->post('admin_id');
         $rows =DB::table($this->tb_company)->where('admin_id', $admin_id)->first();
         $password = $rows->password;
-        $dec_password = $this->decrypt($password);
+        //$dec_password = $this->decrypt($password);
+        $dec_password = "";
         $create_date = $rows->create_date ?? '';
         $eDate = explode(' ', $create_date);
         $rows->create_date = $eDate[0] ?? '';
@@ -302,7 +304,7 @@ class CompanyController extends BaseController
 
         $cnt = DB::table($this->tb_company)->where('admin_id', $admin_id)->doesntExist();
         if (!$cnt){
-            $enc_password = $this->encrypt($password);
+            $enc_password = Hash::make($password);
 
             $upValues['user_phone'] = $smart_phone;
             $upValues['password'] = $enc_password;

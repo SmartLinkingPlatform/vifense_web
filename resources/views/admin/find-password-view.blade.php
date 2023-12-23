@@ -201,6 +201,7 @@
 
                 $.ajax({
                     url: 'admin.regNewPwd',
+                    headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                     data: {
                         user_phone: user_phone,
                         new_pwd: new_pwd,
@@ -234,6 +235,7 @@
 
                 $.ajax({
                     url: 'admin.signnumberCheck',
+                    headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                     data: {
                         signnumber: input_sign_number,
                     },

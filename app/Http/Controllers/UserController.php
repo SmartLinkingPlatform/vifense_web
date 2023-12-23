@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Dotenv\Validator;
+use Illuminate\Support\Facades\Hash;
 use mysql_xdevapi\Exception;
 
 class UserController extends BaseController
@@ -216,9 +217,9 @@ class UserController extends BaseController
         $user_phone = $rows->user_phone;
         $user_name = $rows->user_name;
         $user_email = $rows->user_email;
-        $password = $rows->user_pwd;
-        $dec_password = $this->decrypt($password);
-
+        $password = $rows->password;
+        //$dec_password = $this->decrypt($password);
+        $dec_password = "";
 
         $sql = "SELECT admin_id, company_name FROM tb_admin_info ";
         $sql .= " WHERE user_type < 1 ";
@@ -248,7 +249,7 @@ class UserController extends BaseController
         $user_name = $request->post('user_name');
         $user_email = $request->post('user_email');
         $password = $request->post('password');
-        $enc_password = $this->encrypt($password);
+        $enc_password = Hash::make($password);
         $admin_id = $request->post('admin_id');
         $user_id = $request->post('user_id');
         $update_date = date("Y-m-d h:i:s", time());

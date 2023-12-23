@@ -50,7 +50,7 @@
 									</div>
 									<div class="e-table px-5 pb-5">
 										<div class="table-responsive table-lg">
-											<table class="table table-bordered mb-0">
+											<table class="table table-bordered mb-0 text-center">
 												<thead>
 													<tr>
 														<th >번호</th>
@@ -61,7 +61,7 @@
                                                         <th >가입일시</th>
 														<th >마지막 방문</th>
                                                         <th >로그</th>
-														<th class="text-center" style="width: 200px;" >수정삭제</th>
+														<th style="width: 200px;" >수정삭제</th>
 													</tr>
 												</thead>
 												<tbody id="tbody_admin_list">
@@ -478,8 +478,8 @@
                         let password = data.pwd;
 
                         $('#input_smart_phone').val(list.user_phone);
-                        $('#input_password').val(password);
-                        $('#input_check_password').val(password);
+                        $('#input_password').val('');
+                        $('#input_check_password').val('');
                         $('#input_corporate_company_name').val(list.company_name);
                         $('#input_corporate_phone').val(list.user_regnum);
                         $('#input_corporate_address').val(list.user_address);
@@ -566,7 +566,7 @@
                             let user_phone = list.user_phone;
                             let company_name = list.company_name || '';
                             let certifice_status = list.certifice_status || '0';
-                            let active = list.active || '0';
+                            let active = list.actived || '0';
                             let registe_date = list.registe_date || '';
                             let visit_date = list.visit_date || '';
                             let cert_check = parseInt(certifice_status) > 0 ? 'checked' : '';

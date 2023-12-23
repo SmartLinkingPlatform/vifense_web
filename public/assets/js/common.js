@@ -8,6 +8,7 @@
             if (user_type == 'admin') {
                 $.ajax({
                     url: 'admin.logout',
+                    headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                     type: 'POST',
                     success: function (data) {
                         if (data.msg === "ok") {

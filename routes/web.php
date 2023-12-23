@@ -54,8 +54,9 @@ Route::middleware('adminsession')->group(function(){
         Route::post('admin.getUserinInfo', 'UserController@getUserinInfo');
         Route::post('admin.everyInfo', 'CompanyController@getEveryDrivingInfo');
 
-        Route::post('user.sendMessage', 'NoticeController@sendMessageUsers');
+        Route::post('admin.sendMessage', 'NoticeController@sendMessageUsers');
         Route::post('admin.messageUser', 'NoticeController@getMessageUserList');
+        Route::post('admin.messageList', 'NoticeController@getAllMessageList');
 
     });
 }); // end adminsession
@@ -72,6 +73,15 @@ Route::post('admin.adminLogin', 'JWTAdminAuthController@login');
 
 Route::post('admin.getUserRegNum', 'AdminController@getUserRegisterNumber');
 Route::post('admin.regNewPwd', 'AdminController@registerNewPassword');
+
+Route::post('admin.htmlFile', 'NoticeController@uploadHtmlFile');
+
+Route::get('admin.day-driver-info', function () {
+    return view('admin.day-driver-info');
+});
+
+Route::view('admin.notice', 'admin.notice-view');
+Route::view('admin.fileupload', 'admin.file-upload');
 
 Route::group([
     'middleware' => 'jwt.verify'
@@ -99,9 +109,9 @@ Route::group([
     Route::post('admin.userActive', 'UserController@setUserActive');
     Route::post('admin.userCertify', 'UserController@setUserCertify');
 
-    Route::get('admin.user-driver-info', 'CompanyController@getSearchUserDriverInfo');
-    Route::get('admin.user-driver-info/{search}', 'CompanyController@getSearchUserDriverInfo');
 });
+Route::get('admin.user-driver-info', 'CompanyController@getSearchUserDriverInfo');
+Route::get('admin.user-driver-info/{search}', 'CompanyController@getSearchUserDriverInfo');
 
 /********************************************************************************************************************/
 
@@ -117,7 +127,6 @@ Route::group([
     'middleware' => 'jwt.verify'
 ], function() {
     Route::post('mobile.get_user', 'JWTMobileAuthController@get_user');
-    Route::post('mobile.userLogin', 'CallAPIController@requestUserLogin');
     Route::post('mobile.userSignup', 'CallAPIController@requestUserSignup');
     Route::post('mobile.userInfoModify', 'CallAPIController@requestUserInfoModify');
     Route::post('mobile.regCarInfo', 'CallAPIController@requestRegCarInfo');
@@ -134,21 +143,6 @@ Route::group([
 });
 /********************************************************************************************************************/
 
-//Route::post('admin.getSignNumber', 'AdminController@getSignNumber');
-//Route::post('admin.corporateSignup', 'AdminController@corporateSignup');
-
-
-//----------------------------------------------------
-// driver info
-//----------------------------------------------------
-Route::get('admin.day-driver-info', function () {
-    return view('admin.day-driver-info');
-});
-
-//-----------------------------------------------------
-// Notice part
-//-----------------------------------------------------
-Route::view('user.notice', 'user.notice-view');
 
 
 //include ('mobile.php');

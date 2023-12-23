@@ -103,6 +103,8 @@ class JWTAdminAuthController extends BaseController
                 exit();
             }
 
+            $pass = Hash::make($user_pwd);
+
             $new_user = [
                 'user_phone' => $user_phone, // 아이디
                 'password' => Hash::make($user_pwd), // 암호
@@ -251,6 +253,15 @@ class JWTAdminAuthController extends BaseController
                 session()->put('user_name', $user->user_name);
                 session()->put('logintime', $updated_at);
                 session()->put('checktime', $updated_at);
+
+                $tb_info = 'tb_admin_info';
+                $success = DB::table($tb_info)->where('user_phone', $user->user_phone)
+                    ->update(
+                        [
+                            'visit_date' => $updated_at,
+                            'actived' => 1
+                        ]
+                    );
 
                 return response()->json([
                     'msg' => 'ok'

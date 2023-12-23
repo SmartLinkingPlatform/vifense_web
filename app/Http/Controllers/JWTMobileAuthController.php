@@ -169,12 +169,24 @@ class JWTMobileAuthController extends BaseController
     //모바일 토큰으로 로그인하기
     public function get_user(Request $request)
     {
-        $this->validate($request,[
+        $token = $request->header('authorization');
+        $token = str_replace('Bearer ', '', $token);
+
+        /*$this->validate($request,[
             'token' => 'required'
-        ]);
+        ]);*/
         try {
-            $user = auth('mobile')->authenticate($request->token);
+            $user = auth('mobile')->authenticate($token);
             if($user){
+                $tb_info = 'tb_user_info';
+                $success = DB::table($tb_info)->where('user_phone', $request->user_phone)
+                    ->update(
+                        [
+                            'visit_date' => $request->visit_date,
+                            'actived' => 1
+                        ]
+                    );
+
                 return response()->json([
                     'msg' => 'ok',
                     'user_id' => $user->user_id,

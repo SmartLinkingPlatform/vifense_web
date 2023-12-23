@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Dotenv\Validator;
 use Exception;
+use Illuminate\Support\Facades\Hash;
+
 //use phpseclib3\Crypt\PublicKeyLoader;
 
 class AdminController extends BaseController
@@ -100,6 +102,7 @@ class AdminController extends BaseController
         //
     }
 
+/*
     //-----------------------------------------------------
     // Admin login part
     //-----------------------------------------------------
@@ -145,6 +148,7 @@ class AdminController extends BaseController
             }
         }
     }
+ */
 
     public function adminLogout(Request $request){
         $this->logout();
@@ -190,7 +194,7 @@ class AdminController extends BaseController
     public function registerNewPassword(Request $request){
         $user_phone = $request->post('user_phone');
         $new_pwd = $request->post('new_pwd');
-        $enc_password = $this->encrypt($new_pwd);
+        $enc_password = Hash::make($new_pwd);
 
         $success = DB::table($this->tb_admin_info)->where('user_phone', $user_phone)
             ->update(
@@ -210,7 +214,7 @@ class AdminController extends BaseController
             ]);
         }
     }
-
+/*
     //-----------------------------------------------------
     // Admin management part
     //-----------------------------------------------------
@@ -377,7 +381,6 @@ class AdminController extends BaseController
 
     }
 
-    /* This function equal corporateSignup of AdminController */
     public function addNewCompany_(Request $request){
         $smart_phone = $request->post('smart_phone');
         $password = $request->post('password');
@@ -480,6 +483,7 @@ class AdminController extends BaseController
             ]);
         }
     }
+*/
 
     public function dashborad(Request $request){
         return \Response::json([
@@ -488,6 +492,7 @@ class AdminController extends BaseController
         ]);
     }
 
+/*
     public function corporateSignup(Request $request){
         $user_phone = $request->post('user_phone');
         $user_pwd = $request->post('user_pwd');
@@ -517,12 +522,12 @@ class AdminController extends BaseController
         $file_currentTime = date("YmdHis");
         $randNump= rand(1, 9);
         $order_numberp = $file_currentTime.$randNump;
-        /*if($corporate_photo_file != null && $corporate_photo_file != ''){
+        if($corporate_photo_file != null && $corporate_photo_file != ''){
             $new_namep = $order_numberp.'.'.$corporate_photo_file->getClientOriginalExtension();
             $corporate_photo_file->move(public_path('images/uploads'), $new_namep);
             $corporate_photo_url = 'images/uploads/'.$new_namep;
             $corporate_photo_name = $corporate_photo_file->getClientOriginalName();
-        }*/
+        }
 
         $corporate_doc_url='';
         $randNum = rand(1, 9);
@@ -589,7 +594,7 @@ class AdminController extends BaseController
             ]);
         }
     }
-
+*/
 
     /***** auth part  *****/
     public function getSignNumber(Request $request)

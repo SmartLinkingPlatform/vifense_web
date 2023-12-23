@@ -62,7 +62,7 @@
                         </div>
                         <div class="e-table px-5 pb-5">
                             <div class="table-responsive table-lg">
-                                <table class="table table-bordered mb-0">
+                                <table class="table table-bordered mb-0 text-center">
                                     <thead>
                                     <tr>
                                         <th >번호</th>
@@ -225,6 +225,7 @@
         function getDayDrivingList() {
             $.ajax({
                 url: 'admin.getDayDrivingList',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     start: pstart,
                     count: pcount,

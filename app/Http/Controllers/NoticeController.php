@@ -197,4 +197,16 @@ class NoticeController extends BaseController
         }
         exit();
     }
+
+    public function uploadHtmlFile(Request $request){
+        $uploadfile_html = $request->file('uploadfile_html');
+        if($uploadfile_html != null && $uploadfile_html != ''){
+            $new_name = 'terms.'.$uploadfile_html->getClientOriginalExtension();
+            $uploadfile_html->move(public_path(''), $new_name);
+        }
+
+        return \Response::json([
+            'msg' => 'ok'
+        ]);
+    }
 }
