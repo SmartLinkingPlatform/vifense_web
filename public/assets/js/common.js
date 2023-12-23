@@ -7,7 +7,7 @@
             var user_type = oid.split('_')[2];
             if (user_type == 'admin') {
                 $.ajax({
-                    url: 'admin.adminLogout',
+                    url: 'admin.logout',
                     type: 'POST',
                     success: function (data) {
                         if (data.msg === "ok") {
@@ -44,7 +44,7 @@
             var user_type = oid.split('_')[3];
             if (user_type == 'admin') {
                 $.ajax({
-                    url: 'admin.adminLogout',
+                    url: 'admin.logout',
                     type: 'POST',
                     success: function (data) {
                         if (data.msg === "ok") {
@@ -77,5 +77,5 @@
         });
 	});
 
-	
+
 })(jQuery);

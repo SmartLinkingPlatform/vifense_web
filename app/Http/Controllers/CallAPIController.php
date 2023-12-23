@@ -97,34 +97,6 @@ class CallAPIController extends BaseController
         //
     }
 
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'vifense',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
-    }
-
-    //token 얻기
-    public function requestAuthToken(Request $request) {
-        $user_phone = $request->post('user_phone');
-        $user_pwd = $request->post('user_pwd');
-
-        $tb_user_info = 'tb_user_info';
-        $row = DB::table($tb_user_info)->where('user_phone', $user_phone)->where('user_pwd', $user_pwd)->first();
-        if ($row == null) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $credentials = request([$user_phone, $user_pwd]);
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        return $this->respondWithToken($token);
-    }
-
     //회사 정보 요청
     public function requestCompanyInfo()
     {
@@ -145,7 +117,7 @@ class CallAPIController extends BaseController
     }
 
     //모바일 회원 가입
-    public function requestUserSignup(Request $request)
+    /*public function requestUserSignup(Request $request)
     {
         $user_name = $request->post('user_name');
         $user_phone = $request->post('user_phone');
@@ -187,13 +159,14 @@ class CallAPIController extends BaseController
             ]);
         }
         exit();
-    }
+    }*/
 
     //모바일 로그인
     public function requestUserLogin(Request $request)
     {
         $user_phone = $request->post('user_phone');
         $user_pwd = $request->post('user_pwd');
+        $password = $this->decrypt($user_pwd);
         $visit_date = $request->post('visit_date');
 
         $tb_info = 'tb_user_info';
@@ -204,7 +177,7 @@ class CallAPIController extends BaseController
                 'msg' => 'nonuser'
             ]);
         } else {
-            $row = DB::table($tb_info)->where('user_phone', $user_phone)->where('user_pwd', $user_pwd)->first();
+            $row = DB::table($tb_info)->where('user_phone', $user_phone)->where('password', $password)->first();
             if ($row == null) {
                 return \Response::json([
                     'msg' => 'errpwd'
@@ -223,7 +196,7 @@ class CallAPIController extends BaseController
                         'user_id' => $row->user_id,
                         'user_phone' => $row->user_phone,
                         'user_name' => $row->user_name,
-                        'user_pwd' => $row->user_pwd,
+                        'user_pwd' => $row->password,
                         'admin_id' => $row->admin_id
                     ]);
                     /*} else {

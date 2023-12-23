@@ -340,7 +340,7 @@ class AdminController extends BaseController
         }
     }
 
-    public function getCompanyList(Request $request){
+    public function getCompanyList_(Request $request){
         $search_val = $request->post('search_val');
         $start  = $request->post('start');
         $count    = $request->post('count');
@@ -378,7 +378,7 @@ class AdminController extends BaseController
     }
 
     /* This function equal corporateSignup of AdminController */
-    public function addNewCompany(Request $request){
+    public function addNewCompany_(Request $request){
         $smart_phone = $request->post('smart_phone');
         $password = $request->post('password');
         $corporate_company_name = $request->post('corporate_company_name');

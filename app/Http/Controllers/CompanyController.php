@@ -230,7 +230,7 @@ class CompanyController extends BaseController
     public function getCompanyinInfo(Request $request){
         $admin_id = $request->post('admin_id');
         $rows =DB::table($this->tb_company)->where('admin_id', $admin_id)->first();
-        $password = $rows->user_pwd;
+        $password = $rows->password;
         $dec_password = $this->decrypt($password);
         $create_date = $rows->create_date ?? '';
         $eDate = explode(' ', $create_date);
@@ -305,7 +305,7 @@ class CompanyController extends BaseController
             $enc_password = $this->encrypt($password);
 
             $upValues['user_phone'] = $smart_phone;
-            $upValues['user_pwd'] = $enc_password;
+            $upValues['password'] = $enc_password;
             $upValues['user_name'] = $corporate_name;
             $upValues['user_address'] = $user_address;
             $upValues['user_regnum'] = $corporate_phone;

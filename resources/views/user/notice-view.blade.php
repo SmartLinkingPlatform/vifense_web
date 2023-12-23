@@ -145,17 +145,17 @@
                             </div>
                         </div>
 
-                        <div class="card-body notice-card-body-noticeinner" style="display: none; margin: 0.75rem 1.3rem; border-top: 0; padding: 0">
+                        <div class="card-body notice-card-body-noticeinner" style="display: none; border-top: 0; width: 60%; margin: 0 auto">
                             <div class="e-table">
                                 <div class="table-responsive table-lg">
                                     <table class="table table-bordered mb-0">
                                         <thead>
                                         <tr>
-                                            <th >일자</th>
-                                            <th >대상</th>
-                                            <th >제목</th>
-                                            <th >내용</th>
-                                            <th >비고</th>
+                                            <th style="width: 20%">일자</th>
+                                            <th style="width: 15%">대상</th>
+                                            <th style="width: 20%">제목</th>
+                                            <th style="width: 35%">내용</th>
+                                            <th style="width: 10%">비고</th>
                                         </tr>
                                         </thead>
                                         <tbody id="tbody_notice_list">
@@ -234,6 +234,7 @@
 
                 if(setv==='noticeinner'){
                     $('#send_message_button').css({'display':'none'});
+                    getMessageList();
                 }
                 else{
                     $('#send_message_button').css({'display':'inline-block'});
@@ -330,7 +331,7 @@
 
         function searchUserInfo() {
             $.ajax({
-                url: '/admin.messageUser',
+                url: '/user.messageUser',
                 data: {
                     start: pstart,
                     count:pcount,
@@ -431,7 +432,121 @@
                         });
                     }
                     else {
-                        $('#tbody_day_driving_list').html('');
+                        $('#tbody_user_list').html('');
+                    }
+                },
+                error: function (jqXHR, errdata, errorThrown) {
+                    console.log(errdata);
+                }
+            });
+        }
+
+        function getMessageList() {
+            $.ajax({
+                url: '/user.messageList',
+                data: {
+                    start: pstart,
+                    count:pcount
+                },
+                type: 'POST',
+                success: function (data) {
+                    if (data.msg === "ok") {
+                        $('#tbody_notice_list').html('');
+
+                        let lists = data.lists;
+                        pstart = parseInt(data.start);
+                        let totalpage = parseInt(data.totalpage);
+                        let tags = '';
+
+                        for (let i = 0; i < lists.length; i++) {
+                            let list = lists[i];
+                            let create_date = list.create_date;
+                            let user_name = list.user_name || '전체';
+                            let title = list.title || '';
+                            let content = list.content || '';
+
+                            tags += '<tr>';
+                            tags += '<td class="text-nowrap align-middle">' + create_date + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + user_name + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + title + '</td>';
+                            tags += '<td class="text-nowrap align-middle">' + content + '</td>';
+                            tags += '<td class="text-nowrap align-middle"></td>';
+                            tags += '</tr>';
+                        }
+                        $('#tbody_notice_list').html(tags);
+
+                        let nav_tag='';
+                        nav_tag+='<nav aria-label="..." class="mb-4">';
+                        nav_tag+='<ul class="pagination float-right">';
+
+                        let disble="";
+                        if(pstart===1)
+                            disble="disabled"
+
+                        let prenum= pstart - 1;
+
+                        nav_tag+='<li class="page-item  '+disble+' ">';
+                        nav_tag+='<a class="page-link" href="#"  id="page_nav_number_' + prenum + '" >';
+                        nav_tag+='<i class="ti-angle-left"></i>';
+                        nav_tag+='</a>';
+                        nav_tag+='</li>';
+
+                        pnum = pstart <= numg ? 1 : prenum;
+
+                        for(let idx = 0; idx < numg; idx++)
+                        {
+                            let actv="";
+                            let aria_current='';
+                            let spantag='';
+                            let oid='';
+
+                            if(pnum===pstart)
+                            {
+                                actv='active';
+                                aria_current='aria-current="page"';
+                                spantag='<span class="sr-only">(current)</span>';
+                            }
+                            else
+                                oid="page_nav_number_" + pnum;
+
+                            nav_tag+='<li class="page-item ' + actv + '"  ' + aria_current + '>';
+                            nav_tag+='<a class="page-link" id="' + oid + '"  href="#" >' + pnum + '  ' + spantag + '</a>';
+                            nav_tag+='</li>';
+
+                            if(pnum===totalpage) break;
+                            pnum = pnum + 1;
+                        }
+                        let nextnum= parseInt(pstart) + 1;
+
+                        let edisble="";
+                        if(pstart===totalpage)
+                            edisble="disabled";
+
+                        nav_tag+='<li class="page-item '+edisble+' ">';
+                        nav_tag+='<a class="page-link" id="page_nav_number_' + nextnum + '" href="#">';
+                        nav_tag+='<i class="ti-angle-right"></i>';
+                        nav_tag+='</a>';
+                        nav_tag+='</li>';
+
+                        nav_tag+='</ul>';
+                        nav_tag+='</nav>';
+
+                        $('#page_nav_container').html(nav_tag);
+
+                        $('tr[class="select_tr"]').click(function(){
+                            let user_id = $(this).attr("data-id");
+                            selectUser(user_id);
+                        });
+
+
+                        $('a[id^="page_nav_number_"]').click(function(){
+                            let oid=$(this).attr("id");
+                            pstart=oid.split('_')[3];
+                            searchUserInfo();
+                        });
+                    }
+                    else {
+                        $('#tbody_notice_list').html('');
                     }
                 },
                 error: function (jqXHR, errdata, errorThrown) {

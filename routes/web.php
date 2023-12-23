@@ -41,87 +41,102 @@ Route::middleware('adminsession')->group(function(){
         return view('admin.personinfo');
     });
 
-    Route::post('admin.getDayDrivingList', 'CompanyController@getDayDrivingList');
-    Route::post('admin.getUserList', 'UserController@getUserList');
-    Route::post('admin.getCompanyName', 'UserController@getCompanyName');
-    Route::post('admin.getUserinInfo', 'UserController@getUserinInfo');
-    Route::post('admin.everyInfo', 'CompanyController@getEveryDrivingInfo');
-
     Route::group([
         'middleware' => 'jwt.verify',
     ], function() {
-        Route::post('admin.logout', [JWTAdminAuthController::class, 'logout']);
-        Route::post('admin.refresh', [JWTAdminAuthController::class, 'refresh']);
-        Route::get('admin.profile', [JWTAdminAuthController::class, 'profile']);
+        Route::post('admin.logout', 'JWTAdminAuthController@logout');
+        Route::post('admin.refresh', 'JWTAdminAuthController@refresh');
+        Route::get('admin.profile', 'JWTAdminAuthController@profile');
 
-        Route::post('admin.getDashboardInfo', 'AdminController@getDashboardInfo');
+        Route::post('admin.getDayDrivingList', 'CompanyController@getDayDrivingList');
+        Route::post('admin.getUserList', 'UserController@getUserList');
+        Route::post('admin.getCompanyName', 'UserController@getCompanyName');
+        Route::post('admin.getUserinInfo', 'UserController@getUserinInfo');
+        Route::post('admin.everyInfo', 'CompanyController@getEveryDrivingInfo');
+
+        Route::post('user.sendMessage', 'NoticeController@sendMessageUsers');
+        Route::post('admin.messageUser', 'NoticeController@getMessageUserList');
+
     });
-//----------------------------------------------------
-// driver info
-//----------------------------------------------------
-
-
-//-----------------------------------------------------
-// Notice part
-//-----------------------------------------------------
-    Route::post('user.sendMessage', 'NoticeController@sendMessageUsers');
-    Route::post('admin.messageUser', 'NoticeController@getMessageUserList');
-
 }); // end adminsession
 
 //-----------------------------------------------------
 // Admin part without adminsession
 //-----------------------------------------------------
+Route::view('admin.findPasswordView', 'admin.find-password-view');
+Route::view('admin.signupCorporateView', 'admin.signup-corporate-view');
 
 Route::get('admin', function () { return redirect('admin.login');});
 Route::post('admin.register', 'JWTAdminAuthController@Register');
 Route::post('admin.adminLogin', 'JWTAdminAuthController@login');
 
-//Route::post('admin.adminLogout', 'AdminController@adminLogout');
 Route::post('admin.getUserRegNum', 'AdminController@getUserRegisterNumber');
 Route::post('admin.regNewPwd', 'AdminController@registerNewPassword');
 
 Route::group([
     'middleware' => 'jwt.verify'
 ], function() {
+    /***
+     * admin part
+     */
     Route::post('admin.get_user', 'JWTAdminAuthController@get_user');
+
+    Route::post('admin.getDashboardInfo', 'AdminController@getDashboardInfo');
+    Route::post('admin.getCompanyList', 'CompanyController@getCompanyList');
+    Route::post('admin.addNewCompany', 'CompanyController@addNewCompany');
+    Route::post('admin.getCompanyinInfo', 'CompanyController@getCompanyinInfo');
+    Route::post('admin.editCompanyInfo', 'CompanyController@editCompanyInfo');
+    Route::post('admin.companyDelete', 'CompanyController@companyDelete');
+    Route::post('admin.companyActive', 'CompanyController@companyActive');
+    Route::post('admin.companyCertify', 'CompanyController@companyCertify');
+    Route::post('admin.showCompanyInfo', 'CompanyController@showCompanyInfo');
+
+    // person part
+    Route::post('admin.addNewUserInfo', 'UserController@addNewUserInfo');
+    Route::post('admin.editUserInfo', 'UserController@editUserInfo');
+    Route::post('admin.userDelete', 'UserController@userDelete');
+    Route::post('admin.showUserInfo', 'UserController@showUserInfo');
+    Route::post('admin.userActive', 'UserController@setUserActive');
+    Route::post('admin.userCertify', 'UserController@setUserCertify');
+
+    Route::get('admin.user-driver-info', 'CompanyController@getSearchUserDriverInfo');
+    Route::get('admin.user-driver-info/{search}', 'CompanyController@getSearchUserDriverInfo');
 });
 
-
-//Route::post('admin.adminRegister', 'AdminController@adminRegister');
-//Route::post('admin.adminDelete', 'AdminController@adminDelete');
-//Route::post('admin.getAdminInformation', 'AdminController@getAdminInformation');
-//Route::post('admin.editAdminInformation', 'AdminController@editAdminInformation');
+/********************************************************************************************************************/
 
 
-//---------------------------------------------------
-// admin part
-//---------------------------------------------------
-Route::view('admin.findPasswordView', 'admin.find-password-view');
-Route::post('admin.getSignNumber', 'AdminController@getSignNumber');
-Route::view('admin.signupCorporateView', 'admin.signup-corporate-view');
-Route::post('admin.corporateSignup', 'AdminController@corporateSignup');
+/***
+ * mobile
+*/
+Route::post('mobile.register', 'JWTMobileAuthController@register'); //  /mobile/auth/register
+Route::post('mobile.login', 'JWTMobileAuthController@login');
+Route::post('mobile.companyInfo', 'CallAPIController@requestCompanyInfo');
 
-//---------------------------------------------------
-// company part
-//---------------------------------------------------
-Route::post('admin.getCompanyList', 'CompanyController@getCompanyList');
-Route::post('admin.addNewCompany', 'CompanyController@addNewCompany');
-Route::post('admin.getCompanyinInfo', 'CompanyController@getCompanyinInfo');
-Route::post('admin.editCompanyInfo', 'CompanyController@editCompanyInfo');
-Route::post('admin.companyDelete', 'CompanyController@companyDelete');
-Route::post('admin.companyActive', 'CompanyController@companyActive');
-Route::post('admin.companyCertify', 'CompanyController@companyCertify');
-Route::post('admin.showCompanyInfo', 'CompanyController@showCompanyInfo');
-//---------------------------------------------------
-// person part
-//---------------------------------------------------
-Route::post('admin.addNewUserInfo', 'UserController@addNewUserInfo');
-Route::post('admin.editUserInfo', 'UserController@editUserInfo');
-Route::post('admin.userDelete', 'UserController@userDelete');
-Route::post('admin.showUserInfo', 'UserController@showUserInfo');
-Route::post('admin.userActive', 'UserController@setUserActive');
-Route::post('admin.userCertify', 'UserController@setUserCertify');
+Route::group([
+    'middleware' => 'jwt.verify'
+], function() {
+    Route::post('mobile.get_user', 'JWTMobileAuthController@get_user');
+    Route::post('mobile.userLogin', 'CallAPIController@requestUserLogin');
+    Route::post('mobile.userSignup', 'CallAPIController@requestUserSignup');
+    Route::post('mobile.userInfoModify', 'CallAPIController@requestUserInfoModify');
+    Route::post('mobile.regCarInfo', 'CallAPIController@requestRegCarInfo');
+    Route::post('mobile.listCarInfo', 'CallAPIController@requestListCarInfo');
+    Route::post('mobile.modCarInfo', 'CallAPIController@requestModCarInfo');
+    Route::post('mobile.delCarInfo', 'CallAPIController@requestDelCarInfo');
+    Route::post('mobile.readDriving', 'CallAPIController@requestReadDrivingInfo');
+    Route::post('mobile.saveDriving', 'CallAPIController@requestSaveDrivingInfo');
+    Route::post('mobile.ranking', 'CallAPIController@requestRankingInfo');
+    Route::post('mobile.drivingRanking', 'CallAPIController@requestDrivingRankingInfo');
+    Route::post('mobile.messageList', 'CallAPIController@requestMessageListInfo');
+    Route::post('mobile.newpassword', 'CallAPIController@requestNewPasswordInfo');
+
+});
+/********************************************************************************************************************/
+
+//Route::post('admin.getSignNumber', 'AdminController@getSignNumber');
+//Route::post('admin.corporateSignup', 'AdminController@corporateSignup');
+
 
 //----------------------------------------------------
 // driver info
@@ -129,15 +144,6 @@ Route::post('admin.userCertify', 'UserController@setUserCertify');
 Route::get('admin.day-driver-info', function () {
     return view('admin.day-driver-info');
 });
-/*
-Route::get('admin.user-driver-info', function () {
-    return view('admin.user-driver-info');
-});
-*/
-Route::get('admin.user-driver-info', 'CompanyController@getSearchUserDriverInfo');
-Route::get('admin.user-driver-info/{search}', 'CompanyController@getSearchUserDriverInfo');
-
-
 
 //-----------------------------------------------------
 // Notice part
@@ -145,7 +151,7 @@ Route::get('admin.user-driver-info/{search}', 'CompanyController@getSearchUserDr
 Route::view('user.notice', 'user.notice-view');
 
 
-include ('mobile.php');
+//include ('mobile.php');
 Route::get('/{page}', 'AdminController@index'); // don't call this part for mobile.php route
 // Route::get('/{page}', 'AdminController@index')->where('page', '!(^[mobile.]?)');
 

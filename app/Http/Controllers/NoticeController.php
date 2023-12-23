@@ -167,5 +167,34 @@ class NoticeController extends BaseController
         exit();
     }
 
+    public function getAllMessageList(Request  $request) {
+        $admin_id = $request->session()->get('admin_id');
+        $user_type = $request->session()->get('user_type');
+        $start  = $request->post('start');
+        $count    = $request->post('count');
+        $start_from = ($start-1) * $count;
 
+        $sql = "SELECT a.create_date, a.type, b.user_type, b.company_name, c.user_name, a.title, a.content ";
+        $sql .= "FROM tb_notice AS a ";
+        $sql .= "LEFT JOIN tb_admin_info AS b ON a.from_user_id = b.admin_id ";
+        $sql .= "LEFT JOIN tb_user_info AS c ON a.type_id = c.user_id ";
+
+        $lim_sql = $sql.' LIMIT '.$start_from.', '.$count;
+
+        $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($lim_sql));
+        $total_rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
+        $total = count($total_rows);
+        $total_page = ceil($total / $count);
+
+        if($rows != null){
+            return \Response::json([
+                'msg' => 'ok',
+                'total' => $total,
+                'start' => $start,
+                'totalpage' => $total_page,
+                'lists' => $rows
+            ]);
+        }
+        exit();
+    }
 }

@@ -67,41 +67,35 @@
         let pnum = pstart;
         let pcount=5;
         let numg = 5;
-
-        function getDashboardInfo() {
-            $.ajax({
-                url: 'admin.getDashboardInfo',
-                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
-                type: 'POST',
-                success: function (data) {
-                    $('#total_users').text('');
-                    $('#day_new_users').text('');
-                    $('#day_visit_users').text('');
-                    $('#total_companys').text('');
-                    $('#other_users').text('');
-
-                    console.log(data.msg);
-                    if (data.msg === "ok") {
-                        $('#total_users').text(data.total_users);
-                        $('#day_new_users').text(data.new_users);
-                        $('#day_visit_users').text(data.visit_users);
-                        $('#total_companys').text(data.total_companys);
-                    }
-                },
-                error: function (jqXHR, errdata, errorThrown) {
-                    if(jqXHR['responseJSON']) {
-                        console.log(jqXHR['responseJSON']['message']);
-                        console.log(jqXHR['responseJSON']['file']);
-                    }
-                    else {
-                        console.log(jqXHR['responseText'] ?? errdata);
-                    }
-                }
-            });
-        }
-
         $(document).ready(function () {
             getDashboardInfo();
+
+            function getDashboardInfo() {
+                $.ajax({
+                    url: 'admin.getDashboardInfo',
+                    headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
+                    type: 'POST',
+                    success: function (data) {
+                        $('#total_users').text('');
+                        $('#day_new_users').text('');
+                        $('#day_visit_users').text('');
+                        $('#total_companys').text('');
+                        $('#other_users').text('');
+
+                        console.log(data.msg);
+                        if (data.msg === "ok") {
+                            $('#total_users').text(data.total_users);
+                            $('#day_new_users').text(data.new_users);
+                            $('#day_visit_users').text(data.visit_users);
+                            $('#total_companys').text(data.total_companys);
+                        }
+                    },
+                    error: function (jqXHR, errdata, errorThrown) {
+                        console.log(jqXHR['responseText'] ?? errdata);
+                    }
+                });
+            }
+
         });
 
     </script>

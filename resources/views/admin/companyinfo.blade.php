@@ -466,6 +466,7 @@
 
             $.ajax({
                 url: 'admin.getCompanyinInfo',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     admin_id:id,
                 },
@@ -516,6 +517,7 @@
             $('#info_company_email').text('');
             $.ajax({
                 url: 'admin.showCompanyInfo',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     admin_id:adminid
                 },
@@ -542,6 +544,7 @@
         function getCompanyList() {
             $.ajax({
                 url: 'admin.getCompanyList',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     start: pstart,
                     count:pcount,
@@ -869,6 +872,7 @@
 
             $.ajax({
                 url: 'admin.addNewCompany',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -1068,6 +1072,7 @@
 
             $.ajax({
                 url: 'admin.editCompanyInfo',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -1096,6 +1101,7 @@
                 return;
             $.ajax({
                 url: 'admin.companyDelete',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     admin_id:id,
                 },
@@ -1114,6 +1120,7 @@
         function certifyCompany(id, status) {
             $.ajax({
                 url: 'admin.companyCertify',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     admin_id:id,
                     certify : status
@@ -1135,6 +1142,7 @@
         function activeCompany(id, status) {
             $.ajax({
                 url: 'admin.companyActive',
+                headers: {'Authorization': `Bearer ${window.localStorage.authToken}`},
                 data: {
                     admin_id:id,
                     active : status

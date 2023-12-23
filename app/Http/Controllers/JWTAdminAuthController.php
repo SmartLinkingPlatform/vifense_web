@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 //use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\JWTAuth;
 use App\User;
 use Illuminate\Support\Facades\Hash;
@@ -128,9 +129,11 @@ class JWTAdminAuthController extends BaseController
                 'actived' => 0, // 1 이면 액티브 , 0 이면 디액티브
             ];
 
-            $user = User::create($new_user);
+            $tb_admin = 'tb_admin_info';
+            $success = DB::table($tb_admin)->insert($new_user);
+            //$user = User::create($new_user);
 
-            if ($user) {
+            if ($success) {
                 return \Response::json([
                     'msg' => 'ok',
                     'cont' => 'created user'
@@ -141,7 +144,7 @@ class JWTAdminAuthController extends BaseController
                     'cont' => 'user is not created'
                 ]);
             }
-        }catch(\Exception $e) {
+        } catch(\Exception $e) {
             return \Response::json([
                 'msg' => 'err',
                 'cont'=>$e->getMessage(),
@@ -171,7 +174,7 @@ class JWTAdminAuthController extends BaseController
         }
 
         try {
-            if(!$token = auth()->guard('admin')->attempt($validator->validated())){
+            if(!$token = auth('admin')->attempt($validator->validated())){
                 return response()->json(['msg'=>'Unauthorized user login attempt']);
             }
         } catch (JWTException $e) {
@@ -188,7 +191,7 @@ class JWTAdminAuthController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function profile(){
-        return response()->json(auth()->guard('admin')->user());
+        return response()->json(auth('admin')->user());
     }
 
     /**
@@ -206,7 +209,7 @@ class JWTAdminAuthController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function refresh(){
-        return $this->createNewToken(auth()->guard('admin')->refresh());
+        return $this->createNewToken(auth('admin')->refresh());
     }
 
 
@@ -216,7 +219,7 @@ class JWTAdminAuthController extends BaseController
             'msg'=>'ok',
             'access_token'=>$token,
             'token_type'=>'bearer',
-            'expires_in'=>auth()->guard('admin')->factory()->getTTL()
+            'expires_in'=>auth('admin')->factory()->getTTL()
         ]);
     }
 
@@ -229,7 +232,7 @@ class JWTAdminAuthController extends BaseController
             'token' => 'required'
         ]);
         try {
-            $user = auth()->guard('admin')->authenticate($request->token);
+            $user = auth('admin')->authenticate($request->token);
             if($user){
                 $updated_at = @date("Y-m-d h:i:s", time());
 

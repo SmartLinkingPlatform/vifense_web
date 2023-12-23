@@ -424,7 +424,7 @@
                 form_data.append('corporate_doc_file', corporate_doc_file);
 
                 $.ajax({
-                    url: '/api/admin/register',
+                    url: 'admin.register',
                     //url: 'admin.corporateSignup',
                     // dataType: 'text',  // what to expect back from the PHP script, if anything
                     cache: false,
