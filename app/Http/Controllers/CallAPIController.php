@@ -553,10 +553,10 @@ class CallAPIController extends BaseController
             $idx_mieage = 0; //월 주행거리 순위
             $total_mileage = 0; //월 총 주행거리
             $sql = "SELECT ";
-            $sql .= "user_id, SUM(mileage) AS mileage ";
+            $sql .= "user_id, SUM(mileage) AS mileage, car_id ";
             $sql .= "FROM " . $tb_driving_info . " ";
             $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '" . substr($driving_date, 0, 6) . "' ";
-            $sql .= "GROUP BY user_id ORDER BY mileage DESC";
+            $sql .= "GROUP BY user_id, car_id ORDER BY mileage DESC";
 
             $idx = 0;
             $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
@@ -567,7 +567,7 @@ class CallAPIController extends BaseController
             } else {
                 foreach ($rows as $row) {
                     $idx++;
-                    if ($row->user_id == $user_id) {
+                    if ($row->user_id == $user_id && $row->car_id == $car_id) {
                         $idx_mieage = $idx;
                         $total_mileage = $row->mileage;
                         break;
@@ -578,10 +578,10 @@ class CallAPIController extends BaseController
             //안전 운전 랭킹
             $idx_safety = 0; //월 안전운전 순위
             $sql = "SELECT ";
-            $sql .= "user_id, SUM(driving_score)/COUNT(user_id) AS driving_score ";
+            $sql .= "user_id, SUM(driving_score)/COUNT(user_id) AS driving_score, car_id ";
             $sql .= "FROM " . $tb_driving_info . " ";
             $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '" . substr($driving_date, 0, 6) . "' ";
-            $sql .= "GROUP BY user_id ORDER BY driving_score DESC";
+            $sql .= "GROUP BY user_id, car_id ORDER BY driving_score DESC";
 
             $idx = 0;
             $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
@@ -592,7 +592,7 @@ class CallAPIController extends BaseController
             } else {
                 foreach ($rows as $row) {
                     $idx++;
-                    if ($row->user_id == $user_id) {
+                    if ($row->user_id == $user_id && $row->car_id == $car_id) {
                         $idx_safety = $idx;
                         break;
                     }
