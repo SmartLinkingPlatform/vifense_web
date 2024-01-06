@@ -146,15 +146,9 @@ class CallAPIController extends BaseController
                             'update_date' => $update_date
                         ]
                     );
-                if ($success) {
-                    return \Response::json([
-                        'msg' => 'ok'
-                    ]);
-                } else {
-                    return \Response::json([
-                        'msg' => 'err'
-                    ]);
-                }
+                return \Response::json([
+                    'msg' => 'ok'
+                ]);
             }
         } else{
             return response()->json([
@@ -319,15 +313,9 @@ class CallAPIController extends BaseController
                             'car_gas' => $car_gas
                         ]
                     );
-                if ($success) {
-                    return \Response::json([
-                        'msg' => 'ok'
-                    ]);
-                } else {
-                    return \Response::json([
-                        'msg' => 'err'
-                    ]);
-                }
+                return \Response::json([
+                    'msg' => 'ok'
+                ]);
             } else {
                 return \Response::json([
                     'msg' => 'noExist'
@@ -375,7 +363,7 @@ class CallAPIController extends BaseController
         exit();
     }
 
-    //모바일에서 서버로 오는 차량 주행 정보
+    //모바일   에서 서버로 오는 차량 주행 정보
     public function requestSaveDrivingInfo(Request $request)
     {
         $token = $request->header('authorization');
@@ -720,15 +708,9 @@ class CallAPIController extends BaseController
                     ]
                 );
 
-            if ($success) {
-                return \Response::json([
-                    'msg' => 'ok'
-                ]);
-            } else {
-                return \Response::json([
-                    'msg' => 'err'
-                ]);
-            }
+            return \Response::json([
+                'msg' => 'ok'
+            ]);
         } else {
             return response()->json([
                 'msg' => 'err',
