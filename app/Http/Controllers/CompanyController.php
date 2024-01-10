@@ -503,7 +503,7 @@ class CompanyController extends BaseController
                 foreach($rows as $row) {
                     $user_id = $row->user_id;
                     if ($temp_id != $user_id) {
-                        if ($cnt > 0) {
+                        if ($cnt > 0 && ($temp_phone !== "" && $temp_phone !== null)) {
                             $item = array(
                                 'phone' => $temp_phone,
                                 'company' => $temp_company,
@@ -559,7 +559,7 @@ class CompanyController extends BaseController
                         $fast_cnt += $row->fast_speed_cnt;
                         $fast_time += $row->fast_speed_time;
                     }
-                    if ($cnt == count($total_rows) - 1) {
+                    if ($cnt == count($total_rows) - 1 && $row->user_phone != null) {
                         $item = array(
                             'phone' => $row->user_phone,
                             'company' => $row->company_name,
