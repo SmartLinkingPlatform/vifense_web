@@ -500,10 +500,6 @@ class CallAPIController extends BaseController
                                 'msg_content' => $row->content
                             );
                             array_push($datas, $data);
-                        } else {
-                            return \Response::json([
-                                'msg' => 'noadmin'
-                            ]);
                         }
                     }
                     return \Response::json([
