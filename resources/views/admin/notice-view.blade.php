@@ -534,18 +534,12 @@
                         nav_tag+='</ul>';
                         nav_tag+='</nav>';
 
-                        $('#page_nav_container').html(nav_tag);
-
-                        $('tr[class="select_tr"]').click(function(){
-                            let user_id = $(this).attr("data-id");
-                            selectUser(user_id);
-                        });
-
+                        $('#page_nav_container_list').html(nav_tag);
 
                         $('a[id^="page_nav_number_"]').click(function(){
                             let oid=$(this).attr("id");
                             pstart=oid.split('_')[3];
-                            searchUserInfo();
+                            getMessageList();
                         });
                     }
                     else {

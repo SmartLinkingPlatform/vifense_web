@@ -117,6 +117,25 @@ class CallAPIController extends BaseController
         exit();
     }
 
+    //약관 파일 경로
+    public function requestTermsUrl()
+    {
+        $table_info = 'tb_upload_file';
+        $row = DB::table($table_info)->first();
+
+        if ($row == null) {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        } else {
+            return \Response::json([
+                'msg' => 'ok',
+                'path' => $row->path,
+            ]);
+        }
+        exit();
+    }
+
     //모바일 회원 정보 수정
     public function requestUserInfoModify(Request $request)
     {

@@ -122,6 +122,7 @@ Route::get('admin.user-driver-info/{search}', 'CompanyController@getSearchUserDr
 Route::post('mobile.register', 'JWTMobileAuthController@register'); //  /mobile/auth/register
 Route::post('mobile.login', 'JWTMobileAuthController@login');
 Route::post('mobile.companyInfo', 'CallAPIController@requestCompanyInfo');
+Route::post('mobile.termsUrl', 'CallAPIController@requestTermsUrl');
 
 Route::group([
     'middleware' => 'jwt.verify'

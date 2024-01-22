@@ -172,6 +172,7 @@ class UserController extends BaseController
         $user_email = $request->post('user_email');
         $password = $request->post('password');
         $admin_id = $request->post('admin_id');
+        date_default_timezone_set('Asia/Seoul');
         $create_date = date("Y-m-d h:i:s", time());
 
         $cnt = DB::table($this->tb_user_info)->where('user_phone', $smart_phone)->doesntExist();
@@ -188,7 +189,7 @@ class UserController extends BaseController
                     'user_phone' => $smart_phone,
                     'user_name' => $user_name,
                     'user_email' => $user_email,
-                    'user_pwd' => $password,
+                    'password' => $password,
                     'admin_id' => $admin_id,
                     'create_date' => $create_date,
                     'update_date' => '',
@@ -252,6 +253,7 @@ class UserController extends BaseController
         $enc_password = Hash::make($password);
         $admin_id = $request->post('admin_id');
         $user_id = $request->post('user_id');
+        date_default_timezone_set('Asia/Seoul');
         $update_date = date("Y-m-d h:i:s", time());
 
         $success = DB::table($this->tb_user_info)->where('user_id', $user_id)
@@ -260,7 +262,7 @@ class UserController extends BaseController
                     'user_phone' => $smart_phone,
                     'user_name' => $user_name,
                     'user_email' => $user_email,
-                    'user_pwd' => $enc_password,
+                    'password' => $enc_password,
                     'admin_id' => $admin_id,
                     'update_date' => $update_date,
                     'certifice_status' => '1',

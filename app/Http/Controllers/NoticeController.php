@@ -92,6 +92,7 @@ class NoticeController extends BaseController
         $text_val = $request->post('text_val');
         $to_notices = $request->post('to_notices') ?? '';
         $type_id = $request->post('type_id') ?? '';
+        date_default_timezone_set('Asia/Seoul');
         $create_date = date("Y-m-d h:i:s", time());
         $admin_id = $request->session()->get('admin_id');
 
@@ -177,7 +178,7 @@ class NoticeController extends BaseController
         $sql = "SELECT a.create_date, a.type, b.user_type, b.company_name, c.user_name, a.title, a.content ";
         $sql .= "FROM tb_notice AS a ";
         $sql .= "LEFT JOIN tb_admin_info AS b ON a.from_user_id = b.admin_id ";
-        $sql .= "LEFT JOIN tb_user_info AS c ON a.type_id = c.user_id ";
+        $sql .= "LEFT JOIN tb_user_info AS c ON a.type_id = c.user_id ORDER BY a.notice_id DESC ";
 
         $lim_sql = $sql.' LIMIT '.$start_from.', '.$count;
 
@@ -200,9 +201,28 @@ class NoticeController extends BaseController
 
     public function uploadHtmlFile(Request $request){
         $uploadfile_html = $request->file('uploadfile_html');
+        $url = $_SERVER[ "HTTP_HOST" ];
         if($uploadfile_html != null && $uploadfile_html != ''){
             $new_name = 'terms.'.$uploadfile_html->getClientOriginalExtension();
             $uploadfile_html->move(public_path(''), $new_name);
+        }
+        $url .= '/'.$new_name;
+        $rows =DB::table('tb_upload_file')->first();
+        if($rows == null){
+            $success = DB::table('tb_upload_file')
+                ->insert(
+                    [
+                        'path' => $url
+                    ]
+                );
+        }
+        else{
+            $success = DB::table('tb_upload_file')
+                ->update(
+                    [
+                        'path' => $url
+                    ]
+                );
         }
 
         return \Response::json([

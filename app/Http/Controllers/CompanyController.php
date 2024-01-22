@@ -130,6 +130,7 @@ class CompanyController extends BaseController
         $corporate_name = $request->post('corporate_name');
         $company_phone = $request->post('company_phone');
         $date_string = $request->post('create_date');
+        date_default_timezone_set('Asia/Seoul');
         $current_time = date("Y-m-d h:i:s", time());
         $company_manager = $request->post('company_manager');
         $car_count = $request->post('car_count');
@@ -261,6 +262,7 @@ class CompanyController extends BaseController
         $corporate_name = $request->post('corporate_name');
         $company_phone = $request->post('company_phone');
         $date_string = $request->post('create_date');
+        date_default_timezone_set('Asia/Seoul');
         $current_time = date("Y-m-d h:i:s", time());
         $company_manager = $request->post('company_manager');
         $car_count = $request->post('car_count');
