@@ -199,7 +199,7 @@ class AdminController extends BaseController
         $success = DB::table($this->tb_admin_info)->where('user_phone', $user_phone)
             ->update(
                 [
-                    'user_pwd' => $enc_password
+                    'password' => $enc_password
                 ]
             );
 

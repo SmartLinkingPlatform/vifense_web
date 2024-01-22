@@ -147,7 +147,7 @@ class UserController extends BaseController
         $user_type = $request->session()->get('user_type');
 
         $sql = "SELECT admin_id, company_name FROM tb_admin_info ";
-        $sql .= " WHERE user_type < 1 ";
+        $sql .= " WHERE user_type < 1 AND actived = 1 ";
         if ($user_type == 0) {
             $sql .= " AND admin_id = ".$admin_id;
         }
@@ -222,7 +222,7 @@ class UserController extends BaseController
         $dec_password = "";
 
         $sql = "SELECT admin_id, company_name FROM tb_admin_info ";
-        $sql .= " WHERE user_type < 1 ";
+        $sql .= " WHERE user_type < 1 AND actived = 1 ";
         if ($user_type == 0) {
             $sql .= " AND admin_id = ".$admin_id;
         }

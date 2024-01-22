@@ -136,7 +136,7 @@ class CompanyController extends BaseController
         //$corporate_photo_file = $request->file('corporate_photo_file');
         $corporate_doc_file = $request->file('corporate_doc_file');
         //$corporate_photo_name = '';
-        $corporate_doc_name = '';
+        $corporate_doc_name = "''";
 
         if ($date_string === null || $date_string ==='') {
             $create_date = date('Y-m-d',$current_time);
@@ -157,7 +157,7 @@ class CompanyController extends BaseController
             $corporate_photo_name = $corporate_photo_file->getClientOriginalName();
         }*/
 
-        $corporate_doc_url='';
+        $corporate_doc_url="''";
         $randNum = rand(1, 9);
         $order_number = $file_currentTime.$randNum;
         if($corporate_doc_file != null && $corporate_doc_file != ''){
@@ -183,10 +183,10 @@ class CompanyController extends BaseController
                 ->insert(
                     [
                         'user_phone' => $smart_phone, // 아이디
-                        'user_pwd' => $enc_password, // 암호
+                        'password' => $enc_password, // 암호
                         'user_name' => $corporate_name, // 대표자 성명
-                        'user_email' => '', // 이메일
-                        'user_birthday' => '',
+                        'user_email' => "''", // 이메일
+                        'user_birthday' => "''",
 
                         'user_address' => $user_address, // 사용자 주소
                         //'user_photo' => $corporate_photo_name, // 사용자사진 이름
@@ -196,10 +196,10 @@ class CompanyController extends BaseController
 
                         'company_name' => $corporate_company_name, // 상호(회사이름)
                         'company_phone' => $company_phone, // 회사 전화번호
-                        'company_address' => '', // 회사 주소
+                        'company_address' => "''", // 회사 주소
 
                         'manager_name' => $company_manager, // 담당자 이름
-                        'manager_phone' => '', // 담당자 전화번호
+                        'manager_phone' => "''", // 담당자 전화번호
 
                         'certified_copy' => $corporate_doc_url, // 등록증 사본
                         'certifice_status' => 0, // 인증여부 1: 인증됨, 0: 안됨

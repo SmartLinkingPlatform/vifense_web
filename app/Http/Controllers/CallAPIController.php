@@ -102,7 +102,7 @@ class CallAPIController extends BaseController
     public function requestCompanyInfo()
     {
         $table_info = 'tb_admin_info';
-        $rows = DB::table($table_info)->where('user_type', '0')->get();
+        $rows = DB::table($table_info)->where('user_type', '0')->where('actived', '1')->get();
 
         if ($rows == null) {
             return \Response::json([
@@ -363,7 +363,7 @@ class CallAPIController extends BaseController
         exit();
     }
 
-    //모바일   에서 서버로 오는 차량 주행 정보
+    //모바일에서 서버로 오는 차량 주행 정보
     public function requestSaveDrivingInfo(Request $request)
     {
         $token = $request->header('authorization');
@@ -703,7 +703,7 @@ class CallAPIController extends BaseController
             $success = DB::table($tb_info)->where('user_phone', $user_id)
                 ->update(
                     [
-                        'user_pwd' => $user_pwd,
+                        'password' => $user_pwd,
                         'update_date' => $update_date
                     ]
                 );
