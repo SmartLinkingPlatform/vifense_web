@@ -54,11 +54,13 @@
                                 <i class="side-menu__icon fa fa-newspaper-o"></i><span class="side-menu__label">공지 사항</span>
                             </a>
                         </li>
-                        <li>
-                            <a class="side-menu__item" href="{{ url('/' . $page='admin.fileupload') }}">
-                                <i class="side-menu__icon fa fa-file"></i><span class="side-menu__label">업로드 html</span>
-                            </a>
-                        </li>
+                        @if (Session::get('user_type') == '1')
+                            <li>
+                                <a class="side-menu__item" href="{{ url('/' . $page='admin.fileupload') }}">
+                                    <i class="side-menu__icon fa fa-file"></i><span class="side-menu__label">업로드 html</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </aside>
 <!--/APP-SIDEBAR-->

@@ -30,7 +30,12 @@
                                     <div id="uploadfile_btn" class="btn form-control d-flex justify-content-center align-items-center" style="padding: 0 20px 0 20px" type="text" >파일 찾기</div>
                                 </div>
                             </div>
-
+                            <div class="form-group row d-flex">
+                                <div class="col-md-4 pl-3"></div>
+                                <div class="col-md-8 d-flex flex-row">
+                                    <div id="uploadfile_name" class="d-flex justify-content-center align-items-center" type="text" ></div>
+                                </div>
+                            </div>
                             <div class="modal-footer text-center" style="height: auto; justify-content: center;">
                                 <div class="">
                                     <div class="btn btn-success text-center" id="button_upload" style="width: 80px;">
@@ -53,11 +58,36 @@
 @section('js')
 
     <script>
+        let html_file_name = "";
+
+        function get_uploaded_file() {
+            $.ajax({
+                url: 'admin.uploadedFile',
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function (data) {
+                    if (data.msg === 'ok') {
+                        $('#uploadfile_name').text(data.orig_file);
+                    } else {
+                        $('#uploadfile_name').text('');
+                    }
+                },
+                error: function (jqXHR, errdata, errorThrown) {
+                    console.log(errdata);
+                }
+            });
+        }
+
         $(document).ready(function () {
+            get_uploaded_file();
+
             $('#button_upload').click(function(){
                 let uploadfile_html =  $('#uploadfile_html').prop('files')[0];
                 let form_data = new FormData();
                 form_data.append('uploadfile_html', uploadfile_html);
+                form_data.append('orig_file', html_file_name);
 
                 $.ajax({
                     url: 'admin.htmlFile',
@@ -71,6 +101,7 @@
                             $('#uploadfile_html').val('');
                             $('#uploadfile_btn').text('파일 찾기');
                             $('#old_uploadfile_url').val('');
+                            $('#uploadfile_name').text(html_file_name);
                         }
                     },
                     error: function (jqXHR, errdata, errorThrown) {
@@ -86,7 +117,7 @@
             $('input[id="uploadfile_html"]').change(function(){
                 if (this.files && this.files[0])
                 {
-                    let html_file_name = this.files[0].name;
+                    html_file_name = this.files[0].name;
                     let reader = new FileReader();
                     reader.onload = function(e) {
                         $('#uploadfile_btn').text(html_file_name);

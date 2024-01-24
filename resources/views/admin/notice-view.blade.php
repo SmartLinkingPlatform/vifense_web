@@ -21,9 +21,11 @@
                     <div class="card notice-card">
                         <div class="card-header d-flex justify-content-center notice-card-header">
                             <ul class="nav nav-underline" style="font-size: 16px">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-set="all" href="#">전체</a>
-                                </li>
+                                @if (Session::get('user_type') == '1')
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-set="all" href="#">전체</a>
+                                    </li>
+                                @endif
                                 <li class="nav-item">
                                     <a class="nav-link" data-set="company" href="#">회사</a>
                                 </li>

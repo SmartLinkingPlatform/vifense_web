@@ -75,6 +75,7 @@ Route::post('admin.getUserRegNum', 'AdminController@getUserRegisterNumber');
 Route::post('admin.regNewPwd', 'AdminController@registerNewPassword');
 
 Route::post('admin.htmlFile', 'NoticeController@uploadHtmlFile');
+Route::post('admin.uploadedFile', 'NoticeController@getUploadedFile');
 
 Route::get('admin.day-driver-info', function () {
     return view('admin.day-driver-info');

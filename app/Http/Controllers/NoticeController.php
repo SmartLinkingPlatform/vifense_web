@@ -178,7 +178,12 @@ class NoticeController extends BaseController
         $sql = "SELECT a.create_date, a.type, b.user_type, b.company_name, c.user_name, a.title, a.content ";
         $sql .= "FROM tb_notice AS a ";
         $sql .= "LEFT JOIN tb_admin_info AS b ON a.from_user_id = b.admin_id ";
-        $sql .= "LEFT JOIN tb_user_info AS c ON a.type_id = c.user_id ORDER BY a.notice_id DESC ";
+        $sql .= "LEFT JOIN tb_user_info AS c ON a.type_id = c.user_id ";
+
+        if ($user_type == 0) {
+            $sql .= "WHERE a.from_user_id = '" . $admin_id . "' ";
+        }
+        $sql .= " ORDER BY a.notice_id DESC ";
 
         $lim_sql = $sql.' LIMIT '.$start_from.', '.$count;
 
@@ -199,20 +204,39 @@ class NoticeController extends BaseController
         exit();
     }
 
+    public function getUploadedFile(Request $request) {
+        $table_info = 'tb_upload_file';
+        $row = DB::table($table_info)->first();
+
+        if ($row == null) {
+            return \Response::json([
+                'msg' => 'err'
+            ]);
+        } else {
+            return \Response::json([
+                'msg' => 'ok',
+                'orig_file' => $row->orig_file,
+            ]);
+        }
+        exit();
+    }
+
     public function uploadHtmlFile(Request $request){
+        $orig_file  = $request->post('orig_file');
         $uploadfile_html = $request->file('uploadfile_html');
         $url = $_SERVER[ "HTTP_HOST" ];
         if($uploadfile_html != null && $uploadfile_html != ''){
-            $new_name = 'terms.'.$uploadfile_html->getClientOriginalExtension();
-            $uploadfile_html->move(public_path(''), $new_name);
+            //$new_name = 'terms.'.$uploadfile_html->getClientOriginalExtension();
+            $uploadfile_html->move(public_path(''), $orig_file);
         }
-        $url .= '/'.$new_name;
+        $url .= '/'.$orig_file;
         $rows =DB::table('tb_upload_file')->first();
         if($rows == null){
             $success = DB::table('tb_upload_file')
                 ->insert(
                     [
-                        'path' => $url
+                        'path' => $url,
+                        'orig_file' => $orig_file
                     ]
                 );
         }
@@ -220,7 +244,8 @@ class NoticeController extends BaseController
             $success = DB::table('tb_upload_file')
                 ->update(
                     [
-                        'path' => $url
+                        'path' => $url,
+                        'orig_file' => $orig_file
                     ]
                 );
         }
