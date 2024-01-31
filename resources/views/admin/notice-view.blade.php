@@ -26,9 +26,11 @@
                                         <a class="nav-link active" data-set="all" href="#">전체</a>
                                     </li>
                                 @endif
-                                <li class="nav-item">
-                                    <a class="nav-link" data-set="company" href="#">회사</a>
-                                </li>
+                                @if (Session::get('user_type') == '0')
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-set="company" href="#">회사</a>
+                                    </li>
+                                @endif
                                 <li class="nav-item">
                                     <a class="nav-link" data-set="persion" href="#">개인</a>
                                 </li>
@@ -254,15 +256,15 @@
                 let title_val = $('#'+input_title_id).val();
                 let text_val = $('#'+text_id).val();
 
-                title_val = title_val.replace(/\s/g, '');
-                text_val = text_val.replace(/\s/g, '');
-                if(title_val === ''){
+                let tit_val = title_val.replace(/\s/g, '');
+                let txt_val = text_val.replace(/\s/g, '');
+                if(tit_val === ''){
                     $('#dlgErr').css({'display':'block','margin-top':'10px', 'color':'#d41b11'}).text('제목을 입력하세요.');
                     setTimeout(function () {
                         $('#dlgErr').text('').css({'display':'none', 'margin-top':'0'});
                     },1000);
                 }
-                else if(text_val === ''){
+                else if(txt_val === ''){
                     $('#dlgErr').css({'display':'block','margin-top':'10px', 'color':'#d41b11'}).text('알림 내용을 입력하세요.');
                     setTimeout(function () {
                         $('#dlgErr').text('').css({'display':'none', 'margin-top':'0'});
@@ -467,6 +469,12 @@
                             let list = lists[i];
                             let create_date = list.create_date;
                             let user_name = list.user_name || '전체';
+                            let type = list.type;
+                            if (type === "all") {
+                                user_name = '전체';
+                            } else if(type === "company") {
+                                user_name = list.company_name;
+                            }
                             let title = list.title || '';
                             let content = list.content || '';
 

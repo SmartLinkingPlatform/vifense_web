@@ -504,6 +504,18 @@ class CompanyController extends BaseController
                 $i = 1;
                 foreach($rows as $row) {
                     $user_id = $row->user_id;
+                    if ($row->max_speed == null || $row->max_speed == "" ||
+                        $row->average_speed == null || $row->average_speed == "" ||
+                        $row->mileage == null || $row->mileage == "" ||
+                        $row->driving_time == null || $row->driving_time == "" ||
+                        $row->idling_time == null || $row->idling_time == "" ||
+                        $row->driving_score == null || $row->driving_score == "" ||
+                        $row->quick_speed_cnt == null || $row->quick_speed_cnt == "" ||
+                        $row->brake_speed_cnt == null || $row->brake_speed_cnt == "" ||
+                        $row->fast_speed_cnt == null || $row->fast_speed_cnt == "" ||
+                        $row->fast_speed_time == null || $row->fast_speed_time == "") {
+                        continue;
+                    }
                     if ($temp_id != $user_id) {
                         if ($cnt > 0 && ($temp_phone !== "" && $temp_phone !== null)) {
                             $item = array(

@@ -391,7 +391,9 @@ class CallAPIController extends BaseController
         if($user) {
             $driving_date = $request->post('driving_date');
             $start_time = $request->post('start_time');
+            $start_place = $request->post('start_place');
             $end_time = $request->post('end_time');
+            $end_place = $request->post('end_place');
             $car_id = $request->post('car_id');
             $user_id = $request->post('user_id');
             $max_speed = $request->post('max_speed');
@@ -405,13 +407,114 @@ class CallAPIController extends BaseController
             $quick_speed_cnt = $request->post('quick_cnt');
             $brake_speed_cnt = $request->post('brake_cnt');
 
+            if ($start_time == null || $start_time == "" ||
+                $end_time == null || $end_time == "" ||
+                $max_speed == null || $max_speed == "" ||
+                $average_speed == null || $average_speed == "" ||
+                $mileage == null || $mileage == "" ||
+                $driving_time == null || $driving_time == "" ||
+                $idling_time == null || $idling_time == "" ||
+                $driving_score == null || $driving_score == "" ||
+                $fast_speed_time == null || $fast_speed_time == "" ||
+                $fast_speed_cnt == null || $fast_speed_cnt == "" ||
+                $quick_speed_cnt == null || $quick_speed_cnt == "" ||
+                $brake_speed_cnt == null || $brake_speed_cnt == "") {
+                return \Response::json([
+                    'msg' => 'err'
+                ]);
+            }
+
             $tb_info = 'tb_driving_info';
             $success = DB::table($tb_info)
                 ->insert(
                     [
                         'driving_date' => $driving_date,
                         'start_time' => $start_time,
+                        'start_place' => $start_place,
                         'end_time' => $end_time,
+                        'end_place' => $end_place,
+                        'car_id' => $car_id,
+                        'user_id' => $user_id,
+                        'max_speed' => $max_speed,
+                        'average_speed' => $average_speed,
+                        'mileage' => $mileage,
+                        'driving_time' => $driving_time,
+                        'idling_time' => $idling_time,
+                        'driving_score' => $driving_score,
+                        'fast_speed_time' => $fast_speed_time,
+                        'fast_speed_cnt' => $fast_speed_cnt,
+                        'quick_speed_cnt' => $quick_speed_cnt,
+                        'brake_speed_cnt' => $brake_speed_cnt
+                    ]
+                );
+            if ($success) {
+                return \Response::json([
+                    'msg' => 'ok'
+                ]);
+            } else {
+                return \Response::json([
+                    'msg' => 'err'
+                ]);
+            }
+        } else{
+            return response()->json([
+                'msg' => 'err',
+                'cont' => 'non user with authenticate',
+            ]);
+        }
+        exit();
+    }
+    //저장되지 않은 주행 정보 저장하기
+    public function requestNotSentDrivingInfo(Request $request)
+    {
+        $token = $request->header('authorization');
+        $token = str_replace('Bearer ', '', $token);
+        $user = auth('mobile')->authenticate($token);
+        if($user) {
+            $driving_date = $request->post('driving_date');
+            $start_time = $request->post('start_time');
+            $start_place = $request->post('start_place');
+            $end_time = $request->post('end_time');
+            $end_place = $request->post('end_place');
+            $car_id = $request->post('car_id');
+            $user_id = $request->post('user_id');
+            $max_speed = $request->post('max_speed');
+            $average_speed = $request->post('average_speed');
+            $mileage = $request->post('mileage');
+            $driving_time = $request->post('driving_time');
+            $idling_time = $request->post('idling_time');
+            $driving_score = $request->post('driving_score');
+            $fast_speed_time = $request->post('fast_time');
+            $fast_speed_cnt = $request->post('fast_cnt');
+            $quick_speed_cnt = $request->post('quick_cnt');
+            $brake_speed_cnt = $request->post('brake_cnt');
+
+            if ($start_time == null || $start_time == "" ||
+                $end_time == null || $end_time == "" ||
+                $max_speed == null || $max_speed == "" ||
+                $average_speed == null || $average_speed == "" ||
+                $mileage == null || $mileage == "" ||
+                $driving_time == null || $driving_time == "" ||
+                $idling_time == null || $idling_time == "" ||
+                $driving_score == null || $driving_score == "" ||
+                $fast_speed_time == null || $fast_speed_time == "" ||
+                $fast_speed_cnt == null || $fast_speed_cnt == "" ||
+                $quick_speed_cnt == null || $quick_speed_cnt == "" ||
+                $brake_speed_cnt == null || $brake_speed_cnt == "") {
+                return \Response::json([
+                    'msg' => 'err'
+                ]);
+            }
+
+            $tb_info = 'tb_driving_info';
+            $success = DB::table($tb_info)
+                ->insert(
+                    [
+                        'driving_date' => $driving_date,
+                        'start_time' => $start_time,
+                        'start_place' => $start_place,
+                        'end_time' => $end_time,
+                        'end_place' => $end_place,
                         'car_id' => $car_id,
                         'user_id' => $user_id,
                         'max_speed' => $max_speed,
@@ -496,7 +599,7 @@ class CallAPIController extends BaseController
                 $datas = array();
                 $tb_notice = "tb_notice";
                 $sql = "SELECT * FROM " . $tb_notice;
-                $sql .= " WHERE (type = 'all' OR (type = 'company' AND type_id='" . $user_rows->admin_id . "')";
+                $sql .= " WHERE (type = 'all' OR (type = 'company' AND from_user_id='" . $user_rows->admin_id . "')";
                 $sql .= " OR (type = 'persion' AND type_id='" . $user_rows->user_id . "')) AND notice_id > " . $msg_id;
                 $sql .= " ORDER BY notice_id DESC";
 

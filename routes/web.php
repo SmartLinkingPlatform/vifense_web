@@ -137,6 +137,7 @@ Route::group([
     Route::post('mobile.delCarInfo', 'CallAPIController@requestDelCarInfo');
     Route::post('mobile.readDriving', 'CallAPIController@requestReadDrivingInfo');
     Route::post('mobile.saveDriving', 'CallAPIController@requestSaveDrivingInfo');
+    Route::post('mobile.notSentDriving', 'CallAPIController@requestNotSentDrivingInfo');
     Route::post('mobile.ranking', 'CallAPIController@requestRankingInfo');
     Route::post('mobile.drivingRanking', 'CallAPIController@requestDrivingRankingInfo');
     Route::post('mobile.messageList', 'CallAPIController@requestMessageListInfo');

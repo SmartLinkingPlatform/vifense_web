@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <!-- 개발 -->
+        <script src="https://scert.ez-iok.com/stdauth/ds_auth_ptb/asset/js/ptb_ezauth_proc.js"></script>
+        <!-- 운영 -->
+       <!-- <script src="https://cert.ez-iok.com/stdauth/ds_auth_ptb/asset/js/ptb_ezauth_proc.js"></script>-->
+        <script>
+            /* 1. 간편서명 인증요청  */
+            // eziok_std_process(간편서명 인증요청 생성 URL, 웹브라우져타입[WB:웹브라우져, MB:모바일웹, MWV:모바일웹View], callback함수명)
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelector("#sign_btn").addEventListener("click", function () {
+                    eziok_std_process("https://dgt.vifense.com/eziok/eziok_std_result.php", "WB", "printResult");
+                })
+                // document.querySelector("#mok_move").addEventListener("click", function () {
+                // 모바일 전용서비스로 페이지 이동처리 또는 카카오 브라우져 등 새창으로 처리가 어려운 환경 또는 브라우져에서 처리
+                //MOBILEOK.process("https://이용기관URL/mok/mok_std_request.jsp", "WB", "");
+                // })
+            })
+
+            /* 2. 간편서명 결과 수신 callback 함수 예시*/
+            function printResult(data) {
+                let resultCode = data.split("|")[0];
+                let resultMsg = data.split("|")[1];
+                if (resultCode === 0 || resultCode === '0')
+                    // 간편서명 성공 완료시 처리 부분
+                    document.querySelector("#result").textContent = resultMsg;
+                else {
+                    // 간편서명 실패 완료시 처리 부분
+                    alert("Error : " + resultMsg);
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <button id="sign_btn">서명_팝업</button>
+        <textarea cols="100" rows="50" id="result"></textarea>
+    </body>
+</html>
