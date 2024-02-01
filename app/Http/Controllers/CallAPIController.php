@@ -502,7 +502,7 @@ class CallAPIController extends BaseController
                 $quick_speed_cnt == null || $quick_speed_cnt == "" ||
                 $brake_speed_cnt == null || $brake_speed_cnt == "") {
                 return \Response::json([
-                    'msg' => 'err'
+                    'msg' => 'null'
                 ]);
             }
 
