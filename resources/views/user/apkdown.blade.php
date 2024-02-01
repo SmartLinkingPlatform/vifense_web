@@ -23,7 +23,9 @@
 					<div class="container-login100">
 						<div class="position-relative">
                             <img src="{{URL::asset('assets/images/pngs/bg_appdown_1.png')}}" alt="">
-                            <a href="/apk/vifense.apk" download><img src="{{URL::asset('assets/images/pngs/btn_appdown.png')}}" alt="appdown" style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"></a>
+                            <a href="/apk/vifense_240201.2.apk" download>
+                                <img src="{{URL::asset('assets/images/pngs/btn_appdown.png')}}" alt="appdown" style="position: absolute;left: 50%;top: 40%;transform: translate(-50%, -50%); width: 60%">
+                            </a>
 						</div>
 					</div>
 					<!-- CONTAINER CLOSED -->
