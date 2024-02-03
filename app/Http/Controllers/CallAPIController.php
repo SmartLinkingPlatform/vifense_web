@@ -561,7 +561,7 @@ class CallAPIController extends BaseController
             $tb_driving_info = "tb_driving_info";
             $sql = "SELECT * FROM " . $tb_driving_info;
             $sql .= " WHERE car_id = " . $car_id . " AND user_id = " . $user_id . " AND SUBSTRING(driving_date, 1, 6) = '" . substr($driving_date, 0, 6) . "'";
-            $sql .= " ORDER BY driv_id DESC";
+            $sql .= " ORDER BY driv_id ASC";
 
             $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
             if ($rows == null) {

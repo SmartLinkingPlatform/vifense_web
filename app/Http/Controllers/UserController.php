@@ -291,7 +291,7 @@ class UserController extends BaseController
 
             $crow =DB::table($tb_user_car)->where('user_id', $user_id)->first();
             if ($crow != null) {
-                $success = DB::table($tb_user_car)->where('car_id', $crow->car_id)->delete();
+                $success = DB::table($tb_user_car)->where('user_id', $user_id)->delete();
                 if ($success) {
                     DB::table($tb_car_info)->where('car_id', $crow->car_id)->delete();
                 }
