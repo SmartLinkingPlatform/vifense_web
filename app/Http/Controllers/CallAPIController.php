@@ -389,6 +389,7 @@ class CallAPIController extends BaseController
         $token = str_replace('Bearer ', '', $token);
         $user = auth('mobile')->authenticate($token);
         if($user) {
+            $admin_id = $request->post('admin_id');
             $driving_date = $request->post('driving_date');
             $start_time = $request->post('start_time');
             $start_place = $request->post('start_place');
@@ -401,7 +402,7 @@ class CallAPIController extends BaseController
             $mileage = $request->post('mileage');
             $driving_time = $request->post('driving_time');
             $idling_time = $request->post('idling_time');
-            $driving_score = $request->post('driving_score');
+            $driving_score = 100;
             $fast_speed_time = $request->post('fast_time');
             $fast_speed_cnt = $request->post('fast_cnt');
             $quick_speed_cnt = $request->post('quick_cnt');
@@ -414,14 +415,39 @@ class CallAPIController extends BaseController
                 $mileage == null || $mileage == "" ||
                 $driving_time == null || $driving_time == "" ||
                 $idling_time == null || $idling_time == "" ||
-                $driving_score == null || $driving_score == "" ||
                 $fast_speed_time == null || $fast_speed_time == "" ||
                 $fast_speed_cnt == null || $fast_speed_cnt == "" ||
                 $quick_speed_cnt == null || $quick_speed_cnt == "" ||
                 $brake_speed_cnt == null || $brake_speed_cnt == "") {
                 return \Response::json([
-                    'msg' => 'err'
+                    'msg' => 'null'
                 ]);
+            }
+            if ($fast_speed_time >= 300) {
+                $f_cnt = intdiv( $fast_speed_time , 300);
+                if ($f_cnt > 2) {
+                    $f_cnt = 2;
+                }
+                $driving_score += $f_cnt * (-2);
+            }
+            if ($quick_speed_cnt >= 30) {
+                $q_cnt = intdiv( $quick_speed_cnt , 30);
+                if ($q_cnt > 2) {
+                    $q_cnt = 2;
+                }
+                $driving_score += $q_cnt * (-1);
+            }
+            if ($brake_speed_cnt >= 30) {
+                $b_cnt = intdiv( $brake_speed_cnt , 30);
+                if ($b_cnt > 2) {
+                    $b_cnt = 2;
+                }
+                $driving_score += $b_cnt * (-1);
+            }
+            if ($average_speed <= 50) {
+                if ($driving_score < 100) {
+                    $driving_score += 1;
+                }
             }
 
             $tb_info = 'tb_driving_info';
@@ -435,6 +461,7 @@ class CallAPIController extends BaseController
                         'end_place' => $end_place,
                         'car_id' => $car_id,
                         'user_id' => $user_id,
+                        'admin_id' => $admin_id,
                         'max_speed' => $max_speed,
                         'average_speed' => $average_speed,
                         'mileage' => $mileage,
@@ -471,6 +498,7 @@ class CallAPIController extends BaseController
         $token = str_replace('Bearer ', '', $token);
         $user = auth('mobile')->authenticate($token);
         if($user) {
+            $admin_id = $request->post('admin_id');
             $driving_date = $request->post('driving_date');
             $start_time = $request->post('start_time');
             $start_place = $request->post('start_place');
@@ -483,7 +511,7 @@ class CallAPIController extends BaseController
             $mileage = $request->post('mileage');
             $driving_time = $request->post('driving_time');
             $idling_time = $request->post('idling_time');
-            $driving_score = $request->post('driving_score');
+            $driving_score = 100;
             $fast_speed_time = $request->post('fast_time');
             $fast_speed_cnt = $request->post('fast_cnt');
             $quick_speed_cnt = $request->post('quick_cnt');
@@ -496,7 +524,6 @@ class CallAPIController extends BaseController
                 $mileage == null || $mileage == "" ||
                 $driving_time == null || $driving_time == "" ||
                 $idling_time == null || $idling_time == "" ||
-                $driving_score == null || $driving_score == "" ||
                 $fast_speed_time == null || $fast_speed_time == "" ||
                 $fast_speed_cnt == null || $fast_speed_cnt == "" ||
                 $quick_speed_cnt == null || $quick_speed_cnt == "" ||
@@ -504,6 +531,32 @@ class CallAPIController extends BaseController
                 return \Response::json([
                     'msg' => 'null'
                 ]);
+            }
+            if ($fast_speed_time >= 300) {
+                $f_cnt = intdiv( $fast_speed_time , 300);
+                if ($f_cnt > 2) {
+                    $f_cnt = 2;
+                }
+                $driving_score += $f_cnt * (-2);
+            }
+            if ($quick_speed_cnt >= 30) {
+                $q_cnt = intdiv( $quick_speed_cnt , 30);
+                if ($q_cnt > 2) {
+                    $q_cnt = 2;
+                }
+                $driving_score += $q_cnt * (-1);
+            }
+            if ($brake_speed_cnt >= 30) {
+                $b_cnt = intdiv( $brake_speed_cnt , 30);
+                if ($b_cnt > 2) {
+                    $b_cnt = 2;
+                }
+                $driving_score += $b_cnt * (-1);
+            }
+            if ($average_speed <= 50) {
+                if ($driving_score < 100) {
+                    $driving_score += 1;
+                }
             }
 
             $tb_info = 'tb_driving_info';
@@ -517,6 +570,7 @@ class CallAPIController extends BaseController
                         'end_place' => $end_place,
                         'car_id' => $car_id,
                         'user_id' => $user_id,
+                        'admin_id' => $admin_id,
                         'max_speed' => $max_speed,
                         'average_speed' => $average_speed,
                         'mileage' => $mileage,
@@ -649,6 +703,7 @@ class CallAPIController extends BaseController
         $token = str_replace('Bearer ', '', $token);
         $user = auth('mobile')->authenticate($token);
         if($user) {
+            $admin_id = $request->post('admin_id');
             $car_id = $request->post('car_id');
             $user_id = $request->post('user_id');
             $driving_date = $request->post('driving_date');
@@ -659,9 +714,10 @@ class CallAPIController extends BaseController
             $idx_mieage = 0; //월 주행거리 순위
             $total_mileage = 0; //월 총 주행거리
             $sql = "SELECT ";
-            $sql .= "user_id, SUM(mileage) AS mileage, car_id ";
-            $sql .= "FROM " . $tb_driving_info . " ";
+            $sql .= "user_id, SUM(mileage) AS mileage, car_id, admin_id ";
+            $sql .= "FROM " . $tb_driving_info . " AS a ";
             $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '" . substr($driving_date, 0, 6) . "' ";
+            $sql .= "AND admin_id = " . $admin_id . " ";
             $sql .= "GROUP BY user_id, car_id ORDER BY mileage DESC";
 
             $idx = 0;
@@ -684,9 +740,10 @@ class CallAPIController extends BaseController
             //안전 운전 랭킹
             $idx_safety = 0; //월 안전운전 순위
             $sql = "SELECT ";
-            $sql .= "user_id, SUM(driving_score)/COUNT(user_id) AS driving_score, car_id ";
+            $sql .= "user_id, TRUNCATE(SUM(driving_score)/COUNT(user_id), 0) AS driving_score, car_id, admin_id ";
             $sql .= "FROM " . $tb_driving_info . " ";
             $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '" . substr($driving_date, 0, 6) . "' ";
+            $sql .= "AND admin_id = " . $admin_id . " ";
             $sql .= "GROUP BY user_id, car_id ORDER BY driving_score DESC";
 
             $idx = 0;
@@ -738,6 +795,7 @@ class CallAPIController extends BaseController
         $token = str_replace('Bearer ', '', $token);
         $user = auth('mobile')->authenticate($token);
         if ($user) {
+            $admin_id = $request->post('admin_id');
             $car_id = $request->post('car_id');
             $user_id = $request->post('user_id');
             $driving_date = $request->post('driving_date');
@@ -747,9 +805,10 @@ class CallAPIController extends BaseController
             //주행 거리 랭킹
             $idx_mieage = 0; //월 주행거리 순위
             $sql = "SELECT ";
-            $sql .= "user_id, SUM(mileage) AS mileage ";
+            $sql .= "user_id, SUM(mileage) AS mileage, car_id, admin_id ";
             $sql .= "FROM " . $tb_driving_info . " ";
             $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '" . substr($driving_date, 0, 6) . "' ";
+            $sql .= "AND admin_id = " . $admin_id . " ";
             $sql .= "GROUP BY user_id ORDER BY mileage DESC";
 
             $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
@@ -761,7 +820,7 @@ class CallAPIController extends BaseController
             } else {
                 foreach ($rows as $row) {
                     $idx++;
-                    if ($row->user_id == $user_id) {
+                    if ($row->user_id == $user_id && $row->car_id == $car_id) {
                         $idx_mieage = $idx;
                         break;
                     }
@@ -771,9 +830,10 @@ class CallAPIController extends BaseController
             //안전 운전 랭킹
             $idx_safety = 0; //월 안전운전 순위
             $sql = "SELECT ";
-            $sql .= "user_id, SUM(driving_score)/COUNT(user_id) AS driving_score ";
+            $sql .= "user_id, TRUNCATE(SUM(driving_score)/COUNT(user_id), 0) AS driving_score, car_id, admin_id ";
             $sql .= "FROM " . $tb_driving_info . " ";
             $sql .= "WHERE SUBSTRING(driving_date, 1, 6) = '" . substr($driving_date, 0, 6) . "' ";
+            $sql .= "AND admin_id = " . $admin_id . " ";
             $sql .= "GROUP BY user_id ORDER BY driving_score DESC";
 
             $rows = DB::connection($this->dgt_db)->select(DB::connection($this->dgt_db)->raw($sql));
@@ -785,7 +845,7 @@ class CallAPIController extends BaseController
             } else {
                 foreach ($rows as $row) {
                     $idx++;
-                    if ($row->user_id == $user_id) {
+                    if ($row->user_id == $user_id && $row->car_id == $car_id) {
                         $idx_safety = $idx;
                         break;
                     }
